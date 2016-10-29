@@ -21,7 +21,7 @@ FFTScarf, you first have to have a look at the license of the implementation you
 intend to use.
 
 The code of the wrapper itself, the tests and the benchmark pipeline is in the
-public domain (see UNLICENSE.md file).
+public domain (see LICENSE.md file).
 
 ## Author
 Feel free to throw rotten tomatoes to:
