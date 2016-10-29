@@ -50,8 +50,8 @@ if(FFTSCARF_FFT_IPP)
 endif(FFTSCARF_FFT_IPP)
 
 # A make target for running the benchmarks
-add_custom_target(benchmark
-                    DEPENDS benchmark_ooura benchmark_fftreal) # benchmark_fftw3 benchmark_ffts benchmark_djbfft benchmark_pffft benchmark_ipp
+add_custom_target(benchmark_run
+                    DEPENDS benchmark_run_ooura benchmark_run_fftreal) # benchmark_run_fftw3 benchmark_run_ffts benchmark_run_djbfft benchmark_run_pffft benchmark_run_ipp
 
 # A make target for ploting the results of the benchmark
 add_custom_target(plot

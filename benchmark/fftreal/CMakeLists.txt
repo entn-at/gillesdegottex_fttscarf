@@ -14,7 +14,7 @@ add_custom_command(OUTPUT benchmark.log
                 DEPENDS ${EXEC}
                 WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
-add_custom_target(benchmark_${FFTNAME}
+add_custom_target(benchmark_run_${FFTNAME}
                     DEPENDS benchmark.log)
 
 # Optimization -----------------------------------------------------------------
