@@ -1,0 +1,117 @@
+/*! \file */
+
+#ifndef __FFTSCARF_H__
+#define __FFTSCARF_H__
+
+#define FFTSCARF_VERSION_MAJOR 0
+#define FFTSCARF_VERSION_MINOR 1
+#define FFTSCARF_VERSION_REVISION 0
+
+// This one creates boost's bug #11892 (multiple definitions). Thus, cannot use the typedef below (...)
+// #include <boost/cstdfloat.hpp>
+#cmakedefine FFTSCARF_PRECISION_FLOAT32
+#ifdef FFTSCARF_PRECISION_FLOAT32
+    #define FFFLOAT float
+//     #define FFFLOAT boost::float32_t
+#else
+    #define FFFLOAT double
+//     #define FFFLOAT boost::float64_t
+#endif
+
+#cmakedefine FFTSCARF_FFT_OOURA
+#cmakedefine FFTSCARF_FFT_FFTREAL
+#cmakedefine FFTSCARF_FFT_PFFFT
+#cmakedefine FFTSCARF_FFT_DJBFFT
+#cmakedefine FFTSCARF_FFT_FFTW3
+#cmakedefine FFTSCARF_FFT_FFTS
+#cmakedefine FFTSCARF_FFT_IPP
+
+
+// Check if GPL is enforced on the user's software
+#ifdef FFTSCARF_FFT_FFTW3
+    // If the FFTW3 is used, the GPL is enforced on the software.
+    #define FFTSCARF_LICENSE_GPLENFORCED
+#endif
+
+
+#include <limits>
+#include <string>
+#include <list>
+#include <complex>
+#include <ctime>
+
+
+/*! \brief General namespace of the library
+ */
+namespace fftscarf {
+    //! Return the version of the library as a string.
+    std::string version();
+    //! Write some comile-time information to the given stream.
+    void write_compile_info(std::ostream& out);
+
+    //! Return the machine epsilon, that is, the difference between 1.0 and the next value representable by the floating-point type FFFLOAT.
+    static const FFFLOAT eps = std::numeric_limits<FFFLOAT>::epsilon();
+
+    template<typename Type>	inline std::complex<Type> make_complex(Type value[]){
+        return std::complex<Type>(value[0], value[1]);
+    }
+
+    template<typename Type>	inline std::complex<Type> make_complex(Type real, Type imag){
+        return std::complex<Type>(real, imag);
+    }
+
+    /*! \brief Interface to implement by any FFT implementation
+     */
+    class FFTPlanImplementation
+    {
+
+    protected:
+
+        bool m_forward;
+        int m_size;
+
+    public:
+        static std::list<std::string> availableLibraries();
+
+        FFTPlanImplementation(bool forward=true);
+        FFTPlanImplementation(int n, bool forward=true);
+
+        virtual void resize(int n)=0;
+        int size(){return m_size;}
+
+        // Interface to follow for implementations (template polymorphism doesn't exist)
+        // static std::string version();
+        // static std::string libraryName();
+
+        // To execute the DFT computation:
+        // template<typename TypeInContainer>
+        // void dft(const TypeInContainer& in, std::vector<std::complex<FFFLOAT> >& out, int dftlen=-1);
+        // template<typename TypeOutContainer>
+        // void idft(const std::vector<std::complex<FFFLOAT> >& in, TypeOutContainer& out, int winlen=-1);
+    };
+}
+
+#ifdef FFTSCARF_FFT_OOURA
+    #include "fftscarf_ooura.h"
+#endif
+#ifdef FFTSCARF_FFT_FFTREAL
+    #include "fftscarf_fftreal.h"
+#endif
+#ifdef FFTSCARF_FFT_PFFFT
+    #include "fftscarf_pffft.h"
+#endif
+#ifdef FFTSCARF_FFT_DJBFFT
+    #include "fftscarf_djbfft.h"
+#endif
+#ifdef FFTSCARF_FFT_FFTS
+    #include "fftscarf_ffts.h"
+#endif
+#ifdef FFTSCARF_FFT_FFTW3
+    #include "fftscarf_fftw3.h"
+#endif
+#ifdef FFTSCARF_FFT_IPP
+    #include "fftscarf_ipp.h"
+#endif
+
+
+#endif // __FFTSCARF_H__
