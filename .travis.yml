@@ -17,7 +17,6 @@ matrix:
         - compiler: clang
           os: linux
 
-
 before_install:
     - git submodule update --init --recursive
     - git fetch --tags
