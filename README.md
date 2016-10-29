@@ -3,15 +3,17 @@
 
 ## Purpose
 * Depending on usage or license issue, we might want to switch to another FFT
-implementation. Though we surely don't want to change our code for this.
-FFTScarf provides a wrapper, as light and simple as possible, so that we can
-switch from one FFT implementation to another using a simple compilation flag.
-* The benchmark/ directory provides also a comparison pipeline for FFT impl.
-* Depending on the documentation of the FFT impl. its usage and the vectors
-representation used might not be obvious. So, FFTScarf can also me considered
-as a collection of FFT recipes.
-* Multi dimensional FFTs are currently omitted since FFTScarf is mainly intended
-for audio processing.
+implementation when coding softwares using signal processing. Though, we surely
+don't want to change our code for this. FFTScarf provides a wrapper, as light
+and simple as possible, so that we can switch from one FFT implementation to
+another using a simple compilation flag.
+* The benchmark/ directory provides also a comparison pipeline for FFT
+implementations.
+* Depending on the documentation of the FFT implementation, the used vectors
+representation and its usage might not be obvious. FFTScarf can also be 
+considered as a collection of FFT recipes.
+* Multi dimensional FFTs are currently omitted since audio processing is the
+main target.
 
 ## Legal
 Each FFT implementation has obviously its own license. If you intend to use
