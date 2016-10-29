@@ -1,4 +1,5 @@
-# FFTScarf - A wrapper for FFT implementations dedicated to audio processing
+# FFTScarf
+### A wrapper for FFT implementations dedicated to audio processing
 
 ## Purpose
 * Depending on usage or license issue, we might want to switch to another FFT
