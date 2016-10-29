@@ -1,0 +1,49 @@
+language: cpp
+
+compiler:
+    - clang
+    - gcc
+
+os:
+    - linux
+    - osx
+
+branches:
+    only:
+        - master
+
+matrix:
+    exclude:
+        - compiler: clang
+          os: linux
+
+
+before_install:
+    - git submodule update --init --recursive
+    - git fetch --tags
+    - sleep 1
+    - git checkout $TRAVIS_BRANCH
+    - export PROJECTGITVERSION=`git describe --tags --always |sed 's/^v//'`
+    - echo $PROJECTGITVERSION
+    - echo $TRAVIS_OS_NAME
+    - echo $TRAVIS_COMMIT
+    - echo $TRAVIS_TAG
+    - export TRAVIS_TAG=`git describe --tags --exact-match HEAD 2>/dev/null`
+    - echo $TRAVIS_TAG
+
+install:
+    #- if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install libfftw3-dev; fi
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install cmake; fi
+    #- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install fftw; fi
+    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install cmake; fi
+
+script:
+    - mkdir build
+    - cd build
+    - cmake -DFFTSCARF_BUILD_TEST:BOOL=ON ..
+    - make
+    - ls -l
+    - make test_run
+
+    #- if [ "`uname -m`" = "x86_64" ]; then export ARCH="amd64"; fi
+    #- if [ "`uname -m`" = "x86" ]; then export ARCH="i386"; fi
