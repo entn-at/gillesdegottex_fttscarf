@@ -3,7 +3,7 @@ project (fftscarf)
 
 add_library(fftscarf src/fftscarf.cpp)
 
-message("-- FFTScarf options")
+message("FFTScarf configuring lib")
 
 option(FFTSCARF_PRECISION_FLOAT32 "Precision" ON)
 if(FFTSCARF_PRECISION_FLOAT32)
@@ -92,7 +92,7 @@ include_directories(include)
 
 option(FFTSCARF_BUILD_TEST "Build tests" OFF)
 if(FFTSCARF_BUILD_TEST)
-    message("Preparing Tests")
+    message("FFTScarf configuring tests")
     add_subdirectory(test)
 
     # Add a custom target for running all the tests
@@ -114,10 +114,6 @@ endif(FFTSCARF_BUILD_TEST)
 
 # Optimization -----------------------------------------------------------------
 
-# Remove symbols
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s")
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s")
-
 # Speed up compilation
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe")
@@ -125,8 +121,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe")
 # -O2 -O3 -Ofast
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-# set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Ofast") # Almost no gain and not advised
-# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Ofast") # Almost no gain and not advised
 
 # Install ---------------------------------------------------------------------
 message("-- Installation path: " ${CMAKE_INSTALL_PREFIX})
