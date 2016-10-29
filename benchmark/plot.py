@@ -35,7 +35,7 @@ if  __name__ == "__main__" :
 
     methods = dict()
     for root, dirnames, filenames in os.walk('.'):
-        for fresult in fnmatch.filter(filenames, 'benchmark.speed'):
+        for fresult in fnmatch.filter(filenames, 'benchmark.log'):
             fresult = os.path.join(root,fresult)
             print('Reading '+fresult+'...')
             with open(fresult) as f:
@@ -99,7 +99,7 @@ if  __name__ == "__main__" :
     labels = [item.get_text() for item in axs[0].get_xticklabels()]
 #    print(labels)
     for li in range(len(labels)):
-        labels[li] = str(2**int(labels[li]))
+        labels[li] = str(2**int(float(labels[li])))
     axs[0].set_xticklabels(labels)
 
 #    labels = [item.get_text() for item in axs[1].get_yticklabels()]
