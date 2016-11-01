@@ -10,7 +10,6 @@ using namespace fftscarf;
 
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/random/normal_distribution.hpp>
-
 #include <boost/random/mersenne_twister.hpp>
 static boost::random::mt19937 rndgen(std::time(0));
 
@@ -72,33 +71,32 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
             boost::chrono::nanoseconds nanosec = tend-tstart;
             durations.push_back(1e-9*nanosec.count()/2); // per DFT
 
-//             outframe.resize(inframe.size()); // TODO Something weired happens with FFTReal
-
             if(spec_verify){
                 // Verify: sig->spec == specref
-                FFFLOAT sn = 0.0;
-                for(size_t i=0; i<inframe.size(); ++i)
-                    sn += abs(spec_ref[i]-spec[i])*abs(spec_ref[i]-spec[i]);
-                sn = sqrt(sn/inframe.size());
+                double spec_err = 0.0;
+                for(size_t i=0; i<spec.size(); ++i)
+                    spec_err += abs(spec_ref[i]-spec[i])*abs(spec_ref[i]-spec[i]);
+                spec_err = sqrt(spec_err/spec.size());
 
-    //                if(sn>1000*fftscarf::eps){
-    //                    DCOUT << sn << " eps=" << 1000*fftscarf::eps << std::endl;
-    //                    DCOUT << "m_spec_ref=" << spec_ref << endl;
-    //                    DCOUT << "m_spec=" << spec << endl;
-    //                }
-    //                assert(sn<1000*fftscarf::eps);
+                if(spec_err>1000*fftscarf::eps){
+                    std::cout << sn << " eps=" << 1000*fftscarf::eps << std::endl;
+                    std::cout << "m_spec_ref=" << spec_ref << endl;
+                    std::cout << "m_spec=" << spec << endl;
+                }
+                assert(spec_err<1000*fftscarf::eps);
             }
 
             // Verify: sig->spec->sig' == sig
             // Using relative RMS
-            FFFLOAT sqerr = 0.0;
-            FFFLOAT sqin = 0.0;
+            double sqerr = 0.0;
+            double sqin = 0.0;
             for(size_t i=0; i<inframe.size(); ++i){
                 sqerr += (inframe[i]-outframe[i])*(inframe[i]-outframe[i]);
                 sqin += inframe[i]*inframe[i];
             }
+            double sig_err = sqrt(sqerr/sqin);
             
-            accuracies.push_back(sqrt(sqerr/sqin));
+            accuracies.push_back(sig_err);
         }
 
         std::sort(durations.begin(), durations.end());
