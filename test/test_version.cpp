@@ -7,7 +7,7 @@ using namespace std;
 
 #include <fftscarf.h>
 
-BOOST_AUTO_TEST_CASE( test_rangef )
+BOOST_AUTO_TEST_CASE( test_version )
 {
     std::cout << "Testing FFScarf compilation..." << std::endl;
 
