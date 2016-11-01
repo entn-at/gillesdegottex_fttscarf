@@ -26,32 +26,38 @@ include_directories(${CMAKE_BINARY_DIR}/fftscarf/include)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/fftscarf)
 
+# A make target for running the benchmarks
+add_custom_target(benchmark_run DEPENDS benchmark_run_ooura)
+
 if(FFTSCARF_FFT_OOURA)
     add_subdirectory(ooura)
+    add_dependencies(benchmark_run benchmark_run_ooura)
 endif(FFTSCARF_FFT_OOURA)
 if(FFTSCARF_FFT_FFTREAL)
     add_subdirectory(fftreal)
+    add_dependencies(benchmark_run benchmark_run_fftreal)
 endif(FFTSCARF_FFT_FFTREAL)
 if(FFTSCARF_FFT_PFFFT)
     add_subdirectory(pffft)
+    add_dependencies(benchmark_run benchmark_run_pffft)
 endif(FFTSCARF_FFT_PFFFT)
 if(FFTSCARF_FFT_DJBFFT)
     add_subdirectory(djbfft)
+    add_dependencies(benchmark_run benchmark_run_djbfft)
 endif(FFTSCARF_FFT_DJBFFT)
 if(FFTSCARF_FFT_FFTS)
     add_subdirectory(ffts)
+    add_dependencies(benchmark_run benchmark_run_ffts)
 endif(FFTSCARF_FFT_FFTS)
 if(FFTSCARF_FFT_FFTW3)
     add_subdirectory(fftw3)
+    add_dependencies(benchmark_run benchmark_run_fftw3)
 endif(FFTSCARF_FFT_FFTW3)
 if(FFTSCARF_FFT_IPP)
-    add_subdirectory(ipp)
     include_directories(/opt/intel/ipp/include)
+    add_subdirectory(ipp)
+    add_dependencies(benchmark_run benchmark_run_ipp)
 endif(FFTSCARF_FFT_IPP)
-
-# A make target for running the benchmarks
-add_custom_target(benchmark_run
-                    DEPENDS benchmark_run_ooura benchmark_run_fftreal) # benchmark_run_fftw3 benchmark_run_ffts benchmark_run_djbfft benchmark_run_pffft benchmark_run_ipp
 
 # A make target for ploting the results of the benchmark
 add_custom_target(plot
