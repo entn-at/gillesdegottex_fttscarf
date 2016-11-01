@@ -97,17 +97,17 @@ if(FFTSCARF_BUILD_TEST)
 
     # Add a custom target for running all the tests
     add_custom_target(test_run)
-    add_dependencies(test_run test_run_version) # test_run_fft
+    add_dependencies(test_run test_run_version test_run_fftlibs)
 
     add_custom_target(test_run_version
                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test
                         COMMAND ./test_version)
     add_dependencies(test_run_version test_version)
 
-#     add_custom_target(test_run_fft
-#                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test
-#                         COMMAND ./test_fft)
-#     add_dependencies(test_run_fft test_fft)
+     add_custom_target(test_run_fftlibs
+                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test
+                         COMMAND ./test_fftlibs)
+     add_dependencies(test_run_fftlibs test_fftlibs)
 
 endif(FFTSCARF_BUILD_TEST)
 

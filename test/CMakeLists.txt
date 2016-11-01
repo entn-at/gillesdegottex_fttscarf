@@ -22,9 +22,8 @@ endif(FFTSCARF_PRECISION_FLOAT32)
 add_executable(test_version test_version.cpp)
 target_link_libraries(test_version fftscarf ${Boost_LIBRARIES})
 
-# add_executable(test_fft test_fft.cpp)
-# #target_link_libraries(test_version ${Boost_LIBRARIES})
-# target_link_libraries(test_fft fftscarf ${Boost_LIBRARIES})
+add_executable(test_fftlibs test_fftlibs.cpp)
+target_link_libraries(test_fftlibs fftscarf ${Boost_LIBRARIES})
 
 # Optimization -----------------------------------------------------------------
 
