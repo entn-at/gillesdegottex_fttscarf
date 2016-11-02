@@ -9,16 +9,6 @@ add_definitions(-DBOOST_LOG_DYN_LINK)
 include_directories(../include)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-message("-- FFTScarf options")
-# TODO Replace by fftscarf.h of the lib ?
-if(FFTSCARF_PRECISION_FLOAT32)
-    message("-- Single precision (32b)")
-    add_definitions(-DFFTSCARF_PRECISION_FLOAT)
-    add_definitions(-DOOFLOAT_FLOAT)
-else(FFTSCARF_PRECISION_FLOAT32)
-    message("-- Double precision (64b)")
-endif(FFTSCARF_PRECISION_FLOAT32)
-
 add_executable(test_version test_version.cpp)
 target_link_libraries(test_version fftscarf ${Boost_LIBRARIES})
 
