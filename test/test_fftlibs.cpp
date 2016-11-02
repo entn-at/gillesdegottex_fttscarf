@@ -23,7 +23,7 @@ static void test_lib(){
 
     std::cout << "Testing " << FFTPlanType::libraryName() << " ..." << std::endl;
 
-    int N = 8;
+    int N = 1024;
     double accthresh = fftscarf::eps;
 
     std::cout << "    N=" << N << " accthresh=" << accthresh << std::endl;
