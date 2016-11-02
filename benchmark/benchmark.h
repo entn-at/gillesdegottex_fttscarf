@@ -78,12 +78,12 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
                     spec_err += abs(spec_ref[i]-spec[i])*abs(spec_ref[i]-spec[i]);
                 spec_err = sqrt(spec_err/spec.size());
 
-                if(spec_err>1000*fftscarf::eps){
-                    std::cout << sn << " eps=" << 1000*fftscarf::eps << std::endl;
-                    std::cout << "m_spec_ref=" << spec_ref << endl;
-                    std::cout << "m_spec=" << spec << endl;
+                if(spec_err>10*fftscarf::eps){
+                    std::cout << "spec_err=" << spec_err << " eps=" << 10*fftscarf::eps << std::endl;
+                    std::cout << "spec_ref=" << spec_ref << endl;
+                    std::cout << "spec=" << spec << endl;
                 }
-                assert(spec_err<1000*fftscarf::eps);
+                assert(spec_err<10*fftscarf::eps);
             }
 
             // Verify: sig->spec->sig' == sig
