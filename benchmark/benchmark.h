@@ -38,6 +38,7 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
 
     std::deque<double> durations; // [mus]
     std::deque<double> accuracies;
+    double accthresh = 100*fftscarf::eps;
 
     ofstream resultfile("benchmark.log");
 
@@ -77,12 +78,12 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
                     spec_err += abs(spec_ref[i]-spec[i])*abs(spec_ref[i]-spec[i]);
                 spec_err = sqrt(spec_err/spec.size());
 
-                if(spec_err>10*fftscarf::eps){
-                    std::cout << "spec_err=" << spec_err << " eps=" << 10*fftscarf::eps << std::endl;
+                if(spec_err>accthresh){
+                    std::cout << "spec_err=" << spec_err << " accuracy threshold=" << accthresh << std::endl;
                     std::cout << "spec_ref=" << spec_ref << endl;
                     std::cout << "spec=" << spec << endl;
                 }
-                assert(spec_err<10*fftscarf::eps);
+                assert(spec_err<accthresh);
             }
 
             // Verify: sig->spec->sig' == sig
