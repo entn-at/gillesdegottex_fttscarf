@@ -12,7 +12,7 @@ option(FFTSCARF_FFT_FFTW3 "" OFF)
 option(FFTSCARF_FFT_IPP "" OFF)
 
 # Add Boost library
-find_package(Boost COMPONENTS random chrono REQUIRED)
+find_package(Boost COMPONENTS chrono REQUIRED)
 add_definitions(-DBOOST_LOG_DYN_LINK)
 add_definitions(-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
