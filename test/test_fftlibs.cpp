@@ -14,6 +14,7 @@ using namespace fftscarf;
 
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/mersenne_twister.hpp>
+static boost::mt19937 rnd_engine(std::time(0));
 
 #include "../benchmark/stream.h"
 
@@ -33,7 +34,6 @@ static void test_lib(){
     FFTPlanType ifft(false);
 
     // Prepare the random number generator
-    boost::mt19937 rnd_engine(std::time(0));
     boost::normal_distribution<FFFLOAT> rnd_normal_distrib;
 
     std::vector<std::complex<FFFLOAT> > spec;
