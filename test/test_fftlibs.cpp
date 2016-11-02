@@ -12,8 +12,8 @@ using namespace std;
 #include <fftscarf.h>
 using namespace fftscarf;
 
-#include <boost/random/normal_distribution.hpp>
 #include <boost/random/mersenne_twister.hpp>
+#include <boost/random/normal_distribution.hpp>
 #include <boost/random/variate_generator.hpp>
 
 #include "../benchmark/stream.h"
@@ -23,7 +23,7 @@ static void test_lib(){
 
     std::cout << "Testing " << FFTPlanType::libraryName() << " ..." << std::endl;
 
-    int N = 8;
+    int N = 1024;
     double accthresh = 100*fftscarf::eps;
 
     std::cout << "    N=" << N << " accuracy threshold=" << accthresh << std::endl;
@@ -48,8 +48,6 @@ static void test_lib(){
     for(size_t n=0; n<N; ++n)
         inframe[n] = generator();
 
-    std::cout << "inframe=" << inframe << endl;
-
     // Run the "reference" implementation
     fft_ref.dft(inframe, spec_ref, N);
 
@@ -65,11 +63,11 @@ static void test_lib(){
 
     std::cout << "    spec err=" << spec_err << std::endl;
 
-//     if(spec_err>accthresh){
+    if(spec_err>accthresh){
         std::cout << "spec_err=" << spec_err << " accuracy threshold=" << accthresh << std::endl;
         std::cout << "spec_ref=" << spec_ref << endl;
         std::cout << "spec=" << spec << endl;
-//     }
+    }
     assert(spec_err<accthresh);
 
 
