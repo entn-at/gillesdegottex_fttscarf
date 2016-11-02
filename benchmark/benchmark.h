@@ -11,7 +11,6 @@ using namespace fftscarf;
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <boost/random/mersenne_twister.hpp>
-static boost::random::mt19937 rndgen(std::time(0));
 
 #include "stream.h"
 
@@ -23,8 +22,8 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
     std::cout << "Impl. type N MFlops dur5[s] dur50[s] dur95[s] acc5[s] acc50[s] acc95[s] nbruns" << endl;
 
 //    fftscarf::write_compile_info(cout);
-    boost::mt19937 rnd_engine;
-    boost::random::normal_distribution<FFFLOAT> rnd_normal_distrib;
+    boost::mt19937 rnd_engine(std::time(0));
+    boost::normal_distribution<FFFLOAT> rnd_normal_distrib;
     boost::chrono::system_clock::time_point tstart;
     boost::chrono::system_clock::time_point tend;
     std::vector<std::complex<FFFLOAT> > spec;
