@@ -2,7 +2,7 @@
 using namespace std;
 
 #define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE TestRangedArray
+#define BOOST_TEST_MODULE TestVersion
 #include <boost/test/unit_test.hpp>
 
 #include <fftscarf.h>

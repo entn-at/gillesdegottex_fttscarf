@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 2.8)
 project (tests)
 
 # Add Boost library
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost COMPONENTS random unit_test_framework REQUIRED)
 add_definitions(-DBOOST_LOG_DYN_LINK)
 
 # Add Voimoo library
