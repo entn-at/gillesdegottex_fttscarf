@@ -25,7 +25,7 @@ static void test_lib(){
     int N = 1024;
     double accthresh = 100*fftscarf::eps;
 
-    std::cout << "    N=" << N << " accthresh=" << accthresh << std::endl;
+    std::cout << "    N=" << N << " accuracy threshold=" << accthresh << std::endl;
 
     // fftscarf::FFTPlanImplementationFFTW3 fft_ref(true); // TODO
     fftscarf::FFTPlanImplementationOoura fft_ref(true); // TODO
@@ -62,9 +62,9 @@ static void test_lib(){
     std::cout << "    spec err=" << spec_err << std::endl;
 
     if(spec_err>accthresh){
-        std::cout << spec_err << " accthresh=" << accthresh << std::endl;
-        std::cout << "m_spec_ref=" << spec_ref << endl;
-        std::cout << "m_spec=" << spec << endl;
+        std::cout << "spec_err=" << spec_err << " accuracy threshold=" << accthresh << std::endl;
+        std::cout << "spec_ref=" << spec_ref << endl;
+        std::cout << "spec=" << spec << endl;
     }
     assert(spec_err<accthresh);
 
