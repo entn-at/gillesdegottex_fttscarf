@@ -36,7 +36,7 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
     FFTPlanType ifft(false);
     bool spec_verify = false; // TODO
 
-    std::deque<double> durations; // [mus]
+    std::deque<double> durations; // [s]
     std::deque<double> accuracies;
     double accthresh = 100*fftscarf::eps;
 
