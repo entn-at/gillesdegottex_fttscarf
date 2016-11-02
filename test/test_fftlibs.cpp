@@ -23,7 +23,7 @@ static void test_lib(){
     std::cout << "Testing " << FFTPlanType::libraryName() << " ..." << std::endl;
 
     int N = 1024;
-    double accthresh = fftscarf::eps;
+    double accthresh = 100*fftscarf::eps;
 
     std::cout << "    N=" << N << " accthresh=" << accthresh << std::endl;
 
@@ -62,7 +62,7 @@ static void test_lib(){
     std::cout << "    spec err=" << spec_err << std::endl;
 
     if(spec_err>accthresh){
-        std::cout << spec_err << " eps=" << 1000*fftscarf::eps << std::endl;
+        std::cout << spec_err << " accthresh=" << accthresh << std::endl;
         std::cout << "m_spec_ref=" << spec_ref << endl;
         std::cout << "m_spec=" << spec << endl;
     }
