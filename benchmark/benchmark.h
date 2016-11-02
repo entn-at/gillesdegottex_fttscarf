@@ -9,8 +9,9 @@ using namespace std;
 using namespace fftscarf;
 
 #include <boost/chrono/system_clocks.hpp>
-#include <boost/random/normal_distribution.hpp>
 #include <boost/random/mersenne_twister.hpp>
+#include <boost/random/normal_distribution.hpp>
+#include <boost/random/variate_generator.hpp>
 
 #include "stream.h"
 
@@ -21,9 +22,11 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
     std::cout << "Testing " << name << " ..." << std::endl;
     std::cout << "Impl. type N MFlops dur5[s] dur50[s] dur95[s] acc5[s] acc50[s] acc95[s] nbruns" << endl;
 
-//    fftscarf::write_compile_info(cout);
     boost::mt19937 rnd_engine(std::time(0));
     boost::normal_distribution<FFFLOAT> rnd_normal_distrib;
+    boost::variate_generator<boost::mt19937&, 
+                boost::normal_distribution<FFFLOAT> > generator(rnd_engine, rnd_normal_distrib);
+
     boost::chrono::system_clock::time_point tstart;
     boost::chrono::system_clock::time_point tend;
     std::vector<std::complex<FFFLOAT> > spec;
@@ -56,7 +59,7 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
             // Window the frame
             inframe.resize(N);   // The input frame
             for(size_t n=0; n<N; ++n)
-                inframe[n] = rnd_normal_distrib(rnd_engine);
+                inframe[n] = generator();
 
             if(spec_verify)
                 fft_ref.dft(inframe, spec_ref, N);
