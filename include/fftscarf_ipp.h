@@ -21,12 +21,21 @@ namespace fftscarf {
 
 class FFTPlanImplementationIPP : public FFTPlanImplementation
 {
+    #ifdef FFTSCARF_PRECISION_FLOAT32
     IppsFFTSpec_R_32f *m_pFFTSpec;
+    #else
+    IppsFFTSpec_R_64f *m_pFFTSpec;
+    #endif
     Ipp8u *m_pFFTSpecBuf;
     Ipp8u *m_pFFTWorkBuf;
 
+    #ifdef FFTSCARF_PRECISION_FLOAT32
     Ipp32f *m_pSrc;
     Ipp32f *m_pDst;
+    #else
+    Ipp64f *m_pSrc;
+    Ipp64f *m_pDst;
+    #endif
 
     void init();
 
@@ -58,7 +67,11 @@ public:
             m_pSrc[u] = 0.0;
 
         // Do the FFT
+        #ifdef FFTSCARF_PRECISION_FLOAT32
         ippsFFTFwd_RToPerm_32f(m_pSrc, m_pDst, m_pFFTSpec, m_pFFTWorkBuf);
+        #else
+        ippsFFTFwd_RToPerm_64f(m_pSrc, m_pDst, m_pFFTSpec, m_pFFTWorkBuf);
+        #endif
 
         // Unpack pDst
         int neededoutsize = (m_size%2==1)?(m_size-1)/2+1:m_size/2+1;
@@ -91,7 +104,11 @@ public:
         }
 
         // Do the inverse FFT
+        #ifdef FFTSCARF_PRECISION_FLOAT32
         ippsFFTInv_PermToR_32f(m_pSrc, m_pDst, m_pFFTSpec, m_pFFTWorkBuf);
+        #else
+        ippsFFTInv_PermToR_64f(m_pSrc, m_pDst, m_pFFTSpec, m_pFFTWorkBuf);
+        #endif
 
         // Unpack pDst
         if(int(out.size())!=winlen)
@@ -103,19 +120,6 @@ public:
 
     virtual void dft();
     virtual void idft();
-
-//    // This works only for forward DFT !
-//    inline void setInput(size_t n, FFFLOAT value){m_signal[n] = value;}
-//    inline std::complex<FFFLOAT> getOutput(size_t n){
-//        if(n==0)
-//            return fftscarf::make_complex(m_fftreal_spec[0], FFFLOAT(0.0));
-//        if(int(n)==m_size/2)
-//            return fftscarf::make_complex(m_fftreal_spec[m_size/2], FFFLOAT(0.0));
-//        return make_complex(m_fftreal_spec[n], -m_fftreal_spec[m_size/2+n]);
-//    }
-//    inline std::complex<FFFLOAT> getDCOutput(){return fftscarf::make_complex(m_fftreal_spec[0], FFFLOAT(0.0));} // Avoid index checking
-//    inline std::complex<FFFLOAT> getMidOutput(size_t n){return fftscarf::make_complex(m_fftreal_spec[n], -m_fftreal_spec[m_size/2+n]);} // Avoid index checking
-//    inline std::complex<FFFLOAT> getNyquistOutput(){return fftscarf::make_complex(m_fftreal_spec[m_size/2],FFFLOAT(0.0));}// Avoid index checking
 };
 
 }

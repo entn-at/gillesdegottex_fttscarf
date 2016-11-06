@@ -58,15 +58,24 @@ void FFTPlanImplementationIPP::resize(int n)
     const int order=(int)(log((double)m_size)/log(2.0));
 
     if(m_pSrc)  ippFree(m_pSrc);
-    m_pSrc = ippsMalloc_32f(m_size);
     if(m_pDst)  ippFree(m_pDst);
+    #ifdef FFTSCARF_PRECISION_FLOAT32
+    m_pSrc = ippsMalloc_32f(m_size);
     m_pDst = ippsMalloc_32f(m_size);
+    #else
+    m_pSrc = ippsMalloc_64f(m_size);
+    m_pDst = ippsMalloc_64f(m_size);
+    #endif
 
     // Query to get buffer sizes
     int sizeFFTSpecBuf;
     int sizeFFTInitBuf;
     int sizeFFTWorkBuf;
+    #ifdef FFTSCARF_PRECISION_FLOAT32
     ippsFFTGetSize_R_32f(order, IPP_FFT_DIV_INV_BY_N, ippAlgHintNone, &sizeFFTSpecBuf, &sizeFFTInitBuf, &sizeFFTWorkBuf);
+    #else
+    ippsFFTGetSize_R_64f(order, IPP_FFT_DIV_INV_BY_N, ippAlgHintNone, &sizeFFTSpecBuf, &sizeFFTInitBuf, &sizeFFTWorkBuf);
+    #endif
 
     // Alloc FFT buffers
     Ipp8u *pFFTInitBuf = ippsMalloc_8u(sizeFFTInitBuf);
@@ -76,7 +85,11 @@ void FFTPlanImplementationIPP::resize(int n)
     m_pFFTWorkBuf = ippsMalloc_8u(sizeFFTWorkBuf);
 
     // Initialize FFT
+    #ifdef FFTSCARF_PRECISION_FLOAT32
     ippsFFTInit_R_32f(&m_pFFTSpec, order, IPP_FFT_DIV_INV_BY_N, ippAlgHintNone, m_pFFTSpecBuf, pFFTInitBuf);
+    #else
+    ippsFFTInit_R_64f(&m_pFFTSpec, order, IPP_FFT_DIV_INV_BY_N, ippAlgHintNone, m_pFFTSpecBuf, pFFTInitBuf);
+    #endif
 
     if(pFFTInitBuf) ippFree(pFFTInitBuf);
 }
