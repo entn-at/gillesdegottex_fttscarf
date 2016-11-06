@@ -85,22 +85,25 @@ if  __name__ == "__main__" :
         axs[0].fill_between(np.log2(Ns), MFlops_bt, MFlops_up, facecolor=color, alpha=0.5)
         axs[0].plot(np.log2(Ns), MFlops, label=m, color=color, marker=marker)
 
+        method['acc5'][method['acc5']==0.0] = 10**-8.0
         axs[1].fill_between(np.log2(Ns), np.log10(method['acc5']), np.log10(method['acc95']), facecolor=color, alpha=0.5)
         axs[1].plot(np.log2(Ns), np.log10(method['acc50']), label=m, color=color, marker=marker)
 
-    axs[1].set_ylim((-7.8, -6.6))
+    axs[1].set_ylim((-7.6, -6.6))
     axs[0].legend(loc='upper left')
     axs[0].grid()
     axs[1].grid()
     axs[0].set_ylabel('Speed [MFlops]')
     axs[1].set_ylabel('Accuracy [log10 RMS]')
+    axs[1].set_xlabel('FFT size N')
+    axs[0].set_title('(range shows 5% to 95% percentiles)')
     f.canvas.draw()
 
     labels = [item.get_text() for item in axs[0].get_xticklabels()]
-#    print(labels)
     for li in range(len(labels)):
         labels[li] = str(2**int(float(labels[li])))
     axs[0].set_xticklabels(labels)
+    axs[1].set_xticklabels(labels)
 
 #    labels = [item.get_text() for item in axs[1].get_yticklabels()]
 #    print(labels)
