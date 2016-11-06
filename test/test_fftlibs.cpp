@@ -103,6 +103,20 @@ BOOST_AUTO_TEST_CASE( test_fftlibs_fftreal )
 }
 #endif
 
+#ifdef FFTSCARF_FFT_PFFFT
+BOOST_AUTO_TEST_CASE( test_fftlibs_pffft )
+{
+    test_lib<fftscarf::FFTPlanImplementationPFFFT>();
+}
+#endif
+
+#ifdef FFTSCARF_FFT_FFTS
+BOOST_AUTO_TEST_CASE( test_fftlibs_ffts )
+{
+    test_lib<fftscarf::FFTPlanImplementationFFTS>();
+}
+#endif
+
 #ifdef FFTSCARF_FFT_FFTW3
 BOOST_AUTO_TEST_CASE( test_fftlibs_fftw3 )
 {

@@ -5,9 +5,9 @@ option(FFTSCARF_PRECISION_FLOAT32 "" ON)
 option(FFTSCARF_BUILD_TEST "" OFF)
 option(FFTSCARF_FFT_OOURA "" ON)
 option(FFTSCARF_FFT_FFTREAL "" ON)
-option(FFTSCARF_FFT_PFFFT "" OFF)
+option(FFTSCARF_FFT_PFFFT "" ON)
 option(FFTSCARF_FFT_DJBFFT "" OFF)
-option(FFTSCARF_FFT_FFTS "" OFF)
+option(FFTSCARF_FFT_FFTS "" ON)
 option(FFTSCARF_FFT_FFTW3 "" OFF)
 option(FFTSCARF_FFT_IPP "" OFF)
 
@@ -26,8 +26,9 @@ include_directories(${CMAKE_BINARY_DIR}/fftscarf/include)
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/fftscarf)
 
+
 # A make target for running the benchmarks
-add_custom_target(benchmark_run DEPENDS benchmark_run_ooura)
+add_custom_target(benchmark_run DEPENDS benchmark_run_ooura) # TODO rm benchmark_run_ooura
 
 if(FFTSCARF_FFT_OOURA)
     add_subdirectory(ooura)

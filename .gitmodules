@@ -1,0 +1,3 @@
+[submodule "fftlibs/ffts"]
+	path = fftlibs/ffts
+	url = https://github.com/linkotec/ffts.git

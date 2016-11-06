@@ -3,7 +3,7 @@ project (fftscarf)
 
 add_library(fftscarf src/fftscarf.cpp)
 
-message("FFTScarf configuring lib")
+message("\n-- FFTScarf configuring lib")
 
 option(FFTSCARF_PRECISION_FLOAT32 "Precision" ON)
 if(FFTSCARF_PRECISION_FLOAT32)
@@ -16,10 +16,10 @@ endif(FFTSCARF_PRECISION_FLOAT32)
 message("--   FFT Implementation")
 option(FFTSCARF_FFT_OOURA "Ooura's FFT" ON)
 option(FFTSCARF_FFT_FFTREAL "FFTReal" ON)
-option(FFTSCARF_FFT_PFFFT "PFFFT" OFF)
+option(FFTSCARF_FFT_PFFFT "PFFFT" ON)
 option(FFTSCARF_FFT_DJBFFT "DJBFFT" OFF)
 option(FFTSCARF_FFT_FFTW3 "FFTW3" OFF)
-option(FFTSCARF_FFT_FFTS "FFTS" OFF)
+option(FFTSCARF_FFT_FFTS "FFTS" ON)
 option(FFTSCARF_FFT_IPP "IPP" OFF)
 
 if(FFTSCARF_FFT_OOURA)
@@ -37,37 +37,33 @@ if(FFTSCARF_FFT_FFTREAL)
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_fftreal.cpp)
 endif(FFTSCARF_FFT_FFTREAL)
 
-# if(FFTSCARF_FFT_PFFFT)
-#     message("--     Using Pretty Fast FFT (PFFFT) (built-in)")
-# #    add_definitions(-DFFTSCARF_FFT_PFFFT)
-#     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_pffft.cpp)
-#     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/pffft/pffft.c)
-# endif(FFTSCARF_FFT_PFFFT)
-# 
+if(FFTSCARF_FFT_PFFFT)
+    message("--     Using Pretty Fast FFT (PFFFT) (built-in)")
+    target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_pffft.cpp)
+    target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/pffft/pffft.c)
+endif(FFTSCARF_FFT_PFFFT)
+
 # if(FFTSCARF_FFT_DJBFFT)
 #     message("--     Using DJBFFT (shipped with)")
 # #    message("--     Configuring DJBFFT library")
-# #    add_definitions(-DFFTSCARF_FFT_DJBFFT)
 #     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_djbfft.cpp)
 #     target_link_libraries(fftscarf ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/djbfft-0.76/djbfft.a)
 # endif(FFTSCARF_FFT_DJBFFT)
-# 
-# if(FFTSCARF_FFT_FFTS)
-#     message("--     Using FFTS (shipped with)")
-#     message("--     Configuring FFTS library")
-# #    add_definitions(-DFFTSCARF_FFT_FFTS)
-#     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_ffts.cpp)
-#     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ffts ${CMAKE_CURRENT_BINARY_DIR}/ffts_build)
-#     add_custom_target(libffts
-#                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/
-#                         COMMAND make)
-#     add_dependencies(fftscarf libffts)
-#     target_link_libraries(fftscarf ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/libffts.a)
-# endif(FFTSCARF_FFT_FFTS)
+
+if(FFTSCARF_FFT_FFTS)
+    message("--     Using FFTS (shipped with)")
+    message("--         Configuring FFTS library...")
+    target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_ffts.cpp)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ffts ${CMAKE_CURRENT_BINARY_DIR}/ffts_build)
+    add_custom_target(libffts
+                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/
+                     COMMAND make)
+    add_dependencies(fftscarf libffts)
+    target_link_libraries(fftscarf ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/libffts.a)
+endif(FFTSCARF_FFT_FFTS)
 
 if(FFTSCARF_FFT_FFTW3)
     message("--     Using FFTW3 (external lib)")
-    #    add_definitions(-DFFTSCARF_FFT_FFTW3)
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_fftw3.cpp)
     if(FFTSCARF_PRECISION_FLOAT32)
         target_link_libraries(fftscarf fftw3f)
@@ -92,7 +88,7 @@ include_directories(include)
 
 option(FFTSCARF_BUILD_TEST "Build tests" OFF)
 if(FFTSCARF_BUILD_TEST)
-    message("FFTScarf configuring tests")
+    message("\n-- FFTScarf configuring tests")
     add_subdirectory(test)
 
     # Add a custom target for running all the tests
@@ -111,6 +107,7 @@ if(FFTSCARF_BUILD_TEST)
 
 endif(FFTSCARF_BUILD_TEST)
 
+message("")
 
 # Optimization -----------------------------------------------------------------
 
