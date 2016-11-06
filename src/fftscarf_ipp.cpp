@@ -15,11 +15,7 @@ std::string FFTPlanImplementationIPP::version(){
     return string(lib->Name)+" "+string(lib->Version); // This is the current used version
 }
 std::string FFTPlanImplementationIPP::libraryName(){
-    return string("Intel Integrated Performance Primitives (Intel IPP) ")+version();
-}
-
-void FFTPlanImplementationIPP::setTimeLimitForPlanPreparation(float t){
-    throw string("FFTPlanImplementationPFFFT::setTimeLimitForPlanPreparation: Does nothing for FFTReal implementation");
+    return string("Intel Integrated Performance Primitives (IPP) ")+version();
 }
 
 void FFTPlanImplementationIPP::init(){

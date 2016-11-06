@@ -24,10 +24,6 @@ std::string FFTPlanImplementationFFTS::libraryName(){
     return string("FFTS ")+version()+string(" (precision ")+boost::lexical_cast<std::string>(8*sizeof(FFFLOAT))+string("b)");
 }
 
-void FFTPlanImplementationFFTS::setTimeLimitForPlanPreparation(float t){
-    throw string("FFTPlanImplementationFFTS::setTimeLimitForPlanPreparation: Does nothing for FFTReal implementation");
-}
-
 FFTPlanImplementationFFTS::FFTPlanImplementationFFTS(bool forward)
     : FFTPlanImplementation(forward)
 {

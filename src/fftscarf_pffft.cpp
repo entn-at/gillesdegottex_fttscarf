@@ -15,10 +15,6 @@ std::string FFTPlanImplementationPFFFT::libraryName(){
     return string("Pretty Fast FFT (PFFFT) ")+version()+string(" (SIMD size ")+boost::lexical_cast<std::string>(pffft_simd_size())+string(")"); // This is the current built-in version
 }
 
-void FFTPlanImplementationPFFFT::setTimeLimitForPlanPreparation(float t){
-    throw string("FFTPlanImplementationPFFFT::setTimeLimitForPlanPreparation: Does nothing for FFTReal implementation");
-}
-
 FFTPlanImplementationPFFFT::FFTPlanImplementationPFFFT(bool forward)
     : FFTPlanImplementation(forward)
 {

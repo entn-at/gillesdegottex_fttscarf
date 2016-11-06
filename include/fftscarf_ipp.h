@@ -42,7 +42,6 @@ class FFTPlanImplementationIPP : public FFTPlanImplementation
 public:
     static std::string version();
     static std::string libraryName();
-    static void setTimeLimitForPlanPreparation(float t); // t[s]
 
     FFTPlanImplementationIPP(bool forward=true);
     FFTPlanImplementationIPP(int n, bool forward=true);

@@ -30,7 +30,6 @@ class FFTPlanImplementationPFFFT : public FFTPlanImplementation
 public:
     static std::string version();
     static std::string libraryName();
-    static void setTimeLimitForPlanPreparation(float t); // t[s]
 
     FFTPlanImplementationPFFFT(bool forward=true);
     FFTPlanImplementationPFFFT(int n, bool forward=true);
