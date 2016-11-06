@@ -5,7 +5,7 @@ project (tests)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 add_definitions(-DBOOST_LOG_DYN_LINK)
 
-# Add Voimoo library
+# Add FFTScarf library
 include_directories(../include)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
