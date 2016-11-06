@@ -8,7 +8,7 @@ option(FFTSCARF_FFT_FFTREAL "" ON)
 option(FFTSCARF_FFT_PFFFT "" ON)
 option(FFTSCARF_FFT_DJBFFT "" OFF)
 option(FFTSCARF_FFT_FFTS "" ON)
-option(FFTSCARF_FFT_FFTW3 "" OFF)
+option(FFTSCARF_FFT_FFTW3 "" ON)
 option(FFTSCARF_FFT_IPP "" OFF)
 
 # Add Boost library
