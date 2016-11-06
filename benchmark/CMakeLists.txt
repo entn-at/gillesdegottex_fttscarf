@@ -17,13 +17,15 @@ add_definitions(-DBOOST_LOG_DYN_LINK)
 add_definitions(-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-# Add Voimoo library
+# Add FFTScarf library
 if(FFTSCARF_PRECISION_FLOAT32)
     add_definitions(-DOOFLOAT_FLOAT) # TODO Annoying to have to redefine this here
 endif(FFTSCARF_PRECISION_FLOAT32)
+if(FFTSCARF_FFT_IPP)
+    include_directories(/opt/intel/ipp/include)
+endif(FFTSCARF_FFT_IPP)
 include_directories(${CMAKE_SOURCE_DIR}/../include/)
 include_directories(${CMAKE_BINARY_DIR}/fftscarf/include)
-
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/fftscarf)
 
 
@@ -55,7 +57,6 @@ if(FFTSCARF_FFT_FFTW3)
     add_dependencies(benchmark_run benchmark_run_fftw3)
 endif(FFTSCARF_FFT_FFTW3)
 if(FFTSCARF_FFT_IPP)
-    include_directories(/opt/intel/ipp/include)
     add_subdirectory(ipp)
     add_dependencies(benchmark_run benchmark_run_ipp)
 endif(FFTSCARF_FFT_IPP)
