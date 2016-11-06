@@ -1,5 +1,6 @@
 #include "fftscarf_ooura.h"
 
+#include <assert.h>
 #include <cmath>
 #include <string>
 #include <sstream>
