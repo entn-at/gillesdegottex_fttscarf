@@ -93,19 +93,6 @@ public:
 
     virtual void dft();
     virtual void idft();
-
-//    // This works only for forward DFT !
-//    inline void setInput(size_t n, FFFLOAT value){m_signal[n] = value;}
-//    inline std::complex<FFFLOAT> getOutput(size_t n){
-//        if(n==0)
-//            return fftscarf::make_complex(m_fftreal_spec[0], FFFLOAT(0.0));
-//        if(int(n)==m_size/2)
-//            return fftscarf::make_complex(m_fftreal_spec[m_size/2], FFFLOAT(0.0));
-//        return make_complex(m_fftreal_spec[n], -m_fftreal_spec[m_size/2+n]);
-//    }
-//    inline std::complex<FFFLOAT> getDCOutput(){return fftscarf::make_complex(m_fftreal_spec[0], FFFLOAT(0.0));} // Avoid index checking
-//    inline std::complex<FFFLOAT> getMidOutput(size_t n){return fftscarf::make_complex(m_fftreal_spec[n], -m_fftreal_spec[m_size/2+n]);} // Avoid index checking
-//    inline std::complex<FFFLOAT> getNyquistOutput(){return fftscarf::make_complex(m_fftreal_spec[m_size/2],FFFLOAT(0.0));}// Avoid index checking
 };
 
 }
