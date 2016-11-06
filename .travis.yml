@@ -43,13 +43,13 @@ install:
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install libfftw3-dev; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install cmake; fi
     - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install fftw; fi
-    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install cmake; fi
+    #- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install cmake; fi
     - cmake --version
 
 script:
     - mkdir build
     - cd build
-    - cmake -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON ..
+    - cmake -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_FFT_OOURA:BOOL:ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_PFFFT:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON -DFFTSCARF_FFT_FFTS:BOOL=ON ..
     - make
     - ls -l
     - make test_run
