@@ -123,3 +123,10 @@ BOOST_AUTO_TEST_CASE( test_fftlibs_fftw3 )
     test_lib<fftscarf::FFTPlanImplementationFFTW3>();
 }
 #endif
+
+#ifdef FFTSCARF_FFT_IPP
+BOOST_AUTO_TEST_CASE( test_fftlibs_ipp)
+{
+    test_lib<fftscarf::FFTPlanImplementationIPP>();
+}
+#endif
