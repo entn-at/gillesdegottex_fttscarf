@@ -65,6 +65,11 @@ if  __name__ == "__main__" :
                     methods[method]['acc95'].append(float(res[9]))
 
 
+    # Guess the precision
+    usefloat32 = np.mean(methods[methods.keys()[0]]['acc50'])>1e-10
+    if usefloat32: print('Assume single precision (float32)')
+    else:          print('Assume double precision (float64)')
+
     f, axs = plt.subplots(2, 1, sharex=True, sharey=False)
     for m in methods:
         method = methods[m]
@@ -85,18 +90,27 @@ if  __name__ == "__main__" :
         axs[0].fill_between(np.log2(Ns), MFlops_bt, MFlops_up, facecolor=color, alpha=0.5)
         axs[0].plot(np.log2(Ns), MFlops, label=m, color=color, marker=marker)
 
-        method['acc5'][method['acc5']==0.0] = 10**-8.0
+        if usefloat32:
+            method['acc5'][method['acc5']==0.0] = 10**-8.0
+        else:
+            method['acc5'][method['acc5']==0.0] = 10**-17.0
+
         axs[1].fill_between(np.log2(Ns), np.log10(method['acc5']), np.log10(method['acc95']), facecolor=color, alpha=0.5)
         axs[1].plot(np.log2(Ns), np.log10(method['acc50']), label=m, color=color, marker=marker)
 
-    axs[1].set_ylim((-7.6, -6.6))
+    if usefloat32: axs[1].set_ylim((-7.6, -6.6))
+    else:          axs[1].set_ylim((-16.5, -15.25))
+
     axs[0].legend(loc='upper left')
     axs[0].grid()
     axs[1].grid()
     axs[0].set_ylabel('Speed [MFlops]')
     axs[1].set_ylabel('Accuracy [log10 RMS]')
     axs[1].set_xlabel('FFT size N')
-    axs[0].set_title('(range shows 5% to 95% percentiles)')
+    if usefloat32:  title = 'Single precision (float32)'
+    else:           title = 'Double precision (float64)'
+    title += ' (ranges show 5% to 95% percentiles)'
+    axs[0].set_title(title)
     f.canvas.draw()
 
     labels = [item.get_text() for item in axs[0].get_xticklabels()]
