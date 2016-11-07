@@ -57,7 +57,7 @@ script:
     - cd ..
 
     - mkdir build_float64
-    - cd build_float32
+    - cd build_float64
     - cmake -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_FFT_OOURA:BOOL=ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON -DFFTSCARF_PRECISION_FLOAT32:BOOL=OFF ..
     - make
     - ls -l
