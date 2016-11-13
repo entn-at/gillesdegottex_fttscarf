@@ -1,31 +1,40 @@
-/*! \file */
+/*! \file
+
+How to call:
+FFTPlanSingle
+FFTPlanDouble
+FFTPlan (will use the default precision given by FFTScarf (selected at FFTSarf compile time))
+*/
 
 #ifndef __FFTSCARF_H__
 #define __FFTSCARF_H__
 
 #define FFTSCARF_VERSION_MAJOR 0
-#define FFTSCARF_VERSION_MINOR 1
+#define FFTSCARF_VERSION_MINOR 2
 #define FFTSCARF_VERSION_REVISION 0
 
-// This one creates boost's bug #11892 (multiple definitions). Thus, cannot use the typedef below (...)
-// #include <boost/cstdfloat.hpp>
-#cmakedefine FFTSCARF_PRECISION_FLOAT32
-#ifdef FFTSCARF_PRECISION_FLOAT32
-    #define FFFLOAT float
-//     #define FFFLOAT boost::float32_t
-#else
-    #define FFFLOAT double
-//     #define FFFLOAT boost::float64_t
-#endif
+#cmakedefine FFTSCARF_PRECISION_SINGLE
+#cmakedefine FFTSCARF_PRECISION_DOUBLE
+#cmakedefine FFTSCARF_PRECISION_DEFAULTSINGLE
+#cmakedefine FFTSCARF_PLAN_PROTECTACCESS
 
+#cmakedefine FFTSCARF_FFT_IPP
+#cmakedefine FFTSCARF_FFT_FFTS
+#cmakedefine FFTSCARF_FFT_PFFFT
+#cmakedefine FFTSCARF_FFT_FFTW3
 #cmakedefine FFTSCARF_FFT_OOURA
 #cmakedefine FFTSCARF_FFT_FFTREAL
-#cmakedefine FFTSCARF_FFT_PFFFT
-#cmakedefine FFTSCARF_FFT_DJBFFT
-#cmakedefine FFTSCARF_FFT_FFTW3
-#cmakedefine FFTSCARF_FFT_FFTS
-#cmakedefine FFTSCARF_FFT_IPP
+//#cmakedefine FFTSCARF_FFT_DJBFFT
 
+#ifdef FFTSCARF_PLAN_PROTECTACCESS
+#define FFTSCARF_PLAN_ACCESS_DECLARE boost::mutex m_plan_access;
+#define FFTSCARF_PLAN_ACCESS_LOCK m_plan_access.lock();
+#define FFTSCARF_PLAN_ACCESS_UNLOCK m_plan_access.unlock();
+#else
+#define FFTSCARF_PLAN_ACCESS_DECLARE
+#define FFTSCARF_PLAN_ACCESS_LOCK
+#define FFTSCARF_PLAN_ACCESS_UNLOCK
+#endif
 
 // Check if GPL is enforced on the user's software
 #ifdef FFTSCARF_FFT_FFTW3
@@ -34,11 +43,10 @@
 #endif
 
 
-#include <limits>
 #include <string>
 #include <list>
+#include <limits>
 #include <complex>
-#include <ctime>
 
 
 /*! \brief General namespace of the library
@@ -46,72 +54,85 @@
 namespace fftscarf {
     //! Return the version of the library as a string.
     std::string version();
+
     //! Write some comile-time information to the given stream.
     void write_compile_info(std::ostream& out);
 
-    //! Return the machine epsilon, that is, the difference between 1.0 and the next value representable by the floating-point type FFFLOAT.
-    static const FFFLOAT eps = std::numeric_limits<FFFLOAT>::epsilon();
+    //! Return the list of FFT libraries available in FFTScarf.
+    std::list<std::string> availableLibraries();
 
-    template<typename Type>	inline std::complex<Type> make_complex(Type value[]){
-        return std::complex<Type>(value[0], value[1]);
+    //! Return the machine epsilon, that is, the difference between 1.0 and the next value representable by the floating-point type FloatType.
+    template<typename FloatType>
+    FloatType eps() {return std::numeric_limits<FloatType>::epsilon();}
+
+    //! Return a complex value from an array of two values.
+    template<typename FloatType>
+    inline std::complex<FloatType> make_complex(FloatType value[]){
+        return std::complex<FloatType>(value[0], value[1]);
     }
 
-    template<typename Type>	inline std::complex<Type> make_complex(Type real, Type imag){
-        return std::complex<Type>(real, imag);
+    //! Return a complex value from the given real and imaginary parts.
+    template<typename FloatType>
+    inline std::complex<FloatType> make_complex(FloatType real, FloatType imag){
+        return std::complex<FloatType>(real, imag);
     }
 
-    /*! \brief Interface to implement by any FFT implementation
+    /*! \brief Interface to be implemented by any FFT implementation
+     * The basic idea is to implement a "plan", which follows the same
+     * definition as in FFTW3. Namely, it is an object that:
+     * - A plan is either forward or backward.
+     * - It holds the trigonometric tables for computing an FFT of a given size.
+     * - The size of the plan is not fixed and can be resized at run-time.
+     * - The plan can be "executed" to tranform some data.
      */
     class FFTPlanImplementation
     {
-
     protected:
-
         bool m_forward;
         int m_size;
 
     public:
-        static std::list<std::string> availableLibraries();
-
         FFTPlanImplementation(bool forward=true);
         FFTPlanImplementation(int n, bool forward=true);
 
         virtual void resize(int n)=0;
         int size(){return m_size;}
 
-        // Interface to follow for implementations (template polymorphism doesn't exist)
+        // Interface to follow for implementations:
+        // (static polymorphism doesn't exist)
         // static std::string version();
         // static std::string libraryName();
 
         // To execute the DFT computation:
+        // (template polymorphism doesn't exist)
         // template<typename TypeInContainer>
-        // void dft(const TypeInContainer& in, std::vector<std::complex<FFFLOAT> >& out, int dftlen=-1);
+        // void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1);
         // template<typename TypeOutContainer>
-        // void idft(const std::vector<std::complex<FFFLOAT> >& in, TypeOutContainer& out, int winlen=-1);
+        // void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1);
     };
 }
 
+#ifdef FFTSCARF_FFT_IPP
+    #include "fftscarf_ipp.h"
+#endif
+#ifdef FFTSCARF_FFT_FFTS
+    #include "fftscarf_ffts.h"
+#endif
+#ifdef FFTSCARF_FFT_PFFFT
+    #include "fftscarf_pffft.h"
+#endif
+#ifdef FFTSCARF_FFT_FFTW3
+    #include "fftscarf_fftw3.h"
+#endif
 #ifdef FFTSCARF_FFT_OOURA
     #include "fftscarf_ooura.h"
 #endif
 #ifdef FFTSCARF_FFT_FFTREAL
     #include "fftscarf_fftreal.h"
 #endif
-#ifdef FFTSCARF_FFT_PFFFT
-    #include "fftscarf_pffft.h"
-#endif
-#ifdef FFTSCARF_FFT_DJBFFT
-    #include "fftscarf_djbfft.h"
-#endif
-#ifdef FFTSCARF_FFT_FFTS
-    #include "fftscarf_ffts.h"
-#endif
-#ifdef FFTSCARF_FFT_FFTW3
-    #include "fftscarf_fftw3.h"
-#endif
-#ifdef FFTSCARF_FFT_IPP
-    #include "fftscarf_ipp.h"
-#endif
+//#ifdef FFTSCARF_FFT_DJBFFT
+//    #include "fftscarf_djbfft.h"
+//#endif
 
 
 #endif // __FFTSCARF_H__

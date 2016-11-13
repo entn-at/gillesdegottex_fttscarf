@@ -1,11 +1,29 @@
 import fnmatch
 import os
 import time
+import platform
+import subprocess
+import re
 
 import numpy as np
 
 import matplotlib.pyplot as plt
 plt.ion()
+
+def get_processor_name():
+    if platform.system() == "Windows":
+        return platform.processor()
+    elif platform.system() == "Darwin":
+        os.environ['PATH'] = os.environ['PATH'] + os.pathsep + '/usr/sbin'
+        command ="sysctl -n machdep.cpu.brand_string"
+        return subprocess.check_output(command).strip()
+    elif platform.system() == "Linux":
+        command = "cat /proc/cpuinfo"
+        all_info = subprocess.check_output(command, shell=True).strip()
+        for line in all_info.split("\n"):
+            if "model name" in line:
+                return re.sub( ".*model name.*:\s*", "", line,1)
+    return ""
 
 def getlinestyle(method):
     color = None
@@ -109,8 +127,7 @@ if  __name__ == "__main__" :
     axs[1].set_xlabel('FFT size N')
     if usefloat32:  title = 'Single precision (float32)'
     else:           title = 'Double precision (float64)'
-    title += ' (ranges show 5% to 95% percentiles)'
-    axs[0].set_title(title)
+    axs[1].set_title('(ranges show 5% to 95% percentiles)\n')
     f.canvas.draw()
 
     labels = [item.get_text() for item in axs[0].get_xticklabels()]
@@ -126,6 +143,10 @@ if  __name__ == "__main__" :
 #    for li in range(len(labels)):
 #        labels[li] = '$10^{'+labels[li]+'}$'
 #    axs[1].set_yticklabels(labels)
+
+    # Get CPU info
+    title = get_processor_name()+'\n'+title+'\n'
+    axs[0].set_title(title)
 
     from IPython.core.debugger import  Pdb; Pdb().set_trace()
 

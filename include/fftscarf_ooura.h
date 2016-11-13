@@ -7,35 +7,39 @@
 #include <string>
 
 #include <fftscarf.h>
-#ifndef FFTScarf
-#define FFTScarf FFTPlanImplementationOoura
+#ifdef FFTSCARF_PLAN_PROTECTACCESS
+#include <boost/thread/mutex.hpp>
 #endif
 
 extern "C" {
 #include "../fftlibs/ooura/fftsg.h"
 }
 
-
 namespace fftscarf {
 
-class FFTPlanImplementationOoura : public FFTPlanImplementation
+class FFTPlanOoura : public FFTPlanImplementation
 {
-    FFFLOAT* m_ooura_a;
+public:
+    typedef OOFLOAT FloatType;
+
+private:
+    FloatType* m_ooura_a;
     int* m_ooura_ip;
-    FFFLOAT* m_ooura_w;
+    FloatType* m_ooura_w;
+    FFTSCARF_PLAN_ACCESS_DECLARE
 
 public:
     static std::string version();
     static std::string libraryName();
 
-    FFTPlanImplementationOoura(bool forward=true);
-    FFTPlanImplementationOoura(int n, bool forward=true);
-    ~FFTPlanImplementationOoura();
+    FFTPlanOoura(bool forward=true);
+    FFTPlanOoura(int n, bool forward=true);
+    ~FFTPlanOoura();
 
     virtual void resize(int n);
 
     template<typename TypeInContainer>
-    void dft(const TypeInContainer& in, std::vector<std::complex<FFFLOAT> >& out, int dftlen=-1){
+    void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -54,7 +58,9 @@ public:
         for(; u<dftlen; ++u)
             m_ooura_a[u] = 0.0;
 
+        FFTSCARF_PLAN_ACCESS_LOCK
         rdft(m_size, 1, m_ooura_a, m_ooura_ip, m_ooura_w);
+        FFTSCARF_PLAN_ACCESS_UNLOCK
 
         out[0] = m_ooura_a[0]; // DC
         for(int f=1; f<m_size/2; f++)
@@ -63,7 +69,7 @@ public:
     }
 
     template<typename TypeOutContainer>
-    void idft(const std::vector<std::complex<FFFLOAT> >& in, TypeOutContainer& out, int winlen=-1){
+    void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -84,14 +90,33 @@ public:
         }
         m_ooura_a[1] = in[m_size/2].real(); // Nyquist
 
+        FFTSCARF_PLAN_ACCESS_LOCK
         rdft(m_size, -1, m_ooura_a, m_ooura_ip, m_ooura_w);
+        FFTSCARF_PLAN_ACCESS_UNLOCK
 
-        FFFLOAT oneoverdftlen = 2.0/m_size;
+        FloatType oneoverdftlen = 2.0/m_size;
         for(size_t u=0; u<winlen; ++u)
             out[u] = m_ooura_a[u]*oneoverdftlen;
     }
 };
 
+#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+    typedef FFTPlanOoura FFTPlanSingleOoura;
+    #ifndef FFTSCARF_FFTPLANSINGLE
+        #define FFTSCARF_FFTPLANSINGLE
+        typedef FFTPlanSingleOoura FFTPlanSingle;
+    #endif
+#else
+    typedef FFTPlanOoura FFTPlanDoubleOoura;
+    #ifndef FFTSCARF_FFTPLANDOUBLE
+        #define FFTSCARF_FFTPLANDOUBLE
+        typedef FFTPlanDoubleOoura FFTPlanDouble;
+    #endif
+#endif
+#ifndef FFTSCARF_FFTPLAN
+    #define FFTSCARF_FFTPLAN
+    typedef FFTPlanOoura FFTPlan;
+#endif
 }
 
 #endif // __FFTSCARF_OOURA_H__

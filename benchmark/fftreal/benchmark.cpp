@@ -2,7 +2,7 @@
 
 int main(int argc, char** argcc){
 
-    benchmark<fftscarf::FFTPlanImplementationFFTReal>("fftreal");
+    benchmark<fftscarf::FFTPlanFFTReal>("fftreal");
 
     return 0;
 }

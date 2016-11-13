@@ -5,27 +5,43 @@
 
 const struct AvailableFFTLibraries : public std::list<std::string> {
     AvailableFFTLibraries(){
-    #ifdef FFTSCARF_FFT_OOURA
-        push_back(fftscarf::FFTPlanImplementationOoura::libraryName());
-    #endif
-    #ifdef FFTSCARF_FFT_FFTREAL
-        push_back(fftscarf::FFTPlanImplementationFFTReal::libraryName());
-    #endif
-    #ifdef FFTSCARF_FFT_PFFFT
-        push_back(fftscarf::FFTPlanImplementationPFFFT::libraryName());
-    #endif
-    #ifdef FFTSCARF_FFT_DJBFFT
-        push_back(fftscarf::FFTPlanImplementationDJBFFT::libraryName());
+    #ifdef FFTSCARF_FFT_IPP
+        #ifdef FFTSCARF_PRECISION_SINGLE
+            push_back(fftscarf::FFTPlanSingleIPP::libraryName());
+        #endif
+        #ifdef FFTSCARF_PRECISION_DOUBLE
+            push_back(fftscarf::FFTPlanDoubleIPP::libraryName());
+        #endif
     #endif
     #ifdef FFTSCARF_FFT_FFTS
-        push_back(fftscarf::FFTPlanImplementationFFTS::libraryName());
+        push_back(fftscarf::FFTPlanFFTS::libraryName());
+    #endif
+    #ifdef FFTSCARF_FFT_PFFFT
+        push_back(fftscarf::FFTPlanPFFFT::libraryName());
     #endif
     #ifdef FFTSCARF_FFT_FFTW3
-        push_back(fftscarf::FFTPlanImplementationFFTW3::libraryName());
+        #ifdef FFTSCARF_PRECISION_SINGLE
+            push_back(fftscarf::FFTPlanSingleFFTW3::libraryName());
+        #endif
+        #ifdef FFTSCARF_PRECISION_DOUBLE
+            push_back(fftscarf::FFTPlanDoubleFFTW3::libraryName());
+        #endif
     #endif
-    #ifdef FFTSCARF_FFT_IPP
-        push_back(fftscarf::FFTPlanImplementationIPP::libraryName());
+    #ifdef FFTSCARF_FFT_OOURA
+        push_back(fftscarf::FFTPlanOoura::libraryName());
     #endif
+    #ifdef FFTSCARF_FFT_FFTREAL
+        #ifdef FFTSCARF_PRECISION_SINGLE
+            push_back(fftscarf::FFTPlanSingleFFTReal::libraryName());
+        #endif
+        #ifdef FFTSCARF_PRECISION_DOUBLE
+            push_back(fftscarf::FFTPlanDoubleFFTReal::libraryName());
+        #endif
+//        push_back(fftscarf::FFTPlanLongDoubleFFTReal::libraryName()); // TODO #8
+    #endif
+//    #ifdef FFTSCARF_FFT_DJBFFT
+//        push_back(fftscarf::FFTPlanDJBFFT::libraryName());
+//    #endif
     }
 } s_available_fft_libraries;
 
@@ -42,13 +58,7 @@ namespace fftscarf {
         #ifdef FFTSCARF_LICENSE_GPLENFORCED
         out << "    License: ATTENTION: GPL is enforced on this software" << std::endl;
         #endif
-        out << "    Precision: " << 8*sizeof(FFFLOAT) << "b eps=" << fftscarf::eps;
-        #ifdef FFTSCARF_PRECISION_FLOAT32
-        out << " (float32)" << std::endl;
-        #else
-        out << " (double64)" << std::endl;
-        #endif
-        std::list<std::string> fftlibs = FFTPlanImplementation::availableLibraries();
+        std::list<std::string> fftlibs = availableLibraries();
         if(fftlibs.size()==0)
             out << "    No FFT implementation available";
         else if(fftlibs.size()==1)
@@ -58,9 +68,28 @@ namespace fftscarf {
             for(std::list<std::string>::iterator it=fftlibs.begin(); it!=fftlibs.end(); ++it)
                 out << "        " << *it << std::endl;
         }
+        #ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+        out << "    Default precision: Single (float 32b)" << std::endl;
+        #else
+        out << "    Default precision: Double (float 64b)" << std::endl;
+        #endif
+        #ifdef FFTSCARF_FFTPLANSINGLE
+        out << "    Default FFTPlanSingle: " << FFTPlanSingle::libraryName() << std::endl;
+        #endif
+        #ifdef FFTSCARF_FFTPLANDOUBLE
+        out << "    Default FFTPlanDouble: " << FFTPlanDouble::libraryName() << std::endl;
+        #endif
+        #ifdef FFTSCARF_FFTPLAN
+        out << "    Default FFTPlan: " << FFTPlan::libraryName() << std::endl;
+        #endif
+        #ifdef FFTSCARF_PLAN_PROTECTACCESS
+        out << "    Plan access is protected using a mutex" << std::endl;
+        #else
+        out << "    Plan access is NOT protected" << std::endl;
+        #endif
     }
 
-    std::list<std::string> FFTPlanImplementation::availableLibraries() {
+    std::list<std::string> availableLibraries() {
         return s_available_fft_libraries;
     }
 
@@ -71,6 +100,10 @@ namespace fftscarf {
 
     FFTPlanImplementation::FFTPlanImplementation(int n, bool forward) {
         m_forward = forward;
-        // resize(n); // Don't call it here the vtable might not be ready
+        // resize(n); // Don't call it here the vtable might not be ready. Let the child class deal with it.
     }
+
+    #ifdef FFTSCARF_FFT_IPP
+    bool FFTPlanIPP__s_ipp_initialized = false;
+    #endif
 }

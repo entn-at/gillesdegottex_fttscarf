@@ -4,18 +4,18 @@
 #include <string>
 using namespace std;
 
-#include <boost/lexical_cast.hpp>
-
 namespace fftscarf {
 
-std::string FFTPlanImplementationPFFFT::version(){
+std::string FFTPlanPFFFT::version(){
     return string("2014-08-10"); // This is the current built-in version
 }
-std::string FFTPlanImplementationPFFFT::libraryName(){
-    return string("Pretty Fast FFT (PFFFT) ")+version()+string(" (SIMD size ")+boost::lexical_cast<std::string>(pffft_simd_size())+string(")"); // This is the current built-in version
+std::string FFTPlanPFFFT::libraryName(){
+    stringstream result;
+    result << "Pretty Fast FFT (PFFFT) " << version() << " (SIMD size " << pffft_simd_size() << ")" << " (precision " << 8*sizeof(FloatType) << "b)"; // This is the current built-in version
+    return result.str();
 }
 
-FFTPlanImplementationPFFFT::FFTPlanImplementationPFFFT(bool forward)
+FFTPlanPFFFT::FFTPlanPFFFT(bool forward)
     : FFTPlanImplementation(forward)
 {
     m_setup = NULL;
@@ -23,7 +23,7 @@ FFTPlanImplementationPFFFT::FFTPlanImplementationPFFFT(bool forward)
     m_output = NULL;
     m_work = NULL;
 }
-FFTPlanImplementationPFFFT::FFTPlanImplementationPFFFT(int n, bool forward)
+FFTPlanPFFFT::FFTPlanPFFFT(int n, bool forward)
     : FFTPlanImplementation(n, forward)
 {
     m_setup = NULL;
@@ -34,12 +34,13 @@ FFTPlanImplementationPFFFT::FFTPlanImplementationPFFFT(int n, bool forward)
     resize(n);
 }
 
-void FFTPlanImplementationPFFFT::resize(int n)
+void FFTPlanPFFFT::resize(int n)
 {
     assert(n>0);
 
     if(n==m_size) return;
 
+    FFTSCARF_PLAN_ACCESS_LOCK
     m_size = n;
 
     if(m_setup || m_input || m_output){
@@ -57,15 +58,18 @@ void FFTPlanImplementationPFFFT::resize(int n)
 
     m_setup = pffft_new_setup(n, PFFFT_REAL);
 
-    m_input = (float*)pffft_aligned_malloc(n*sizeof(float));
-    m_output = (float*)pffft_aligned_malloc(n*sizeof(float));
+    m_input = (FloatType*)pffft_aligned_malloc(n*sizeof(FloatType));
+    m_output = (FloatType*)pffft_aligned_malloc(n*sizeof(FloatType));
 
-    // Following the doc
+    // Following the PFFFT's documentation
     if(n>=16384)
-        m_work = (float*)pffft_aligned_malloc(n*sizeof(float));
+        m_work = (FloatType*)pffft_aligned_malloc(n*sizeof(FloatType));
+
+    FFTSCARF_PLAN_ACCESS_UNLOCK
 }
 
-FFTPlanImplementationPFFFT::~FFTPlanImplementationPFFFT() {
+FFTPlanPFFFT::~FFTPlanPFFFT() {
+    FFTSCARF_PLAN_ACCESS_LOCK
     if(m_setup || m_input || m_output){
         pffft_destroy_setup(m_setup);
         m_setup = NULL;
@@ -78,6 +82,7 @@ FFTPlanImplementationPFFFT::~FFTPlanImplementationPFFFT() {
         pffft_aligned_free(m_work);
         m_work = NULL;
     }
+    FFTSCARF_PLAN_ACCESS_UNLOCK
 }
 
 }
