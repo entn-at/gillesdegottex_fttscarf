@@ -30,7 +30,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/ffts
 
 
 # A make target for running the benchmarks
-add_custom_target(benchmark_run DEPENDS benchmark_run_ooura) # TODO rm benchmark_run_ooura
+add_custom_target(benchmark_run DEPENDS benchmark_run_ooura)  # TODO rm benchmark_run_ooura
 
 if(FFTSCARF_FFT_IPP)
     add_subdirectory(ipp)
