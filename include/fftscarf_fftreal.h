@@ -5,34 +5,79 @@
 #include <complex>
 #include <vector>
 #include <string>
+#include <sstream>
 
 #include <fftscarf.h>
-#ifndef FFTScarf
-#define FFTScarf FFTPlanImplementationFFTReal
+#ifdef FFTSCARF_PLAN_PROTECTACCESS
+#include <boost/thread/mutex.hpp>
 #endif
 
 #include "../fftlibs/FFTReal/FFTReal.h"
 
 namespace fftscarf {
 
-class FFTPlanImplementationFFTReal : public FFTPlanImplementation
+template<typename _FloatType>
+class FFTPlanFFTRealTemplate : public FFTPlanImplementation
 {
-    ffft::FFTReal<FFFLOAT> *m_fftreal_fft;
-    std::vector<FFFLOAT> m_signal;
-    FFFLOAT* m_fftreal_spec;
+public:
+    typedef _FloatType FloatType;
+
+private:
+    ffft::FFTReal<FloatType> *m_fftreal_fft;
+    std::vector<FloatType> m_signal;
+    FloatType* m_fftreal_spec;
+    FFTSCARF_PLAN_ACCESS_DECLARE
 
 public:
-    static std::string version();
-    static std::string libraryName();
+    static std::string version() {
+        return std::string("2.11"); // This is the current built-in version
+    }
+    static std::string libraryName() {
+        std::stringstream result;
+        result << "FFTReal " << version() << " (precision " << 8*sizeof(FloatType) << "b)";
+        return result.str();
+    }
 
-    FFTPlanImplementationFFTReal(bool forward=true);
-    FFTPlanImplementationFFTReal(int n, bool forward=true);
-    ~FFTPlanImplementationFFTReal();
+    FFTPlanFFTRealTemplate(bool forward=true)
+        : FFTPlanImplementation(forward)
+    {
+        m_fftreal_spec = NULL;
+        m_fftreal_fft = NULL;
+    }
+    FFTPlanFFTRealTemplate(int n, bool forward=true)
+        : FFTPlanImplementation(n, forward)
+    {
+        m_fftreal_spec = NULL;
+        m_fftreal_fft = NULL;
 
-    virtual void resize(int n);
+        resize(n);
+    }
+    virtual void resize(int n)
+    {
+        assert(n>0);
+
+        if(n==m_size) return;
+
+        FFTSCARF_PLAN_ACCESS_LOCK
+        m_size = n;
+
+        delete[] m_fftreal_spec;
+        m_fftreal_spec = NULL;
+
+        m_fftreal_fft = new ffft::FFTReal<FloatType>(m_size);
+        m_fftreal_spec = new FloatType[m_size];
+
+        if(m_forward){
+            m_signal.resize(m_size);
+        }
+        else{
+            m_signal.resize((m_size%2==1)?(m_size-1)/2+1:m_size/2+1);
+        }
+        FFTSCARF_PLAN_ACCESS_UNLOCK
+    }
 
     template<typename TypeInContainer>
-    void dft(const TypeInContainer& in, std::vector<std::complex<FFFLOAT> >& out, int dftlen=-1){
+    void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -45,6 +90,7 @@ public:
         if(int(out.size())!=neededoutsize)
             out.resize(neededoutsize);
 
+        FFTSCARF_PLAN_ACCESS_LOCK
         if(in.size()==m_size)
             m_fftreal_fft->do_fft(m_fftreal_spec, &(in[0]));
         else{
@@ -57,6 +103,7 @@ public:
                 m_signal[u] = 0.0;
             m_fftreal_fft->do_fft(m_fftreal_spec, &(m_signal[0]));
         }
+        FFTSCARF_PLAN_ACCESS_UNLOCK
 
         out[0] = m_fftreal_spec[0]; // DC
         // TODO manage odd size
@@ -66,7 +113,7 @@ public:
     }
 
     template<typename TypeOutContainer>
-    void idft(const std::vector<std::complex<FFFLOAT> >& in, TypeOutContainer& out, int winlen=-1){
+    void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -84,7 +131,7 @@ public:
 
 
         // TODO manage odd size
-        FFFLOAT oneoverdftlen = 1.0/m_size;
+        FloatType oneoverdftlen = 1.0/m_size;
         m_fftreal_spec[0] = in[0].real()*oneoverdftlen; // DC
         for(int f=1; f<m_size/2; f++){
             m_fftreal_spec[f] = in[f].real()*oneoverdftlen;
@@ -92,6 +139,7 @@ public:
         }
         m_fftreal_spec[m_size/2] = in[m_size/2].real()*oneoverdftlen; // Nyquist
 
+        FFTSCARF_PLAN_ACCESS_LOCK
         if(winlen==m_size)
             m_fftreal_fft->do_ifft(m_fftreal_spec, &(out[0])); // IDFT
         else{
@@ -103,9 +151,45 @@ public:
             for(size_t i=0; i<winlen; i++)
                 out[i] = m_signal[i];
         }
+        FFTSCARF_PLAN_ACCESS_UNLOCK
+    }
+
+    ~FFTPlanFFTRealTemplate()
+    {
+        if(m_fftreal_fft)	delete m_fftreal_fft;
+        if(m_fftreal_spec)	delete[] m_fftreal_spec;
     }
 };
 
+#ifdef FFTSCARF_PRECISION_SINGLE
+    typedef FFTPlanFFTRealTemplate<float> FFTPlanSingleFFTReal;
+    #ifndef FFTSCARF_FFTPLANSINGLE
+        #define FFTSCARF_FFTPLANSINGLE
+        typedef FFTPlanSingleFFTReal FFTPlanSingle;
+    #endif
+#endif
+#ifdef FFTSCARF_PRECISION_DOUBLE
+    typedef FFTPlanFFTRealTemplate<double> FFTPlanDoubleFFTReal;
+    #ifndef FFTSCARF_FFTPLANDOUBLE
+        #define FFTSCARF_FFTPLANDOUBLE
+        typedef FFTPlanDoubleFFTReal FFTPlanDouble;
+    #endif
+#endif
+
+#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+    typedef FFTPlanSingleFFTReal FFTPlanFFTReal;
+#else
+    typedef FFTPlanDoubleFFTReal FFTPlanFFTReal;
+#endif
+
+#ifndef FFTSCARF_FFTPLAN
+    #define FFTSCARF_FFTPLAN
+    #ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+        typedef FFTPlanSingleFFTReal FFTPlan;
+    #else
+        typedef FFTPlanDoubleFFTReal FFTPlan;
+    #endif
+#endif
 }
 
 #endif // __FFTSCARF_FFTREAL_H__

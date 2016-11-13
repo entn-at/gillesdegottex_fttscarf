@@ -2,7 +2,7 @@
 
 int main(int argc, char** argcc){
 
-    benchmark<fftscarf::FFTPlanImplementationPFFFT>("pffft", 5);
+    benchmark<fftscarf::FFTPlanPFFFT>("pffft", 5);
 
     return 0;
 }

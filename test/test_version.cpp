@@ -9,7 +9,7 @@ using namespace std;
 
 BOOST_AUTO_TEST_CASE( test_version )
 {
-    std::cout << "Testing FFScarf compilation..." << std::endl;
+    std::cout << "Testing FFScarf version and compilation information..." << std::endl;
 
     // Print some info related to versions and compilation
     fftscarf::write_compile_info(cout);

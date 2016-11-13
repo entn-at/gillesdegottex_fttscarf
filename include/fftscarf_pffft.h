@@ -6,39 +6,41 @@
 #include <vector>
 #include <string>
 #include <cmath>
-
 #include <iostream>
 
 #include <fftscarf.h>
-#ifndef FFTScarf
-#define FFTScarf FFTPlanImplementationPFFFT
+#ifdef FFTSCARF_PLAN_PROTECTACCESS
+#include <boost/thread/mutex.hpp>
 #endif
-
 
 #include "../fftlibs/pffft/pffft.h"
 
 namespace fftscarf {
 
-class FFTPlanImplementationPFFFT : public FFTPlanImplementation
+class FFTPlanPFFFT : public FFTPlanImplementation
 {
-    PFFFT_Setup *m_setup;
+public:
+    typedef float FloatType;
 
-    float *m_input;
-    float *m_output;
-    float *m_work;
+private:
+    PFFFT_Setup *m_setup;
+    FloatType *m_input;
+    FloatType *m_output;
+    FloatType *m_work;
+    FFTSCARF_PLAN_ACCESS_DECLARE
 
 public:
     static std::string version();
     static std::string libraryName();
 
-    FFTPlanImplementationPFFFT(bool forward=true);
-    FFTPlanImplementationPFFFT(int n, bool forward=true);
-    ~FFTPlanImplementationPFFFT();
+    FFTPlanPFFFT(bool forward=true);
+    FFTPlanPFFFT(int n, bool forward=true);
+    ~FFTPlanPFFFT();
 
     virtual void resize(int n);
 
     template<typename TypeInContainer>
-    void dft(const TypeInContainer& in, std::vector<std::complex<FFFLOAT> >& out, int dftlen=-1){
+    void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -57,7 +59,9 @@ public:
         for(; u<dftlen; ++u)
             m_input[u] = 0.0;
 
+        FFTSCARF_PLAN_ACCESS_LOCK
         pffft_transform_ordered(m_setup, m_input, m_output, m_work, PFFFT_FORWARD);
+        FFTSCARF_PLAN_ACCESS_UNLOCK
 
         out[0] = m_output[0]; // DC
         for(int f=1; f<m_size/2; f++)
@@ -66,7 +70,7 @@ public:
     }
 
     template<typename TypeOutContainer>
-    void idft(const std::vector<std::complex<FFFLOAT> >& in, TypeOutContainer& out, int winlen=-1){
+    void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -87,14 +91,25 @@ public:
             m_input[2*f+1] = in[f].imag();
         }
 
+        FFTSCARF_PLAN_ACCESS_LOCK
         pffft_transform_ordered(m_setup, m_input, m_output, m_work, PFFFT_BACKWARD);
+        FFTSCARF_PLAN_ACCESS_UNLOCK
 
-        FFFLOAT oneoverdftlen = 1.0/m_size;
+        FloatType oneoverdftlen = 1.0/m_size;
         for(size_t u=0; u<winlen; ++u)
             out[u] = m_output[u]*oneoverdftlen;
     }
 };
 
+typedef FFTPlanPFFFT FFTPlanSinglePFFFT;
+#ifndef FFTSCARF_FFTPLANSINGLE
+    #define FFTSCARF_FFTPLANSINGLE
+    typedef FFTPlanSinglePFFFT FFTPlanSingle;
+#endif
+#ifndef FFTSCARF_FFTPLAN
+    #define FFTSCARF_FFTPLAN
+    typedef FFTPlanPFFFT FFTPlan;
+#endif
 }
 
 #endif // __FFTSCARF_FFT_PFFFT_H__

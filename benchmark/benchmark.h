@@ -8,6 +8,12 @@ using namespace std;
 #include <fftscarf.h>
 using namespace fftscarf;
 
+#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+#define FFFLOAT float
+#else
+#define FFFLOAT double
+#endif
+
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/normal_distribution.hpp>
@@ -30,18 +36,17 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
     boost::chrono::system_clock::time_point tstart;
     boost::chrono::system_clock::time_point tend;
     std::vector<std::complex<FFFLOAT> > spec;
-    std::vector<std::complex<FFFLOAT> > spec_ref;
+//    std::vector<std::complex<FFFLOAT> > spec_ref;
     std::vector<FFFLOAT> inframe, outframe;
 
-//     fftscarf::FFTPlanImplementationFFTW3 fft_ref(true); // TODO
-    fftscarf::FFTPlanImplementationOoura fft_ref(true); // TODO
+//    fftscarf::FFTPlanImplementationOoura fft_ref(true); // TODO
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
-    bool spec_verify = false; // TODO
+//    bool spec_verify = false; // TODO
+//    double accthresh = 100*fftscarf::eps<FFFLOAT>();
 
     std::deque<double> durations; // [s]
     std::deque<double> accuracies;
-    double accthresh = 100*fftscarf::eps;
 
     ofstream resultfile("benchmark.log");
 
@@ -61,8 +66,8 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
             for(size_t n=0; n<N; ++n)
                 inframe[n] = generator();
 
-            if(spec_verify)
-                fft_ref.dft(inframe, spec_ref, N);
+//            if(spec_verify)
+//                fft_ref.dft(inframe, spec_ref, N);
 
             tstart = boost::chrono::system_clock::now();
 
@@ -74,20 +79,20 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
             boost::chrono::nanoseconds nanosec = tend-tstart;
             durations.push_back(1e-9*nanosec.count()/2); // per DFT
 
-            if(spec_verify){
-                // Verify: sig->spec == specref
-                double spec_err = 0.0;
-                for(size_t i=0; i<spec.size(); ++i)
-                    spec_err += abs(spec_ref[i]-spec[i])*abs(spec_ref[i]-spec[i]);
-                spec_err = sqrt(spec_err/spec.size());
+//            if(spec_verify){
+//                // Verify: sig->spec == specref
+//                double spec_err = 0.0;
+//                for(size_t i=0; i<spec.size(); ++i)
+//                    spec_err += abs(spec_ref[i]-spec[i])*abs(spec_ref[i]-spec[i]);
+//                spec_err = sqrt(spec_err/spec.size());
 
-                if(spec_err>accthresh){
-                    std::cout << "spec_err=" << spec_err << " accuracy threshold=" << accthresh << std::endl;
-                    std::cout << "spec_ref=" << spec_ref << endl;
-                    std::cout << "spec=" << spec << endl;
-                }
-                assert(spec_err<accthresh);
-            }
+//                if(spec_err>accthresh){
+//                    std::cout << "spec_err=" << spec_err << " accuracy threshold=" << accthresh << std::endl;
+//                    std::cout << "spec_ref=" << spec_ref << endl;
+//                    std::cout << "spec=" << spec << endl;
+//                }
+//                assert(spec_err<accthresh);
+//            }
 
             // Verify: sig->spec->sig' == sig
             // Using relative RMS
