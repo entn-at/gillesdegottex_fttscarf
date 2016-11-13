@@ -1,6 +1,7 @@
 #ifndef __FFTSCARF_FFTW3_H__
 #define __FFTSCARF_FFTW3_H__
 
+#include <cassert>
 #include <cmath>
 #include <complex>
 #include <vector>
