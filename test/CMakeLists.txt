@@ -13,10 +13,10 @@ include_directories(../include)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(test_version test_version.cpp)
-target_link_libraries(test_version fftscarf ${Boost_LIBRARIES})
+target_link_libraries(test_version fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 add_executable(test_fftlibs test_fftlibs.cpp)
-target_link_libraries(test_fftlibs fftscarf ${Boost_LIBRARIES})
+target_link_libraries(test_fftlibs fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 # Optimization -----------------------------------------------------------------
 
