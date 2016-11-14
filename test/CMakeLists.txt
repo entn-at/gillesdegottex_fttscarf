@@ -4,6 +4,7 @@ project (tests)
 # Add Boost library
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
 add_definitions(-DBOOST_LOG_DYN_LINK)
+#set(Boost_USE_STATIC_LIBS on)
 
 # Add FFTScarf library
 include_directories(../include)
