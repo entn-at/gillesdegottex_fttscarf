@@ -56,7 +56,7 @@ install:
   - git submodule update --init --recursive
 #  - ps: cd ..
 
-  - choco install cmake -version 3.0.2
+  - choco install cmake -version 3.2.3
 # - choco install make
   - ps: New-Item -ItemType directory -Name build | Out-Null
   - ps: cd build
