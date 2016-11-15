@@ -78,5 +78,5 @@ build_script:
   - ps: Get-ChildItem Release
 
   - echo Run tests
-  #- cmake --build . --config Release --target test_run
+  - cmake --build . --config Release --target test_run
   #- ctest
