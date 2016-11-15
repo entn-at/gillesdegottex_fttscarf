@@ -18,6 +18,12 @@ target_link_libraries(test_version fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 add_executable(test_fftlibs test_fftlibs.cpp)
 target_link_libraries(test_fftlibs fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
+
+# Add support for unit tests e.g. ctest.
+enable_testing()
+add_test(test_version test_version)
+add_test(test_fftlibs test_fftlibs)
+
 # Optimization -----------------------------------------------------------------
 
 # Speed up compilation
