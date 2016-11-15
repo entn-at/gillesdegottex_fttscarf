@@ -1,5 +1,5 @@
-cmake_minimum_required (VERSION 2.8)
-project (eval_fft)
+cmake_minimum_required (VERSION 3.2)
+project (benchmark)
 
 option(FFTSCARF_DEFAULTPRECISION_FLOAT32 "" ON)
 option(FFTSCARF_BUILD_TEST "" OFF)
@@ -12,15 +12,23 @@ option(FFTSCARF_FFT_FFTW3 "" ON)
 option(FFTSCARF_FFT_IPP "" OFF)
 
 # Add Boost library
+set(Boost_USE_STATIC_LIBS on)
 find_package(Boost COMPONENTS chrono REQUIRED)
-add_definitions(-DBOOST_LOG_DYN_LINK)
 add_definitions(-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+include_directories(${Boost_INCLUDE_DIR})
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # Add FFTScarf library
-if(FFTSCARF_DEFAULTPRECISION_FLOAT32)
-    add_definitions(-DOOFLOAT_FLOAT) # TODO Annoying to have to redefine this here
-endif(FFTSCARF_DEFAULTPRECISION_FLOAT32)
+if(FFTSCARF_PRECISION_DEFAULTSINGLE)
+    message("\n-- Use single precision (float 32b)")
+    set(FFTSCARF_PRECISION_SINGLE ON CACHE BOOL "docstring" FORCE)
+    set(FFTSCARF_PRECISION_DOUBLE OFF CACHE BOOL "docstring" FORCE)
+    add_definitions(-DOOFLOAT_FLOAT) # TODO Annoying to have to redefine this here. Really necessary? not already done by fftscarf's CMakeLists.txt ?
+else(FFTSCARF_PRECISION_DEFAULTSINGLE)
+    message("\n-- Use double precision (float 64b)")
+    set(FFTSCARF_PRECISION_SINGLE OFF CACHE BOOL "docstring" FORCE)
+    set(FFTSCARF_PRECISION_DOUBLE ON CACHE BOOL "docstring" FORCE)
+endif(FFTSCARF_PRECISION_DEFAULTSINGLE)
 if(FFTSCARF_FFT_IPP)
     include_directories(/opt/intel/ipp/include)
 endif(FFTSCARF_FFT_IPP)
