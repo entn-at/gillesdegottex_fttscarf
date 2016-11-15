@@ -1,4 +1,3 @@
-#os: Windows Server 2012 R2
 os: Visual Studio 2015
 
 environment:
@@ -32,36 +31,33 @@ install:
 ##  - cmd: vcvarsall amd64
   #- ps: cd "C:\projects\fftscarf"
 
-  #- ps: New-Item -ItemType directory -Name lib | Out-Null
-  #- ps: cd lib
+  - ps: New-Item -ItemType directory -Name lib | Out-Null
+  - ps: cd lib
 
-  #- ps: echo "Install FFTW3"
-  #- ps: if ($env:platform -eq 'x64') {$libfft = "fftw-3.3.4-dll64"}
-  #- ps: if ($env:platform -eq 'x86') {$libfft = "fftw-3.3.4-dll32"}
-  #- ps: echo $libfft
-  #- ps: New-Item -ItemType directory -Name $libfft | Out-Null
-  #- ps: cd $libfft
-##  - echo %CD%
-  #- ps: Invoke-WebRequest "ftp://ftp.fftw.org/pub/fftw/$libfft.zip" -OutFile "$libfft.zip"
-  #- ps: Get-ChildItem .
+  - ps: echo "Install FFTW3"
+  - ps: if ($env:platform -eq 'x64') {$libfft = "fftw-3.3.4-dll64"}
+  - ps: if ($env:platform -eq 'x86') {$libfft = "fftw-3.3.4-dll32"}
+  - ps: echo $libfft
+  - ps: New-Item -ItemType directory -Name $libfft | Out-Null
+  - ps: cd $libfft
+  - echo %CD%
+  - ps: Invoke-WebRequest "ftp://ftp.fftw.org/pub/fftw/$libfft.zip" -OutFile "$libfft.zip"
+  - ps: Get-ChildItem .
 ##  - appveyor DownloadFile "ftp://ftp.fftw.org/pub/fftw/$libfft.zip"
-  #- ps: 7z x "$libfft.zip" -y
-  #- ps: lib /machine:$env:platform /def:libfftw3-3.def
-  #- ps: Get-ChildItem .
+  - ps: 7z x "$libfft.zip" -y
+  - ps: lib /machine:$env:platform /def:libfftw3-3.def
+  - ps: Get-ChildItem .
   #- ps: cd ..
   #- ps: Move-Item "$libfft" libfft
 ##  - ps: Get-ChildItem C:\projects\dfasma\lib\fftw-3.3.4-dll32
 ##  - ps: lib /MACHINE:X86 /def:libfftw3-3.def # Needed only for MSVC (lib is still unrecognized command)
 
-# Leave lib folder
-  #- ps: cd ..
+  # Leave lib folder
+  - ps: cd ..
 
   - echo %CD%
 
   - git submodule update --init --recursive
-#  - ps: cd ..
-
-  - ps: Get-ChildItem .
 
   #- choco install cmake -version 3.2.3
   #- choco install make
