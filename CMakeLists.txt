@@ -71,7 +71,7 @@ endif(FFTSCARF_FFT_PFFFT)
 
 if(FFTSCARF_FFT_FFTW3)
     message("--     Enable FFTW3 (external lib)")
-    include_directories(C:/projects/fftscarf/libfft)
+    include_directories(C:/projects/fftscarf/lib/libfft)
     if(FFTSCARF_PRECISION_SINGLE)
         target_link_libraries(fftscarf fftw3f)
     endif(FFTSCARF_PRECISION_SINGLE)
