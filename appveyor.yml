@@ -46,10 +46,8 @@ install:
   - ps: 7z x "$libfft.zip" -y
   - ps: lib /machine:$env:platform /def:libfftw3-3.def
   - ps: Get-ChildItem .
-  #- ps: cd ..
+  - ps: cd ..
   #- ps: Move-Item "$libfft" libfft
-##  - ps: Get-ChildItem C:\projects\dfasma\lib\fftw-3.3.4-dll32
-##  - ps: lib /MACHINE:X86 /def:libfftw3-3.def # Needed only for MSVC (lib is still unrecognized command)
 
   # Leave lib folder
   - ps: cd ..
@@ -64,7 +62,6 @@ install:
 
 
 build_script:
-  - ps: Get-ChildItem C:\Libraries\boost_1_59_0\lib64-msvc-14.0\libboost_unit_test_framework-vc140-mt-1_59.lib
   - md build
   - cd build
   - cmake -G "Visual Studio 14 2015 Win64" -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_PLAN_PROTECTACCESS:BOOL=ON -DFFTSCARF_PRECISION_SINGLE:BOOL=ON -DFFTSCARF_PRECISION_DOUBLE:BOOL=ON -DFFTSCARF_PRECISION_DEFAULTSINGLE:BOOL=ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_PFFFT:BOOL=OFF -DFFTSCARF_FFT_FFTW3:BOOL=OFF -DFFTSCARF_FFT_FFTS:BOOL=OFF -DFFTSCARF_FFT_IPP:BOOL=OFF ..
