@@ -80,3 +80,4 @@ build_script:
   - echo Run tests
   - ps: cd test
   - ctest
+  - cmake --build . --config Release --target test_run
