@@ -1,19 +1,28 @@
 cmake_minimum_required (VERSION 2.8)
 project (tests)
 
-# Add Boost library
+
+# Add Boost unit test library.
+set(Boost_USE_STATIC_LIBS on)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
-add_definitions(-DBOOST_LOG_DYN_LINK)
+#add_definitions(-DBOOST_LOG_DYN_LINK)
+include_directories(${Boost_INCLUDE_DIR})
 
 # Add FFTScarf library
 include_directories(../include)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(test_version test_version.cpp)
-target_link_libraries(test_version fftscarf ${Boost_LIBRARIES})
+target_link_libraries(test_version fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 add_executable(test_fftlibs test_fftlibs.cpp)
-target_link_libraries(test_fftlibs fftscarf ${Boost_LIBRARIES})
+target_link_libraries(test_fftlibs fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+
+
+# Add support for unit tests e.g. ctest.
+enable_testing()
+add_test(test_version test_version)
+add_test(test_fftlibs test_fftlibs)
 
 # Optimization -----------------------------------------------------------------
 

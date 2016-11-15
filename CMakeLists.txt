@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.2)
 project (fftscarf)
 
 add_library(fftscarf src/fftscarf.cpp)
@@ -12,9 +12,11 @@ option(FFTSCARF_PRECISION_DEFAULTSINGLE "Set default precision to single" ON)
 option(FFTSCARF_PLAN_PROTECTACCESS "Protect access of the plan resize and execution using a mutex (need boost library)." OFF)
 if(FFTSCARF_PLAN_PROTECTACCESS)
     message("--   Protect plan access (resize and execution) using a mutex (using Boost library)")
+    set(Boost_USE_STATIC_LIBS on)
     find_package(Boost COMPONENTS thread REQUIRED)
-    add_definitions(-DBOOST_LOG_DYN_LINK)
+#    add_definitions(-DBOOST_LOG_DYN_LINK)
     add_definitions(-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
+    include_directories(${Boost_INCLUDE_DIR})
     target_link_libraries(fftscarf ${Boost_LIBRARIES})
 else(FFTSCARF_PRECISION_SINGLE)
     message("--   Plan access are not protected")
@@ -117,12 +119,12 @@ if(FFTSCARF_BUILD_TEST)
 
     add_custom_target(test_run_version
                         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test
-                        COMMAND ./test_version)
+                        COMMAND test_version)
     add_dependencies(test_run_version test_version)
 
     add_custom_target(test_run_fftlibs
                      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test
-                     COMMAND ./test_fftlibs)
+                     COMMAND test_fftlibs)
     add_dependencies(test_run_fftlibs test_fftlibs)
 
 endif(FFTSCARF_BUILD_TEST)
