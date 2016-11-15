@@ -24,12 +24,11 @@ install:
   - echo appveyor_repo_tag %appveyor_repo_tag%
   - ps: echo $env:platform
 
-  #- ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
+  - ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
 ##  - ps: Get-ChildItem .
-  #- cmd: if "%PLATFORM%" == "x64" call vcvarsall.bat amd64
-  #- cmd: if "%PLATFORM%" == "x86" call vcvarsall.bat x86
-##  - cmd: vcvarsall amd64
-  #- ps: cd "C:\projects\fftscarf"
+  - cmd: if "%PLATFORM%" == "x64" call vcvarsall.bat amd64
+  - cmd: if "%PLATFORM%" == "x86" call vcvarsall.bat x86
+  - ps: cd "C:\projects\fftscarf"
 
   - ps: New-Item -ItemType directory -Name lib | Out-Null
   - ps: cd lib
