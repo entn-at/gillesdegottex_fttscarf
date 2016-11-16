@@ -160,17 +160,11 @@ public:
     }
 
     ~FFTPlanFFTW3Template() {
-        std::cout << "1" << std::endl;
         FFTSCARF_PLAN_ACCESS_LOCK
-        std::cout << "2" << std::endl;
         if(m_fftw3_plan) fftwg_destroy_plan(m_fftw3_plan);
-        std::cout << "3" << std::endl;
         if(m_fftw3_sig) fftwg_free((void*)m_fftw3_sig);
-        std::cout << "4" << std::endl;
         if(m_fftw3_spec) fftwg_free((void*)m_fftw3_spec);
-        std::cout << "5" << std::endl;
         FFTSCARF_PLAN_ACCESS_UNLOCK
-        std::cout << "6" << std::endl;
     }
 };
 
