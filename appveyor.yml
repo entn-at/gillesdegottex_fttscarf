@@ -2,7 +2,6 @@ os: Visual Studio 2015
 
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_59_0
-  BOOST_LIBRARYDIR: C:\Libraries\boost_1_59_0\lib64-msvc-14.0
 
 platform:
   - x86
@@ -23,6 +22,9 @@ install:
   - echo appveyor_repo_tag_name %appveyor_repo_tag_name%
   - echo appveyor_repo_tag %appveyor_repo_tag%
   - ps: echo $env:platform
+
+  - ps: if ($env:platform -eq 'x64') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_59_0\lib64-msvc-14.0"}
+  - ps: if ($env:platform -eq 'x86') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_59_0\lib32-msvc-14.0"}
 
   # For the lib command
   - ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
@@ -65,8 +67,6 @@ install:
 
 
 build_script:
-  - ps: Get-ChildItem C:\Libraries\boost_1_59_0\lib64-msvc-14.0
-  - ps: Get-ChildItem C:\Libraries\boost_1_59_0\lib32-msvc-14.0
   - md build
   - cd build
   - ps: echo $env:platform
