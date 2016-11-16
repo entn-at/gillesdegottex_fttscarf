@@ -94,7 +94,7 @@ public:
         rdft(m_size, -1, m_ooura_a, m_ooura_ip, m_ooura_w);
         FFTSCARF_PLAN_ACCESS_UNLOCK
 
-        FloatType oneoverdftlen = 2.0/m_size;
+        FloatType oneoverdftlen = FloatType(2.0)/m_size;
         for(int u=0; u<winlen; ++u)
             out[u] = m_ooura_a[u]*oneoverdftlen;
     }
