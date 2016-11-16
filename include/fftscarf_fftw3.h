@@ -118,7 +118,7 @@ public:
 
 
         int u = 0;
-        for(; u<in.size(); ++u)
+        for(; u<int(in.size()); ++u)
             m_fftw3_sig[u] = in[u];
         for(; u<dftlen; ++u)
             m_fftw3_sig[u] = 0.0;

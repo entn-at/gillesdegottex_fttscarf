@@ -74,10 +74,10 @@ build_script:
   - ps: if ($env:platform -eq 'x86') {$env:GCONFIG="Visual Studio 14 2015"}
   - cmake -G "%GCONFIG%" -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_PLAN_PROTECTACCESS:BOOL=ON -DFFTSCARF_PRECISION_SINGLE:BOOL=ON -DFFTSCARF_PRECISION_DOUBLE:BOOL=OFF -DFFTSCARF_PRECISION_DEFAULTSINGLE:BOOL=OFF -DFFTSCARF_FFT_OOURA:BOOL=ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON ..
   - ps: cmake --build . --config Release
-  - ps: Get-ChildItem .
   - ps: Get-ChildItem Release
 
   - echo Run tests
-  #- cmake --build . --config Release --target test_run
   - ps: cd test
   - ctest
+  - ps: cd ..
+  #- cmake --build . --config Release --target test_run
