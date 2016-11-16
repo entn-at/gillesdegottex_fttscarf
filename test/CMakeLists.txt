@@ -39,10 +39,12 @@ add_test(test_fftlibs test_fftlibs)
 
 # Optimization -----------------------------------------------------------------
 
-# Speed up compilation
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe")
+if(NOT WIN32) # TODO Should be test on GCC because the followin might work on mingw
+    # Speed up compilation
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe")
 
-# -O2 -O3 -Ofast
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+    # -O2 -O3 -Ofast
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+else(NOT WIN32)
