@@ -1,5 +1,5 @@
-#os: Visual Studio 2015
-os: Windows Server 2012 R2
+os: Visual Studio 2015
+#os: Windows Server 2012 R2
 
 environment:
   BOOST_ROOT: C:\Libraries\boost_1_59_0
@@ -31,8 +31,8 @@ install:
   - ps: if ($env:platform -eq 'x86') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_59_0\lib32-msvc-14.0"}
 
   # For the lib command
-  #- ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
-  - ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC"
+  - ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
+  #- ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC"
   - cmd: if "%PLATFORM%" == "x64" call vcvarsall.bat amd64
   - cmd: if "%PLATFORM%" == "x86" call vcvarsall.bat x86
   - ps: cd "C:\projects\fftscarf"
@@ -41,8 +41,10 @@ install:
   - ps: cd lib
 
   - ps: echo "Install FFTW3"
-  - ps: if ($env:platform -eq 'x64') {$libfft = "fftw-3.3.4-dll64"}
-  - ps: if ($env:platform -eq 'x86') {$libfft = "fftw-3.3.4-dll32"}
+  #- ps: if ($env:platform -eq 'x64') {$libfft = "fftw-3.3.4-dll64"}
+  #- ps: if ($env:platform -eq 'x86') {$libfft = "fftw-3.3.4-dll32"}
+  - ps: if ($env:platform -eq 'x64') {$libfft = "fftw-3.3.5-dll64"}
+  - ps: if ($env:platform -eq 'x86') {$libfft = "fftw-3.3.5-dll32"}
   - ps: echo $libfft
   - ps: New-Item -ItemType directory -Name $libfft | Out-Null
   - ps: cd $libfft
@@ -72,10 +74,10 @@ build_script:
   - md build
   - cd build
   - ps: echo $env:platform
-  #- ps: if ($env:platform -eq 'x64') {$env:GCONFIG="Visual Studio 14 2015 Win64"}
-  #- ps: if ($env:platform -eq 'x86') {$env:GCONFIG="Visual Studio 14 2015"}
-  - ps: if ($env:platform -eq 'x64') {$env:GCONFIG="Visual Studio 12 Win64"}
-  - ps: if ($env:platform -eq 'x86') {$env:GCONFIG="Visual Studio 12"}
+  - ps: if ($env:platform -eq 'x64') {$env:GCONFIG="Visual Studio 14 2015 Win64"}
+  - ps: if ($env:platform -eq 'x86') {$env:GCONFIG="Visual Studio 14 2015"}
+  #- ps: if ($env:platform -eq 'x64') {$env:GCONFIG="Visual Studio 12 Win64"}
+  #- ps: if ($env:platform -eq 'x86') {$env:GCONFIG="Visual Studio 12"}
   - cmake -G "%GCONFIG%" -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_PLAN_PROTECTACCESS:BOOL=ON -DFFTSCARF_PRECISION_SINGLE:BOOL=OFF -DFFTSCARF_PRECISION_DOUBLE:BOOL=ON -DFFTSCARF_PRECISION_DEFAULTSINGLE:BOOL=OFF -DFFTSCARF_FFT_OOURA:BOOL=ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON ..
   - ps: cmake --build . --config Release
   - ps: Get-ChildItem Release
