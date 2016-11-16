@@ -59,11 +59,11 @@ if(FFTSCARF_FFT_FFTS)
     message("--       Configuring FFTS library...")
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_ffts.cpp)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ffts ${CMAKE_CURRENT_BINARY_DIR}/ffts_build)
-    add_custom_target(libffts
-                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/
-                     COMMAND make)
-    add_dependencies(fftscarf libffts)
-    target_link_libraries(fftscarf ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/libffts.a)
+#    add_custom_target(libffts
+#                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/
+#                     COMMAND make)
+#    add_dependencies(fftscarf libffts)
+#    target_link_libraries(fftscarf ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/libffts.a)
 endif(FFTSCARF_FFT_FFTS)
 
 if(FFTSCARF_FFT_PFFFT)
