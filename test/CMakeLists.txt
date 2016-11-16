@@ -47,4 +47,4 @@ if(NOT WIN32) # TODO Should be test on GCC because the followin might work on mi
     # -O2 -O3 -Ofast
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
-else(NOT WIN32)
+endif(NOT WIN32)
