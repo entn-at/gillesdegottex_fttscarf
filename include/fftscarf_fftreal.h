@@ -131,7 +131,7 @@ public:
 
 
         // TODO manage odd size
-        FloatType oneoverdftlen = 1.0/m_size;
+        FloatType oneoverdftlen = FloatType(1.0)/m_size;
         m_fftreal_spec[0] = in[0].real()*oneoverdftlen; // DC
         for(int f=1; f<m_size/2; f++){
             m_fftreal_spec[f] = in[f].real()*oneoverdftlen;
@@ -148,7 +148,7 @@ public:
 
             m_fftreal_fft->do_ifft(m_fftreal_spec, &(m_signal[0])); // IDFT
 
-            for(size_t i=0; i<winlen; i++)
+            for(int i=0; i<winlen; i++)
                 out[i] = m_signal[i];
         }
         FFTSCARF_PLAN_ACCESS_UNLOCK

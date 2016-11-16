@@ -95,7 +95,7 @@ public:
         FFTSCARF_PLAN_ACCESS_UNLOCK
 
         FloatType oneoverdftlen = 2.0/m_size;
-        for(size_t u=0; u<winlen; ++u)
+        for(int u=0; u<winlen; ++u)
             out[u] = m_ooura_a[u]*oneoverdftlen;
     }
 };
