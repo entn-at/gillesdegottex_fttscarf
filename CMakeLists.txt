@@ -145,8 +145,10 @@ message("")
 # Optimization -----------------------------------------------------------------
 
 if(WIN32) # TODO Should be test on GCC because the followin might work on mingw
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O2")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+#    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /O2")
+#    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /O2")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Ox -D_USE_MATH_DEFINES /arch:SSE")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox -D_USE_MATH_DEFINES /arch:SSE")
 else(WIN32) # TODO Should be test on GCC because the followin might work on mingw
     # Speed up compilation
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")
