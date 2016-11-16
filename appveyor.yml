@@ -16,13 +16,16 @@ branches:
     - devel
 
 install:
-  - git fetch --tags
+  - git fetch --tags 
+  - git submodule update --init --recursive
+
   - echo APPVEYOR_REPO_TAG_NAME %APPVEYOR_REPO_TAG_NAME%
   - echo APPVEYOR_REPO_TAG %APPVEYOR_REPO_TAG%
   - echo appveyor_repo_tag_name %appveyor_repo_tag_name%
   - echo appveyor_repo_tag %appveyor_repo_tag%
   - ps: echo $env:platform
 
+  # Set Boost lib dir
   - ps: if ($env:platform -eq 'x64') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_59_0\lib64-msvc-14.0"}
   - ps: if ($env:platform -eq 'x86') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_59_0\lib32-msvc-14.0"}
 
@@ -44,7 +47,6 @@ install:
   - echo %CD%
   - ps: Invoke-WebRequest "ftp://ftp.fftw.org/pub/fftw/$libfft.zip" -OutFile "$libfft.zip"
   - ps: Get-ChildItem .
-##  - appveyor DownloadFile "ftp://ftp.fftw.org/pub/fftw/$libfft.zip"
   - ps: 7z x "$libfft.zip" -y
   - ps: lib /machine:$env:platform /def:libfftw3-3.def
   - ps: lib /machine:$env:platform /def:libfftw3f-3.def
@@ -58,8 +60,6 @@ install:
   - ps: cd ..
 
   - echo %CD%
-
-  - git submodule update --init --recursive
 
   #- choco install cmake -version 3.2.3
   #- choco install make
@@ -78,7 +78,6 @@ build_script:
   - ps: Get-ChildItem Release
 
   - echo Run tests
-  - echo %PATH%
-  - cmake --build . --config Release --target test_run
+  #- cmake --build . --config Release --target test_run
   - ps: cd test
   - ctest
