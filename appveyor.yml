@@ -53,7 +53,7 @@ install:
   - ps: lib /machine:$env:platform /def:libfftw3l-3.def
   - ps: cd ..
   - ps: Move-Item "$libfft" libfft
-  - set PATH=%PATH%;C:\projects\fftscarf\lib\libfft
+  - set PATH=C:\projects\fftscarf\lib\libfft;%PATH%
   - ps: Get-ChildItem C:\projects\fftscarf\lib\libfft
 
   # Leave lib folder
