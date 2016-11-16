@@ -136,7 +136,7 @@ public:
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
-        int dftlen = (in.size()-1)*2;
+        int dftlen = int((in.size()-1)*2);
         if(m_size!=dftlen)
             resize(dftlen);
 
@@ -154,7 +154,7 @@ public:
         fftwg_execute(m_fftw3_plan);
         FFTSCARF_PLAN_ACCESS_UNLOCK
 
-        FloatType oneoverdftlen = 1.0/m_size;
+        FloatType oneoverdftlen = FloatType(1.0)/m_size;
         for(size_t i=0; i<winlen; i++)
             out[i] = m_fftw3_sig[i]*oneoverdftlen;
     }

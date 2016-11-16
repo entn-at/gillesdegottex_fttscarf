@@ -117,7 +117,7 @@ public:
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
-        int dftlen = (in.size()-1)*2;
+        int dftlen = int((in.size()-1)*2);
         if(m_size!=dftlen)
             resize(dftlen);
 

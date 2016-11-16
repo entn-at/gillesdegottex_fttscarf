@@ -34,7 +34,7 @@ static void test_lib(){
     FFTPlanType ifft(false);
 
     // Prepare the random number generator
-    boost::mt19937 rnd_engine(std::time(0));
+    boost::mt19937 rnd_engine((uint32_t)std::time(0));
     boost::normal_distribution<typename FFTPlanType::FloatType> rnd_normal_distrib;
     boost::variate_generator<boost::mt19937&, 
         boost::normal_distribution<typename FFTPlanType::FloatType> > generator(rnd_engine, rnd_normal_distrib);
