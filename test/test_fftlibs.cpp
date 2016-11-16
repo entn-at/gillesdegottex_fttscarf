@@ -45,7 +45,7 @@ static void test_lib(){
 
     // Fill an input frame
     inframe.resize(N);
-    for(size_t n=0; n<N; ++n)
+    for(int n=0; n<N; ++n)
         inframe[n] = generator();
 
     // Run the "reference" implementation

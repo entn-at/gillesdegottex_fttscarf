@@ -52,7 +52,7 @@ public:
         if(int(out.size())!=neededoutsize)
             out.resize(neededoutsize);
 
-        size_t u = 0;
+        int u = 0;
         for(; u<in.size(); ++u)
             m_ooura_a[u] = in[u];
         for(; u<dftlen; ++u)
