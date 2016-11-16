@@ -53,7 +53,7 @@ public:
             out.resize(neededoutsize);
 
         int u = 0;
-        for(; u<in.size(); ++u)
+        for(; u<int(in.size()); ++u)
             m_ooura_a[u] = in[u];
         for(; u<dftlen; ++u)
             m_ooura_a[u] = 0.0;

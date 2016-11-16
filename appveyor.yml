@@ -65,7 +65,8 @@ install:
 
 
 build_script:
-  - ps: Get-ChildItem C:\Libraries\boost_1_59_0
+  - ps: Get-ChildItem C:\Libraries\boost_1_59_0\lib64-msvc-14.0
+  - ps: Get-ChildItem C:\Libraries\boost_1_59_0\lib32-msvc-14.0
   - md build
   - cd build
   - ps: echo $env:platform

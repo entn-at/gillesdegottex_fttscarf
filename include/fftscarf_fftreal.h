@@ -94,10 +94,10 @@ public:
         if(in.size()==m_size)
             m_fftreal_fft->do_fft(m_fftreal_spec, &(in[0]));
         else{
-            size_t u = 0;
+            int u = 0;
             if(m_signal.size()!=m_size)
                 m_signal.resize(m_size);
-            for(; u<in.size(); ++u)
+            for(; u<int(in.size()); ++u)
                 m_signal[u] = in[u];
             for(; u<dftlen; ++u)
                 m_signal[u] = 0.0;

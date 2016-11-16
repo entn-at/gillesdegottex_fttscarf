@@ -117,7 +117,7 @@ public:
             out.resize(neededoutsize);
 
 
-        size_t u = 0;
+        int u = 0;
         for(; u<in.size(); ++u)
             m_fftw3_sig[u] = in[u];
         for(; u<dftlen; ++u)
@@ -155,7 +155,7 @@ public:
         FFTSCARF_PLAN_ACCESS_UNLOCK
 
         FloatType oneoverdftlen = FloatType(1.0)/m_size;
-        for(size_t i=0; i<winlen; i++)
+        for(int i=0; i<winlen; i++)
             out[i] = m_fftw3_sig[i]*oneoverdftlen;
     }
 
