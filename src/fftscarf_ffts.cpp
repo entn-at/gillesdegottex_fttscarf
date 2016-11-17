@@ -100,29 +100,40 @@ void FFTPlanFFTS::resize(int n)
 }
 
 FFTPlanFFTS::~FFTPlanFFTS() {
+    std::cout << "1" << std::endl;
 
     FFTSCARF_PLAN_ACCESS_LOCK
 
+    std::cout << "2" << std::endl;
+
     if(m_signal || m_spec){
+        std::cout << "3" << std::endl;
     #ifdef HAVE_SSE
         _mm_free(m_signal);
         _mm_free(m_spec);
 //        free(m_signal);
 //        free(m_spec);
     #else
+        std::cout << "4" << std::endl;
         free(m_signal);
+        std::cout << "5" << std::endl;
         free(m_spec);
+        std::cout << "6" << std::endl;
     #endif
         m_signal = NULL;
         m_spec = NULL;
+        std::cout << "7" << std::endl;
     }
 
+    std::cout << "8" << std::endl;
     if(m_p){
         ffts_free(m_p);
         m_p = NULL;
     }
+    std::cout << "9" << std::endl;
 
     FFTSCARF_PLAN_ACCESS_UNLOCK
+    std::cout << "10" << std::endl;
 }
 
 }
