@@ -1,7 +1,7 @@
 #include <fftscarf_ffts.h>
 
 // memalign
-//#include <malloc.h>
+#include <malloc.h>
 // posix_memalign
 #include <stdlib.h>
 //#include <mm.h>
@@ -108,18 +108,23 @@ FFTPlanFFTS::~FFTPlanFFTS() {
 
     if(m_signal || m_spec){
         std::cout << "3" << std::endl;
-    #ifdef HAVE_SSE
-        _mm_free(m_signal);
-        _mm_free(m_spec);
-//        free(m_signal);
-//        free(m_spec);
-    #else
-        std::cout << "4" << std::endl;
-        free(m_signal);
-        std::cout << "5" << std::endl;
-        free(m_spec);
-        std::cout << "6" << std::endl;
-    #endif
+        #if (defined(_WIN32) || defined(WIN32))
+            _aligned_free(m_signal);
+            _aligned_free(m_spec);
+        #else
+            #ifdef HAVE_SSE
+                _mm_free(m_signal);
+                _mm_free(m_spec);
+            //        free(m_signal);
+            //        free(m_spec);
+            #else
+                std::cout << "4" << std::endl;
+                free(m_signal);
+                std::cout << "5" << std::endl;
+                free(m_spec);
+                std::cout << "6" << std::endl;
+            #endif
+        #endif
         m_signal = NULL;
         m_spec = NULL;
         std::cout << "7" << std::endl;
