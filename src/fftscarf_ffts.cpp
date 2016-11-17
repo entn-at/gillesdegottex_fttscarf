@@ -1,7 +1,7 @@
 #include <fftscarf_ffts.h>
 
 // memalign
-#include <malloc.h>
+//#include <malloc.h>
 // posix_memalign
 #include <stdlib.h>
 //#include <mm.h>
