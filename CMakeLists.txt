@@ -63,7 +63,11 @@ if(FFTSCARF_FFT_FFTS)
 #                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/
 #                     COMMAND make)
 #    add_dependencies(fftscarf libffts)
-#    target_link_libraries(fftscarf ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/libffts.a)
+    if(WIN32)
+        target_link_libraries(fftscarf ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/Release/ffts_static.lib)
+    else(WIN32)
+        target_link_libraries(fftscarf ${CMAKE_CURRENT_BINARY_DIR}/ffts_build/libffts.a)
+    endif(WIN32)
 endif(FFTSCARF_FFT_FFTS)
 
 if(FFTSCARF_FFT_PFFFT)
