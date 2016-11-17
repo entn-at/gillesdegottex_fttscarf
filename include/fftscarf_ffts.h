@@ -53,8 +53,8 @@ public:
         if(int(out.size())!=neededoutsize)
             out.resize(neededoutsize);
 
-        size_t u = 0;
-        for(; u<in.size(); ++u)
+        int u = 0;
+        for(; u<int(in.size()); ++u)
             m_signal[u] = in[u];
         for(; u<dftlen; ++u)
             m_signal[u] = 0.0;
@@ -91,8 +91,8 @@ public:
         ffts_execute(m_p, m_spec, m_signal);
         FFTSCARF_PLAN_ACCESS_UNLOCK
 
-        FloatType oneoverdftlen = 1.0/m_size;
-        for(size_t u=0; u<winlen; ++u)
+        FloatType oneoverdftlen = FloatType(1.0)/m_size;
+        for(int u=0; u<winlen; ++u)
             out[u] = m_signal[u]*oneoverdftlen;
     }
 };

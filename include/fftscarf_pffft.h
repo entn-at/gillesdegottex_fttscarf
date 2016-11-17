@@ -53,8 +53,8 @@ public:
         if(int(out.size())!=neededoutsize)
             out.resize(neededoutsize);
 
-        size_t u = 0;
-        for(; u<in.size(); ++u)
+        int u = 0;
+        for(; u<int(in.size()); ++u)
             m_input[u] = in[u];
         for(; u<dftlen; ++u)
             m_input[u] = 0.0;
@@ -95,8 +95,8 @@ public:
         pffft_transform_ordered(m_setup, m_input, m_output, m_work, PFFFT_BACKWARD);
         FFTSCARF_PLAN_ACCESS_UNLOCK
 
-        FloatType oneoverdftlen = 1.0/m_size;
-        for(size_t u=0; u<winlen; ++u)
+        FloatType oneoverdftlen = FloatType(1.0)/m_size;
+        for(int u=0; u<winlen; ++u)
             out[u] = m_output[u]*oneoverdftlen;
     }
 };
