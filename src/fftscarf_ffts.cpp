@@ -68,7 +68,7 @@ void FFTPlanFFTS::resize(int n)
 
     #if (defined(_WIN32) || defined(WIN32))
         m_signal = (FloatType FFTS_ALIGN(32) *) _aligned_malloc(n * sizeof(FloatType), 32);
-        m_spec = (FloatType FFTS_ALIGN(32) *) _aligned_malloc((2*n+1) * sizeof(FloatType), 32);
+        m_spec = (FloatType FFTS_ALIGN(32) *) _aligned_malloc((2*n+1) * sizeof(FloatType), 32);  // TODO (2*n+1) ?????
     #else
         // See http://www.delorie.com/gnu/docs/glibc/libc_31.html
         #ifdef HAVE_SSE
