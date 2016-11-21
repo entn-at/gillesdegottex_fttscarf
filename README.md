@@ -33,9 +33,11 @@ public domain (see UNLICENSE.md file).
 
 Go into FFTScarf root directory, then:
 
-```$ mkdir build; cd build
+```
+$ mkdir build; cd build
 
-$ cmake ..```
+$ cmake ..
+```
 
 To run test:
 
