@@ -47,7 +47,8 @@ static void test_lib(){
 
     std::cout << "    N=" << N << std::endl;
 
-    FFTPlanDFTTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
+//    FFTPlanDFTTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
+    FFTPlanFFTRealTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 

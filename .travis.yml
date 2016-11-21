@@ -54,6 +54,5 @@ script:
     - make
     - ls -l
 
-    - make test_run
     - cd test
     - ctest
