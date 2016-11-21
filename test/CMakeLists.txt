@@ -3,7 +3,7 @@ project (test)
 
 # Add Boost unit test library.
 set(Boost_USE_STATIC_LIBS on)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
 # Add FFTScarf library
@@ -12,6 +12,7 @@ link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(test_version test_version.cpp)
 target_link_libraries(test_version fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(test_version ${Boost_LIBRARIES})
 if(WIN32)
     if(FFTSCARF_PRECISION_SINGLE)
         target_link_libraries(test_version C:/projects/fftscarf/lib/libfft/libfftw3f-3.lib)
@@ -23,6 +24,7 @@ endif(WIN32)
 
 add_executable(test_fftlibs test_fftlibs.cpp)
 target_link_libraries(test_fftlibs fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(test_fftlibs ${Boost_LIBRARIES})
 if(WIN32)
     if(FFTSCARF_PRECISION_SINGLE)
         target_link_libraries(test_fftlibs C:/projects/fftscarf/lib/libfft/libfftw3f-3.lib)
@@ -32,10 +34,11 @@ if(WIN32)
     endif(FFTSCARF_PRECISION_DOUBLE)
 endif(WIN32)
 
-# Add support for unit tests e.g. ctest.
+# Add tests using ctest
 enable_testing()
 add_test(test_version test_version)
-add_test(test_fftlibs test_fftlibs)
+add_test(test_fftlibs32 test_fftlibs -N 32)
+add_test(test_fftlibs4096 test_fftlibs -N 4096)
 
 # Optimization -----------------------------------------------------------------
 

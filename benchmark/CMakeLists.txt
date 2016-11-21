@@ -1,15 +1,15 @@
 cmake_minimum_required (VERSION 3.2)
 project (benchmark)
 
-option(FFTSCARF_DEFAULTPRECISION_FLOAT32 "" ON)
-option(FFTSCARF_BUILD_TEST "" OFF)
+option(FFTSCARF_PRECISION_DEFAULTSINGLE "" ON)
+option(FFTSCARF_FFT_IPP "" OFF)
+option(FFTSCARF_FFT_FFTS "" ON)
+option(FFTSCARF_FFT_PFFFT "" ON)
+option(FFTSCARF_FFT_FFTW3 "" ON)
 option(FFTSCARF_FFT_OOURA "" ON)
 option(FFTSCARF_FFT_FFTREAL "" ON)
-option(FFTSCARF_FFT_PFFFT "" ON)
-option(FFTSCARF_FFT_DJBFFT "" OFF)
-option(FFTSCARF_FFT_FFTS "" ON)
-option(FFTSCARF_FFT_FFTW3 "" ON)
-option(FFTSCARF_FFT_IPP "" OFF)
+#option(FFTSCARF_FFT_DJBFFT "" OFF)
+option(FFTSCARF_FFT_DFT "" OFF)
 
 # Add Boost library
 set(Boost_USE_STATIC_LIBS on)
@@ -19,6 +19,8 @@ include_directories(${Boost_INCLUDE_DIR})
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 # Add FFTScarf library
+set(FFTSCARF_BUILD_TEST OFF CACHE BOOL "docstring" FORCE)
+set(FFTSCARF_PLAN_PROTECTACCESS OFF CACHE BOOL "docstring" FORCE)
 if(FFTSCARF_PRECISION_DEFAULTSINGLE)
     message("\n-- Use single precision (float 32b)")
     set(FFTSCARF_PRECISION_SINGLE ON CACHE BOOL "docstring" FORCE)
@@ -68,6 +70,10 @@ endif(FFTSCARF_FFT_FFTREAL)
 #    add_subdirectory(djbfft)
 #    add_dependencies(benchmark_run benchmark_run_djbfft)
 #endif(FFTSCARF_FFT_DJBFFT)
+if(FFTSCARF_FFT_DFT)
+    add_subdirectory(dft)
+    add_dependencies(benchmark_run benchmark_run_dft)
+endif(FFTSCARF_FFT_DFT)
 
 # A make target for ploting the results of the benchmark
 add_custom_target(plot

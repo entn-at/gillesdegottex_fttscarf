@@ -45,6 +45,9 @@ def getlinestyle(method):
         color = 'green'
     if method=='fftreal':
         color = 'cyan'
+    if method=='dft':
+        color = 'black'
+        marker = '.'
 
     return color, marker
 

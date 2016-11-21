@@ -6,6 +6,7 @@
 #else
     #define OOFLOAT double
 #endif
+//#define OOFLOAT long double
 
 void cdft(int, int, OOFLOAT *, int *, OOFLOAT *);
 void rdft(int, int, OOFLOAT *, int *, OOFLOAT *);

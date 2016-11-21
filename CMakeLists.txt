@@ -46,6 +46,7 @@ option(FFTSCARF_FFT_PFFFT "PFFFT" OFF)
 option(FFTSCARF_FFT_FFTW3 "FFTW3" OFF)
 option(FFTSCARF_FFT_OOURA "Ooura's FFT" ON)
 option(FFTSCARF_FFT_FFTREAL "FFTReal" OFF)
+option(FFTSCARF_FFT_DFT "DFT" OFF)
 #option(FFTSCARF_FFT_DJBFFT "DJBFFT" OFF)
 
 if(FFTSCARF_FFT_IPP)
@@ -116,6 +117,10 @@ endif(FFTSCARF_FFT_FFTREAL)
 #     target_link_libraries(fftscarf ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/djbfft-0.76/djbfft.a)
 # endif(FFTSCARF_FFT_DJBFFT)
 
+if(FFTSCARF_FFT_DFT)
+    message("--   Enable Standard DFT (built-in)")
+endif(FFTSCARF_FFT_DFT)
+
 configure_file(include/fftscarf.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(include)
@@ -127,21 +132,6 @@ option(FFTSCARF_BUILD_TEST "Build tests" OFF)
 if(FFTSCARF_BUILD_TEST)
     message("\n-- FFTScarf configuring tests")
     add_subdirectory(test)
-
-    # Add a custom target for running all the tests
-    add_custom_target(test_run)
-    add_dependencies(test_run test_run_version test_run_fftlibs)
-
-    add_custom_target(test_run_version
-                        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test
-                        COMMAND test_version)
-    add_dependencies(test_run_version test_version)
-
-    add_custom_target(test_run_fftlibs
-                     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test
-                     COMMAND test_fftlibs)
-    add_dependencies(test_run_fftlibs test_fftlibs)
-
 endif(FFTSCARF_BUILD_TEST)
 
 message("")

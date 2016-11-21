@@ -10,9 +10,6 @@
 #include <iostream>
 
 #include <fftscarf.h>
-#ifdef FFTSCARF_PLAN_PROTECTACCESS
-#include <boost/thread/mutex.hpp>
-#endif
 
 #include <ipp.h>
 
@@ -120,7 +117,7 @@ public:
         size_t u = 0;
         for(; u<in.size(); ++u)
             m_pSrc[u] = in[u];
-        for(; u<dftlen; ++u)
+        for(; u<m_size; ++u)
             m_pSrc[u] = 0.0;
 
         // Do the FFT

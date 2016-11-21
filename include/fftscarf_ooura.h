@@ -7,9 +7,6 @@
 #include <string>
 
 #include <fftscarf.h>
-#ifdef FFTSCARF_PLAN_PROTECTACCESS
-#include <boost/thread/mutex.hpp>
-#endif
 
 extern "C" {
 #include "../fftlibs/ooura/fftsg.h"

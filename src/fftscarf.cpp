@@ -42,6 +42,14 @@ const struct AvailableFFTLibraries : public std::list<std::string> {
 //    #ifdef FFTSCARF_FFT_DJBFFT
 //        push_back(fftscarf::FFTPlanDJBFFT::libraryName());
 //    #endif
+    #ifdef FFTSCARF_FFT_DFT
+        #ifdef FFTSCARF_PRECISION_SINGLE
+            push_back(fftscarf::FFTPlanSingleDFT::libraryName());
+        #endif
+        #ifdef FFTSCARF_PRECISION_DOUBLE
+            push_back(fftscarf::FFTPlanDoubleDFT::libraryName());
+        #endif
+    #endif
     }
 } s_available_fft_libraries;
 

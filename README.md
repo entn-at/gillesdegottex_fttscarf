@@ -4,6 +4,7 @@
 # FFTScarf
 ### A wrapper for FFT implementations dedicated to audio processing
 
+
 ## Purpose
 * Depending on usage or license issue, we might want to switch to another FFT
 implementation when coding softwares using signal processing. Though, we surely
@@ -18,6 +19,7 @@ considered as a collection of FFT recipes.
 * Multi dimensional FFTs are currently omitted since audio processing is the
 main target.
 
+
 ## Legal
 Each FFT implementation has obviously its own license. If you intend to use
 FFTScarf, you first have to have a look at the license of the implementation you
@@ -25,6 +27,30 @@ intend to use.
 
 The code of the wrapper itself, the tests and the benchmark pipeline is in the
 public domain (see UNLICENSE.md file).
+
+
+## Compilation
+
+Go into FFTScarf root directory, then:
+
+$ mkdir build; cd build
+$ cmake ..
+
+To run test:
+$ cd test; ctest
+
+
+## Benchmark
+
+To run the benchmark, first compile it:
+
+$ mkdir build-benchmark; cd build-benchmark
+$ cmake ../benchmark; make
+
+and run it:
+$ make benchmark_run
+$ make plot
+
 
 ## Author
 Feel free to throw rotten tomatoes to:

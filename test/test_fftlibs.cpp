@@ -19,17 +19,35 @@ using namespace fftscarf;
 
 #include "../benchmark/stream.h"
 
+#include <boost/program_options.hpp>
+namespace po = boost::program_options;
+
 template<typename FFTPlanType>
 static void test_lib(){
 
+    // Default argument
+    int N = 1024;
+
+    // Arguments parsing
+    po::options_description desc("Options");
+    desc.add_options()
+        ("N,N", po::value<uint32_t>(), "The FFT size")
+        ("verispec", "Verify the spectrum by comparison with a reference")
+    ;
+    po::variables_map vm;
+    po::store(po::parse_command_line(boost::unit_test::framework::master_test_suite().argc, boost::unit_test::framework::master_test_suite().argv, desc), vm);
+    po::notify(vm);
+    if (vm.count("N"))
+        N = vm["N"].as<uint32_t>();
+
     std::cout << "Testing " << FFTPlanType::libraryName() << " ..." << std::endl;
 
-    int N = 1024;
-    double accthresh = 100*fftscarf::eps<typename FFTPlanType::FloatType>();
+    long double accthresh = 100*fftscarf::eps<typename FFTPlanType::FloatType>();
+    long double specaccthresh = 10*accthresh; // TODO 10*
 
-    std::cout << "    N=" << N << " accuracy threshold=" << accthresh << std::endl;
+    std::cout << "    N=" << N << std::endl;
 
-//    fftscarf::FFTPlanImplementationOoura fft_ref(true); // TODO Need a reference for both types!
+    FFTPlanDFTTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 
@@ -48,27 +66,25 @@ static void test_lib(){
     for(int n=0; n<N; ++n)
         inframe[n] = generator();
 
-    // Run the "reference" implementation
-//    fft_ref.dft(inframe, spec_ref, N);
-
     // Run the tested implementation
     fft.dft(inframe, spec, N);
 
+    if(vm.count("verispec")){
+        // Run the "reference" implementation
+        fft_ref.dft(inframe, spec_ref, N);
 
-//    // Verify: sig->spec == specref
-//    std::cout << "    ref implementation for sepc err: " << fft_ref.libraryName() << std::endl;
-//    double spec_err = 0.0;
-//    for(size_t i=0; i<spec.size(); ++i)
-//        spec_err += std::abs(spec_ref[i]-spec[i])*std::abs(spec_ref[i]-spec[i]);
-//    spec_err = sqrt(spec_err/spec_ref.size());
-//    std::cout << "    spec err=" << spec_err << std::endl;
-//    if(spec_err>accthresh){
-//        std::cout << "spec_err=" << spec_err << " accuracy threshold=" << accthresh << std::endl;
-//        std::cout << "spec_ref=" << spec_ref << endl;
-//        std::cout << "spec=" << spec << endl;
-//    }
-//    assert(spec_err<accthresh);
-
+        // Verify: sig->spec == specref
+        long double spec_err = 0.0;
+        for(size_t i=0; i<spec.size(); ++i)
+            spec_err += std::abs(spec_ref[i]-spec[i])*std::abs(spec_ref[i]-spec[i]);
+        spec_err = sqrt(spec_err/spec_ref.size());
+        std::cout << "    spec err=" << spec_err << " (ref implementation: " << fft_ref.libraryName() << "; threshold " << specaccthresh << ")" << std::endl;
+        if(spec_err>specaccthresh){
+            std::cout << "spec_ref=" << spec_ref << endl;
+            std::cout << "spec=" << spec << endl;
+        }
+        BOOST_CHECK(spec_err<specaccthresh);
+    }
 
     // Verify: sig->spec->sig' == sig
 
@@ -76,15 +92,15 @@ static void test_lib(){
     ifft.idft(spec, outframe, N);
 
     // Then measure relative RMS
-    double sqerr = 0.0;
-    double sqin = 0.0;
+    long double sqerr = 0.0;
+    long double sqin = 0.0;
     for(size_t i=0; i<inframe.size(); ++i){
         sqerr += (inframe[i]-outframe[i])*(inframe[i]-outframe[i]);
         sqin += inframe[i]*inframe[i];
     }
-    double sig_rerr = sqrt(sqerr/sqin);
-    std::cout << "    sig err=" << sig_rerr << std::endl;
-    assert(sig_rerr<accthresh);
+    long double sig_rerr = sqrt(sqerr/sqin);
+    std::cout << "    sig err=" << sig_rerr << " (threshold=" << accthresh << ")" << std::endl;
+    BOOST_CHECK(sig_rerr<accthresh);
 }
 
 #ifdef FFTSCARF_FFT_OOURA
@@ -158,6 +174,21 @@ BOOST_AUTO_TEST_CASE( test_fftlibs_ipp_single)
 BOOST_AUTO_TEST_CASE( test_fftlibs_ipp_double)
 {
     test_lib<fftscarf::FFTPlanDoubleIPP>();
+}
+#endif
+#endif
+
+#ifdef FFTSCARF_FFT_DFT
+#ifdef FFTSCARF_PRECISION_SINGLE
+BOOST_AUTO_TEST_CASE( test_fftlibs_dft_single)
+{
+    test_lib<fftscarf::FFTPlanSingleDFT>();
+}
+#endif
+#ifdef FFTSCARF_PRECISION_DOUBLE
+BOOST_AUTO_TEST_CASE( test_fftlibs_dft_double)
+{
+    test_lib<fftscarf::FFTPlanDoubleDFT>();
 }
 #endif
 #endif

@@ -10,9 +10,6 @@
 #include <iostream>
 
 #include <fftscarf.h>
-#ifdef FFTSCARF_PLAN_PROTECTACCESS
-#include <boost/thread/mutex.hpp>
-#endif
 
 #include <fftw3.h>
 
