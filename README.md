@@ -34,9 +34,11 @@ public domain (see UNLICENSE.md file).
 Go into FFTScarf root directory, then:
 
 `$ mkdir build; cd build`
+
 `$ cmake ..`
 
 To run test:
+
 `$ cd test; ctest`
 
 
@@ -45,10 +47,13 @@ To run test:
 To run the benchmark, first compile it:
 
 `$ mkdir build-benchmark; cd build-benchmark`
+
 `$ cmake ../benchmark; make`
 
 and run it:
+
 `$ make benchmark_run`
+
 `$ make plot`
 
 
