@@ -36,8 +36,8 @@ endif(WIN32)
 # Add tests using ctest
 enable_testing()
 add_test(test_version test_version)
-add_test(test_fftlibs32 test_fftlibs -N 32)
-add_test(test_fftlibs4096 test_fftlibs -N 4096)
+add_test(test_fftlibs32 test_fftlibs --N=32)
+add_test(test_fftlibs4096 test_fftlibs --N=4096)
 
 # Optimization -----------------------------------------------------------------
 
