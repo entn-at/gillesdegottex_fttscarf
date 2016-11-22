@@ -87,7 +87,7 @@ public:
         std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         m_fftw3_sig = (FloatType*) fftwg_malloc(sizeof(FloatType) * m_size);
         std::cout << __FILE__ << ":" << __LINE__ << std::endl;
-        m_fftw3_spec = (fftwg_complex*) fftwg_malloc(sizeof(fftwg_complex) * 2*m_size);
+        m_fftw3_spec = (fftwg_complex*) fftwg_malloc(sizeof(fftwg_complex) * m_size);
         std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         //  | FFTW_PRESERVE_INPUT
     //         unsigned int flags = FFTW_ESTIMATE;
@@ -159,10 +159,8 @@ public:
 
         std::cout << __FILE__ << ":" << __LINE__ << " m_size=" << m_size << " in.size()=" << in.size() << std::endl;
         for(int i=0; i<m_size/2+1; i++){
-            m_fftw3_spec[2*i+0] = in[i].real();
-            m_fftw3_spec[2*i+1] = in[i].imag();
-//            m_fftw3_spec[i][0] = in[i].real();
-//            m_fftw3_spec[i][1] = in[i].imag();
+            m_fftw3_spec[i][0] = in[i].real();
+            m_fftw3_spec[i][1] = in[i].imag();
         }
         std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_LOCK
