@@ -35,9 +35,10 @@ endif(WIN32)
 
 # Add tests using ctest
 enable_testing()
-add_test(NAME test_version CONFIGURATIONS Release COMMAND test_version)
-add_test(NAME test_fftlibs32 CONFIGURATIONS Release COMMAND test_fftlibs --size=32)
-add_test(NAME test_fftlibs4096 CONFIGURATIONS Release COMMAND test_fftlibs --size=4096)
+add_test(test_version test_version)
+add_test(test_fftlibs test_fftlibs)
+#add_test(NAME test_fftlibs32 CONFIGURATIONS Release COMMAND test_fftlibs --size=32)
+#add_test(NAME test_fftlibs4096 CONFIGURATIONS Release COMMAND test_fftlibs --size=4096)
 
 # Optimization -----------------------------------------------------------------
 

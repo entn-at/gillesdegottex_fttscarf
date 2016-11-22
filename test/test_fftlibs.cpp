@@ -26,7 +26,7 @@ template<typename FFTPlanType>
 static void test_lib(){
 
     // Default argument
-    int N = 1024;
+    int N = 4096;
 
     // Arguments parsing
     po::options_description desc("Options");
@@ -34,7 +34,10 @@ static void test_lib(){
         ("size", po::value<uint32_t>(), "The FFT size")
         ("verispec", "Verify the spectrum by comparison with a reference")
     ;
+    //    po::positional_options_description posopt;
+    //    posopt.add("size", 1);
     po::variables_map vm;
+//    po::store(po::command_line_parser(boost::unit_test::framework::master_test_suite().argc, boost::unit_test::framework::master_test_suite().argv).options(desc).positional(posopt).run(), vm);
     po::store(po::parse_command_line(boost::unit_test::framework::master_test_suite().argc, boost::unit_test::framework::master_test_suite().argv, desc), vm);
     po::notify(vm);
     if (vm.count("size"))
