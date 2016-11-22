@@ -43,12 +43,10 @@ static void test_lib(){
     if (vm.count("size"))
         N = vm["size"].as<uint32_t>();
 
-    std::cout << "Testing " << FFTPlanType::libraryName() << " ..." << std::endl;
+    std::cout << "Testing " << FFTPlanType::libraryName() << "  N=" << N << " ..." << std::endl;
 
     long double accthresh = 100*fftscarf::eps<typename FFTPlanType::FloatType>();
     long double specaccthresh = 10*accthresh; // TODO 10*
-
-    std::cout << "    N=" << N << std::endl;
 
 //    FFTPlanDFTTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
     FFTPlanFFTRealTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
