@@ -32,7 +32,8 @@ static void test_lib(){
     po::options_description desc("Options");
     desc.add_options()
         ("size", po::value<uint32_t>(), "The FFT size")
-        ("verispec", "Verify the spectrum by comparison with a reference")
+        ("specverif", "Verify the spectrum by comparison with a reference")
+        ("specprint", "If verification fails, print the erroneous vectors")
     ;
     //    po::positional_options_description posopt;
     //    posopt.add("size", 1);
@@ -46,11 +47,12 @@ static void test_lib(){
     std::cout << "Testing " << FFTPlanType::libraryName() << "  N=" << N << " ..." << std::endl;
 
     long double accthresh = 100*fftscarf::eps<typename FFTPlanType::FloatType>();
-    long double specaccthresh = 10*accthresh; // TODO 10*
+    long double specaccthresh = accthresh; // TODO 10*
 
     // TODO Need to compare with a long double FFT
 //    FFTPlanDFTTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
-    FFTPlanFFTRealTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because its wrong > 4096
+//    FFTPlanFFTRealTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because its wrong > 4096
+    FFTPlanLongDoubleFFTW3 fft_ref(true); // That's the best
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 
@@ -72,7 +74,7 @@ static void test_lib(){
     // Run the tested implementation
     fft.dft(inframe, spec, N);
 
-    if(vm.count("verispec")){
+    if(vm.count("specverif")){
         // Run the "reference" implementation
         fft_ref.dft(inframe, spec_ref, N);
 
@@ -81,8 +83,8 @@ static void test_lib(){
         for(size_t i=0; i<spec.size(); ++i)
             spec_err += std::abs(spec_ref[i]-spec[i])*std::abs(spec_ref[i]-spec[i]);
         spec_err = sqrt(spec_err/spec_ref.size());
-        std::cout << "    spec err=" << spec_err << " (ref implementation: " << fft_ref.libraryName() << "; threshold " << specaccthresh << ")" << std::endl;
-        if(spec_err>specaccthresh){
+        std::cout << "    spec err=" << spec_err << " (threshold=" << specaccthresh << "; ref implementation: " << fft_ref.libraryName() << ")" << std::endl;
+        if(spec_err>specaccthresh && vm.count("specprint")){
             std::cout << "spec_ref=" << spec_ref << endl;
             std::cout << "spec=" << spec << endl;
         }
@@ -114,84 +116,97 @@ BOOST_AUTO_TEST_CASE( test_fftlibs_ooura )
 #endif
 
 #ifdef FFTSCARF_FFT_FFTREAL
-#ifdef FFTSCARF_PRECISION_SINGLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_fftreal_single )
-{
-    test_lib<fftscarf::FFTPlanSingleFFTReal>();
-}
-#endif
-#ifdef FFTSCARF_PRECISION_DOUBLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_fftreal_double )
-{
-    test_lib<fftscarf::FFTPlanDoubleFFTReal>();
-}
-#endif
-// #8 The precision is currently not that of long double
-//BOOST_AUTO_TEST_CASE( test_fftlibs_fftreal_long_double )
-//{
-//    test_lib<fftscarf::FFTPlanImplementationFFTReal<long double> >();
-//}
+    #ifdef FFTSCARF_PRECISION_SINGLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_fftreal_single )
+    {
+        test_lib<fftscarf::FFTPlanSingleFFTReal>();
+    }
+    #endif
+    #ifdef FFTSCARF_PRECISION_DOUBLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_fftreal_double )
+    {
+        test_lib<fftscarf::FFTPlanDoubleFFTReal>();
+    }
+    #endif
+    #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_fftreal_longdouble )
+    {
+        test_lib<fftscarf::FFTPlanLongDoubleFFTReal>();
+    }
+    #endif
 #endif
 
 #ifdef FFTSCARF_FFT_PFFFT
-#ifdef FFTSCARF_PRECISION_SINGLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_pffft )
-{
-    test_lib<fftscarf::FFTPlanPFFFT>();
-}
-#endif
+    #ifdef FFTSCARF_PRECISION_SINGLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_pffft )
+    {
+        test_lib<fftscarf::FFTPlanPFFFT>();
+    }
+    #endif
 #endif
 
 #ifdef FFTSCARF_FFT_FFTS
-#ifdef FFTSCARF_PRECISION_SINGLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_ffts )
-{
-    test_lib<fftscarf::FFTPlanFFTS>();
-}
-#endif
+    #ifdef FFTSCARF_PRECISION_SINGLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_ffts )
+    {
+        test_lib<fftscarf::FFTPlanFFTS>();
+    }
+    #endif
 #endif
 
 #ifdef FFTSCARF_FFT_FFTW3
-#ifdef FFTSCARF_PRECISION_SINGLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_fftw3_single )
-{
-    test_lib<fftscarf::FFTPlanSingleFFTW3>();
-}
-#endif
-#ifdef FFTSCARF_PRECISION_DOUBLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_fftw3_double )
-{
-    test_lib<fftscarf::FFTPlanDoubleFFTW3>();
-}
-#endif
+    #ifdef FFTSCARF_PRECISION_SINGLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_fftw3_single )
+    {
+        test_lib<fftscarf::FFTPlanSingleFFTW3>();
+    }
+    #endif
+    #ifdef FFTSCARF_PRECISION_DOUBLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_fftw3_double )
+    {
+        test_lib<fftscarf::FFTPlanDoubleFFTW3>();
+    }
+    #endif
+    #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_fftw3_longdouble )
+    {
+        test_lib<fftscarf::FFTPlanLongDoubleFFTW3>();
+    }
+    #endif
 #endif
 
 #ifdef FFTSCARF_FFT_IPP
-#ifdef FFTSCARF_PRECISION_SINGLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_ipp_single)
-{
-    test_lib<fftscarf::FFTPlanSingleIPP>();
-}
-#endif
-#ifdef FFTSCARF_PRECISION_DOUBLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_ipp_double)
-{
-    test_lib<fftscarf::FFTPlanDoubleIPP>();
-}
-#endif
+    #ifdef FFTSCARF_PRECISION_SINGLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_ipp_single)
+    {
+        test_lib<fftscarf::FFTPlanSingleIPP>();
+    }
+    #endif
+    #ifdef FFTSCARF_PRECISION_DOUBLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_ipp_double)
+    {
+        test_lib<fftscarf::FFTPlanDoubleIPP>();
+    }
+    #endif
 #endif
 
 #ifdef FFTSCARF_FFT_DFT
-#ifdef FFTSCARF_PRECISION_SINGLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_dft_single)
-{
-    test_lib<fftscarf::FFTPlanSingleDFT>();
-}
-#endif
-#ifdef FFTSCARF_PRECISION_DOUBLE
-BOOST_AUTO_TEST_CASE( test_fftlibs_dft_double)
-{
-    test_lib<fftscarf::FFTPlanDoubleDFT>();
-}
-#endif
+    #ifdef FFTSCARF_PRECISION_SINGLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_dft_single)
+    {
+        test_lib<fftscarf::FFTPlanSingleDFT>();
+    }
+    #endif
+    #ifdef FFTSCARF_PRECISION_DOUBLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_dft_double)
+    {
+        test_lib<fftscarf::FFTPlanDoubleDFT>();
+    }
+    #endif
+    #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+    BOOST_AUTO_TEST_CASE( test_fftlibs_dft_longdouble)
+    {
+        test_lib<fftscarf::FFTPlanLongDoubleDFT>();
+    }
+    #endif
 #endif

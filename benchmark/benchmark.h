@@ -8,10 +8,12 @@ using namespace std;
 #include <fftscarf.h>
 using namespace fftscarf;
 
-#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+#if FFTSCARF_PRECISION_DEFAULT == 32
 #define FFFLOAT float
-#else
+#elif FFTSCARF_PRECISION_DEFAULT == 64
 #define FFFLOAT double
+#elif FFTSCARF_PRECISION_DEFAULT == 128
+#define FFFLOAT long double
 #endif
 
 #include <boost/chrono/system_clocks.hpp>

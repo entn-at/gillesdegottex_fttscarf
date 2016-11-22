@@ -26,6 +26,9 @@ const struct AvailableFFTLibraries : public std::list<std::string> {
         #ifdef FFTSCARF_PRECISION_DOUBLE
             push_back(fftscarf::FFTPlanDoubleFFTW3::libraryName());
         #endif
+        #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+            push_back(fftscarf::FFTPlanLongDoubleFFTW3::libraryName());
+        #endif
     #endif
     #ifdef FFTSCARF_FFT_OOURA
         push_back(fftscarf::FFTPlanOoura::libraryName());
@@ -37,7 +40,9 @@ const struct AvailableFFTLibraries : public std::list<std::string> {
         #ifdef FFTSCARF_PRECISION_DOUBLE
             push_back(fftscarf::FFTPlanDoubleFFTReal::libraryName());
         #endif
-//        push_back(fftscarf::FFTPlanLongDoubleFFTReal::libraryName()); // TODO #8
+        #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+            push_back(fftscarf::FFTPlanLongDoubleFFTReal::libraryName());
+        #endif
     #endif
 //    #ifdef FFTSCARF_FFT_DJBFFT
 //        push_back(fftscarf::FFTPlanDJBFFT::libraryName());
@@ -48,6 +53,9 @@ const struct AvailableFFTLibraries : public std::list<std::string> {
         #endif
         #ifdef FFTSCARF_PRECISION_DOUBLE
             push_back(fftscarf::FFTPlanDoubleDFT::libraryName());
+        #endif
+        #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+            push_back(fftscarf::FFTPlanLongDoubleDFT::libraryName());
         #endif
     #endif
     }
@@ -76,16 +84,21 @@ namespace fftscarf {
             for(std::list<std::string>::iterator it=fftlibs.begin(); it!=fftlibs.end(); ++it)
                 out << "        " << *it << std::endl;
         }
-        #ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
-        out << "    Default precision: Single (float 32b)" << std::endl;
-        #else
-        out << "    Default precision: Double (float 64b)" << std::endl;
+        #if FFTSCARF_PRECISION_DEFAULT == 32
+        out << "    Default precision: single (float 32b)" << std::endl;
+        #elif FFTSCARF_PRECISION_DEFAULT == 64
+        out << "    Default precision: double (float 64b)" << std::endl;
+        #elif FFTSCARF_PRECISION_DEFAULT == 128
+        out << "    Default precision: long double (float 128b)" << std::endl;
         #endif
         #ifdef FFTSCARF_FFTPLANSINGLE
         out << "    Default FFTPlanSingle: " << FFTPlanSingle::libraryName() << std::endl;
         #endif
         #ifdef FFTSCARF_FFTPLANDOUBLE
         out << "    Default FFTPlanDouble: " << FFTPlanDouble::libraryName() << std::endl;
+        #endif
+        #ifdef FFTSCARF_FFTPLANLONGDOUBLE
+        out << "    Default FFTPlanLongDouble: " << FFTPlanLongDouble::libraryName() << std::endl;
         #endif
         #ifdef FFTSCARF_FFTPLAN
         out << "    Default FFTPlan: " << FFTPlan::libraryName() << std::endl;

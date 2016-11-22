@@ -1,4 +1,4 @@
-#include "fftscarf_ooura.h"
+#include <fftscarf.h>
 
 #include <assert.h>
 #include <cmath>

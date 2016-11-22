@@ -8,8 +8,6 @@
 #include <string>
 #include <iostream>
 
-#include <fftscarf.h>
-
 namespace fftscarf {
 
 //# define M_PIl          3.141592653589793238462643383279502884L /* pi */
@@ -136,19 +134,31 @@ public:
         typedef FFTPlanDoubleDFT FFTPlanDouble;
     #endif
 #endif
-
-#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
-    typedef FFTPlanSingleDFT FFTPlanDFT;
-#else
-    typedef FFTPlanDoubleDFT FFTPlanDFT;
+#ifdef FFTSCARF_PRECISION_LONGDOUBLE
+    typedef FFTPlanDFTTemplate<long double> FFTPlanLongDoubleDFT;
+    #ifndef FFTSCARF_FFTPLANLONGDOUBLE
+        #define FFTSCARF_FFTPLANLONGDOUBLE
+        typedef FFTPlanLongDoubleDFT FFTPlanLongDouble;
+    #endif
 #endif
 
-#ifndef FFTSCARF_FFTPLAN
-    #define FFTSCARF_FFTPLAN
-    #ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+#if FFTSCARF_PRECISION_DEFAULT == 32
+    typedef FFTPlanSingleDFT FFTPlanDFT;
+    #ifndef FFTSCARF_FFTPLAN
+        #define FFTSCARF_FFTPLAN
         typedef FFTPlanSingleDFT FFTPlan;
-    #else
+    #endif
+#elif FFTSCARF_PRECISION_DEFAULT == 64
+    typedef FFTPlanDoubleDFT FFTPlanDFT;
+    #ifndef FFTSCARF_FFTPLAN
+        #define FFTSCARF_FFTPLAN
         typedef FFTPlanDoubleDFT FFTPlan;
+    #endif
+#elif FFTSCARF_PRECISION_DEFAULT == 128
+    typedef FFTPlanLongDoubleDFT FFTPlanDFT;
+    #ifndef FFTSCARF_FFTPLAN
+        #define FFTSCARF_FFTPLAN
+        typedef FFTPlanLongDoubleDFT FFTPlan;
     #endif
 #endif
 }

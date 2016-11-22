@@ -8,8 +8,6 @@
 #include <cmath>
 #include <iostream>
 
-#include <fftscarf.h>
-
 #include <pffft/pffft.h>
 
 namespace fftscarf {
@@ -36,8 +34,8 @@ public:
 
     virtual void resize(int n);
 
-    template<typename TypeInContainer>
-    void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1){
+    template<typename TypeInContainer, typename TypeInput>
+    void dft(const TypeInContainer& in, std::vector<std::complex<TypeInput> >& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -66,8 +64,8 @@ public:
         out[m_size/2] = m_output[1]; // Nyquist
     }
 
-    template<typename TypeOutContainer>
-    void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1){
+    template<typename TypeOutContainer, typename TypeInput>
+    void idft(const std::vector<std::complex<TypeInput> >& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 

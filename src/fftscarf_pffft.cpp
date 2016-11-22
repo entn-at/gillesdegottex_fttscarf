@@ -1,4 +1,4 @@
-#include "fftscarf_pffft.h"
+#include <fftscarf.h>
 
 #include <cmath>
 #include <string>

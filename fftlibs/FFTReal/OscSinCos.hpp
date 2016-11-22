@@ -55,7 +55,7 @@ OscSinCos <T>::OscSinCos ()
 
 
 template <class T>
-void	OscSinCos <T>::set_step (double angle_rad)
+void	OscSinCos <T>::set_step (long double angle_rad)
 {
 	using namespace std;
 

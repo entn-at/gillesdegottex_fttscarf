@@ -9,8 +9,6 @@
 #include <cmath>
 #include <iostream>
 
-#include <fftscarf.h>
-
 #include <ipp.h>
 
 namespace fftscarf {
@@ -104,8 +102,8 @@ public:
         FFTSCARF_PLAN_ACCESS_UNLOCK
     }
 
-    template<typename TypeInContainer>
-    void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1){
+    template<typename TypeInContainer, typename TypeInput>
+    void dft(const TypeInContainer& in, std::vector<std::complex<TypeInput> >& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -136,8 +134,8 @@ public:
             out[f] = make_complex(m_pDst[2*f], m_pDst[2*f+1]);
     }
 
-    template<typename TypeOutContainer>
-    void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1){
+    template<typename TypeOutContainer, typename TypeInput>
+    void idft(const std::vector<std::complex<TypeInput> >& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -193,17 +191,17 @@ public:
     #endif
 #endif
         
-#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+#if FFTSCARF_PRECISION_DEFAULT == 32
     typedef FFTPlanSingleIPP FFTPlanIPP;
-#else
+#elif FFTSCARF_PRECISION_DEFAULT == 64
     typedef FFTPlanDoubleIPP FFTPlanIPP;
 #endif
 
 #ifndef FFTSCARF_FFTPLAN
     #define FFTSCARF_FFTPLAN
-    #ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+    #if FFTSCARF_PRECISION_DEFAULT == 32
         typedef FFTPlanSingleIPP FFTPlan;
-    #else
+    #elif FFTSCARF_PRECISION_DEFAULT == 64
         typedef FFTPlanDoubleIPP FFTPlan;
     #endif
 #endif

@@ -6,8 +6,6 @@
 #include <vector>
 #include <string>
 
-#include <fftscarf.h>
-
 extern "C" {
 #include <ooura/fftsg.h>
 }
@@ -35,8 +33,8 @@ public:
 
     virtual void resize(int n);
 
-    template<typename TypeInContainer>
-    void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1){
+    template<typename TypeInContainer, typename TypeInput>
+    void dft(const TypeInContainer& in, std::vector<std::complex<TypeInput> >& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -65,8 +63,8 @@ public:
         out[m_size/2] = m_ooura_a[1]; // Nyquist
     }
 
-    template<typename TypeOutContainer>
-    void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1){
+    template<typename TypeOutContainer, typename TypeInput>
+    void idft(const std::vector<std::complex<TypeInput> >& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -97,19 +95,26 @@ public:
     }
 };
 
-#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+#if (FFTSCARF_PRECISION_DEFAULT == 32)
     typedef FFTPlanOoura FFTPlanSingleOoura;
     #ifndef FFTSCARF_FFTPLANSINGLE
         #define FFTSCARF_FFTPLANSINGLE
         typedef FFTPlanSingleOoura FFTPlanSingle;
     #endif
-#else
+#elif (FFTSCARF_PRECISION_DEFAULT == 64)
     typedef FFTPlanOoura FFTPlanDoubleOoura;
     #ifndef FFTSCARF_FFTPLANDOUBLE
         #define FFTSCARF_FFTPLANDOUBLE
         typedef FFTPlanDoubleOoura FFTPlanDouble;
     #endif
+#elif (FFTSCARF_PRECISION_DEFAULT == 128)
+    typedef FFTPlanOoura FFTPlanLongDoubleOoura;
+    #ifndef FFTSCARF_FFTPLANLONGDOUBLE
+        #define FFTSCARF_FFTPLANLONGDOUBLE
+        typedef FFTPlanLongDoubleOoura FFTPlanLongDouble;
+    #endif
 #endif
+
 #ifndef FFTSCARF_FFTPLAN
     #define FFTSCARF_FFTPLAN
     typedef FFTPlanOoura FFTPlan;

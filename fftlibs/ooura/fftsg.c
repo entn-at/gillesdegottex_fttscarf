@@ -651,22 +651,22 @@ void makewt(int nw, int *ip, OOFLOAT *w)
     ip[1] = 1;
     if (nw > 2) {
         nwh = nw >> 1;
-        delta = atan(1.0) / nwh;
-        wn4r = cos(delta * nwh);
+        delta = atanl(1.0) / nwh;
+        wn4r = cosl(delta * nwh);
         w[0] = 1;
         w[1] = wn4r;
         if (nwh == 4) {
-            w[2] = cos(delta * 2);
-            w[3] = sin(delta * 2);
+            w[2] = cosl(delta * 2);
+            w[3] = sinl(delta * 2);
         } else if (nwh > 4) {
             makeipt(nw, ip);
-            w[2] = 0.5 / cos(delta * 2);
-            w[3] = 0.5 / cos(delta * 6);
+            w[2] = 0.5 / cosl(delta * 2);
+            w[3] = 0.5 / cosl(delta * 6);
             for (j = 4; j < nwh; j += 4) {
-                w[j] = cos(delta * j);
-                w[j + 1] = sin(delta * j);
-                w[j + 2] = cos(3 * delta * j);
-                w[j + 3] = -sin(3 * delta * j);
+                w[j] = cosl(delta * j);
+                w[j + 1] = sinl(delta * j);
+                w[j + 2] = cosl(3 * delta * j);
+                w[j + 3] = -sinl(3 * delta * j);
             }
         }
         nw0 = 0;
@@ -730,12 +730,12 @@ void makect(int nc, int *ip, OOFLOAT *c)
     ip[1] = nc;
     if (nc > 1) {
         nch = nc >> 1;
-        delta = atan(1.0) / nch;
-        c[0] = cos(delta * nch);
+        delta = atanl(1.0) / nch;
+        c[0] = cosl(delta * nch);
         c[nch] = 0.5 * c[0];
         for (j = 1; j < nch; j++) {
-            c[j] = 0.5 * cos(delta * j);
-            c[nc - j] = 0.5 * sin(delta * j);
+            c[j] = 0.5 * cosl(delta * j);
+            c[nc - j] = 0.5 * sinl(delta * j);
         }
     }
 }

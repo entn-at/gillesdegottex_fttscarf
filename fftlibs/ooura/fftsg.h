@@ -1,11 +1,11 @@
 #ifndef __OOURA_H__
 #define __OOURA_H__
 
-#ifdef OOFLOAT_FLOAT
-    #define OOFLOAT float
-#else
-    #define OOFLOAT double
-#endif
+//#ifdef OOFLOAT_FLOAT
+//    #define OOFLOAT float
+//#else
+//    #define OOFLOAT double
+//#endif
 //#define OOFLOAT long double
 
 void cdft(int, int, OOFLOAT *, int *, OOFLOAT *);

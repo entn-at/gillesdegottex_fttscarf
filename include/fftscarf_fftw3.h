@@ -9,8 +9,6 @@
 #include <cmath>
 #include <iostream>
 
-#include <fftscarf.h>
-
 #include <fftw3.h>
 
 namespace fftscarf {
@@ -99,8 +97,8 @@ public:
         FFTSCARF_PLAN_ACCESS_UNLOCK
     }
 
-    template<typename TypeInContainer>
-    void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1) {
+    template<typename TypeInContainer, typename TypeInput>
+    void dft(const TypeInContainer& in, std::vector<std::complex<TypeInput> >& out, int dftlen=-1) {
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -128,8 +126,8 @@ public:
             out[i] = make_complex(m_fftw3_spec[i]);
     }
 
-    template<typename TypeOutContainer>
-    void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1) {
+    template<typename TypeOutContainer, typename TypeInput>
+    void idft(const std::vector<std::complex<TypeInput> >& in, TypeOutContainer& out, int winlen=-1) {
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -179,19 +177,30 @@ public:
         typedef FFTPlanDoubleFFTW3 FFTPlanDouble;
     #endif
 #endif
+#ifdef FFTSCARF_PRECISION_LONGDOUBLE
+    typedef FFTPlanFFTW3Template<long double, fftwl_plan, fftwl_complex, fftwl_plan_dft_r2c_1d, fftwl_plan_dft_c2r_1d, fftwl_execute, fftwl_destroy_plan, fftwl_malloc, fftwl_free> FFTPlanLongDoubleFFTW3;
+    #ifndef FFTSCARF_FFTPLANLONGDOUBLE
+        #define FFTSCARF_FFTPLANLONGDOUBLE
+        typedef FFTPlanLongDoubleFFTW3 FFTPlanLongDouble;
+    #endif
+#endif
 
-#ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+#if FFTSCARF_PRECISION_DEFAULT == 32
     typedef FFTPlanSingleFFTW3 FFTPlanFFTW3;
-#else
+#elif FFTSCARF_PRECISION_DEFAULT == 64
     typedef FFTPlanDoubleFFTW3 FFTPlanFFTW3;
+#elif FFTSCARF_PRECISION_DEFAULT == 128
+    typedef FFTPlanLongDoubleFFTW3 FFTPlanFFTW3;
 #endif
 
 #ifndef FFTSCARF_FFTPLAN
     #define FFTSCARF_FFTPLAN
-    #ifdef FFTSCARF_PRECISION_DEFAULTSINGLE
+    #if FFTSCARF_PRECISION_DEFAULT == 32
         typedef FFTPlanSingleFFTW3 FFTPlan;
-    #else
+    #elif FFTSCARF_PRECISION_DEFAULT == 64
         typedef FFTPlanDoubleFFTW3 FFTPlan;
+    #elif FFTSCARF_PRECISION_DEFAULT == 128
+        typedef FFTPlanLongDoubleFFTW3 FFTPlan;
     #endif
 #endif
 }

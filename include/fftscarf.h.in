@@ -15,7 +15,8 @@ FFTPlan (will use the default precision given by FFTScarf (selected at FFTSarf c
 
 #cmakedefine FFTSCARF_PRECISION_SINGLE
 #cmakedefine FFTSCARF_PRECISION_DOUBLE
-#cmakedefine FFTSCARF_PRECISION_DEFAULTSINGLE
+#cmakedefine FFTSCARF_PRECISION_LONGDOUBLE
+#cmakedefine FFTSCARF_PRECISION_DEFAULT @FFTSCARF_PRECISION_DEFAULT@
 #cmakedefine FFTSCARF_PLAN_PROTECTACCESS
 
 #cmakedefine FFTSCARF_FFT_IPP

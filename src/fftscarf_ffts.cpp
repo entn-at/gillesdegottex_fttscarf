@@ -1,4 +1,4 @@
-#include <fftscarf_ffts.h>
+#include <fftscarf.h>
 
 // memalign
 //#include <malloc.h>

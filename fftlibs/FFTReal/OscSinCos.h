@@ -49,7 +49,7 @@ public:
 						OscSinCos ();
 
 	ffft_FORCEINLINE void
-						set_step (double angle_rad);
+                                                set_step (long double angle_rad);
 
 	ffft_FORCEINLINE DataType
 						get_cos () const;
