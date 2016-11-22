@@ -55,4 +55,4 @@ script:
     - ls -l
 
     - cd test
-    - ctest
+    - ctest -V
