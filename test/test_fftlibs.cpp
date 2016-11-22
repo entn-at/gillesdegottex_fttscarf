@@ -49,10 +49,15 @@ static void test_lib(){
     long double accthresh = 100*fftscarf::eps<typename FFTPlanType::FloatType>();
     long double specaccthresh = accthresh; // TODO 10*
 
-    // TODO Need to compare with a long double FFT
-//    FFTPlanDFTTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because accuracy is very bad (and extra slow)
-//    FFTPlanFFTRealTemplate<typename FFTPlanType::FloatType> fft_ref(true); // TODO That's not good because its wrong > 4096
-    FFTPlanLongDoubleFFTW3 fft_ref(true); // That's the best
+    #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+        FFTPlanLongDoubleOoura fft_ref(true);
+    #else
+        #ifdef FFTSCARF_PRECISION_DOUBLE
+            FFTPlanDoubleOoura fft_ref(true);
+        #else
+            FFTPlanSingleOoura fft_ref(true);
+        #endif
+    #endif
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 

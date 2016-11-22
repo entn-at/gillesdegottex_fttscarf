@@ -198,10 +198,11 @@ public:
 #endif
 
 #ifndef FFTSCARF_FFTPLAN
-    #define FFTSCARF_FFTPLAN
     #if FFTSCARF_PRECISION_DEFAULT == 32
+        #define FFTSCARF_FFTPLAN
         typedef FFTPlanSingleIPP FFTPlan;
     #elif FFTSCARF_PRECISION_DEFAULT == 64
+        #define FFTSCARF_FFTPLAN
         typedef FFTPlanDoubleIPP FFTPlan;
     #endif
 #endif

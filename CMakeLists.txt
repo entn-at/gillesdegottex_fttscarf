@@ -9,8 +9,9 @@ option(FFTSCARF_PRECISION_SINGLE "Enable single precision" ON)
 option(FFTSCARF_PRECISION_DOUBLE "Enable double precision" ON)
 option(FFTSCARF_PRECISION_LONGDOUBLE "Enable long double precision" OFF)
 option(FFTSCARF_PRECISION_DEFAULT "Set default precision (32, 64, 128)" 32)
-
 option(FFTSCARF_PLAN_PROTECTACCESS "Protect access of the plan resize and execution using a mutex (need boost library)." OFF)
+option(FFTSCARF_BUILD_TEST "Compile the tests" OFF)
+
 if(FFTSCARF_PLAN_PROTECTACCESS)
     message("-- Protect plan access (resize and execution) using a mutex (using Boost library)")
     set(Boost_USE_STATIC_LIBS on)
@@ -54,8 +55,8 @@ option(FFTSCARF_FFT_DFT "DFT" OFF)
 #option(FFTSCARF_FFT_DJBFFT "DJBFFT" OFF)
 
 if(FFTSCARF_BUILD_TEST)
-    set(FFTSCARF_FFT_FFTW3 ON CACHE BOOL "docstring" FORCE)
-    set(FFTSCARF_PRECISION_LONGDOUBLE ON CACHE BOOL "docstring" FORCE)
+    # Force options in order to have a reference FFT
+    set(FFTSCARF_FFT_OOURA ON CACHE BOOL "docstring" FORCE)
 endif()
 
 # FFT Implementations --------------------------------------------------------
