@@ -9,7 +9,7 @@
 
 #include <fftscarf.h>
 
-#include "../fftlibs/FFTReal/FFTReal.h"
+#include <FFTReal/FFTReal.h>
 
 namespace fftscarf {
 

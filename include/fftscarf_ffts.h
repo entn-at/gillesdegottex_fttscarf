@@ -10,8 +10,8 @@
 
 #include <fftscarf.h>
 
-#include "../fftlibs/ffts/include/ffts.h"
-#include "../fftlibs/ffts/src/ffts_attributes.h"
+#include <ffts/include/ffts.h>
+#include <ffts/src/ffts_attributes.h>
 
 namespace fftscarf {
 

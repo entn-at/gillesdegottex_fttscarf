@@ -10,7 +10,7 @@
 
 #include <fftscarf.h>
 
-#include "../fftlibs/pffft/pffft.h"
+#include <pffft/pffft.h>
 
 namespace fftscarf {
 

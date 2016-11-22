@@ -9,7 +9,7 @@
 #include <fftscarf.h>
 
 extern "C" {
-#include "../fftlibs/ooura/fftsg.h"
+#include <ooura/fftsg.h>
 }
 
 namespace fftscarf {
