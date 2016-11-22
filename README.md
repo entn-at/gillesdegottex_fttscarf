@@ -39,7 +39,7 @@ $ cmake ..
 
 Then you can use `fftscarf.h` and `libfftscarf.a` in your own project.
 
-(if you use external libraries (i.e. FFTW3 or IPP), and only in this case, you will have to link your project with the proper lib files).
+(when using external libraries (FFTW3 or IPP), and only in this case, your project has to link with the proper lib files).
 
 
 ## Benchmark
