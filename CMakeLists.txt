@@ -55,6 +55,7 @@ option(FFTSCARF_FFT_DFT "DFT" OFF)
 
 if(FFTSCARF_BUILD_TEST)
     set(FFTSCARF_FFT_FFTW3 ON CACHE BOOL "docstring" FORCE)
+    set(FFTSCARF_PRECISION_LONGDOUBLE ON CACHE BOOL "docstring" FORCE)
 endif()
 
 # FFT Implementations --------------------------------------------------------
