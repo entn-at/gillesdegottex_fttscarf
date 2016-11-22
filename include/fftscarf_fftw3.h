@@ -157,10 +157,12 @@ public:
         if(int(out.size())!=winlen)
             out.resize(winlen);
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
-        for(int i=0; i<m_size; i++){
-            m_fftw3_spec[i][0] = in[i].real();
-            m_fftw3_spec[i][1] = in[i].imag();
+        std::cout << __FILE__ << ":" << __LINE__ << " m_size=" << m_size << " in.size()=" << in.size() << std::endl;
+        for(int i=0; i<m_size/2+1; i++){
+            m_fftw3_spec[2*i+0] = in[i].real();
+            m_fftw3_spec[2*i+1] = in[i].imag();
+//            m_fftw3_spec[i][0] = in[i].real();
+//            m_fftw3_spec[i][1] = in[i].imag();
         }
         std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_LOCK
