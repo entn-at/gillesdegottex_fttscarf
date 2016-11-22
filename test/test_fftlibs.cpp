@@ -50,12 +50,12 @@ static void test_lib(){
     long double specaccthresh = accthresh; // TODO 10*
 
     #ifdef FFTSCARF_PRECISION_LONGDOUBLE
-        FFTPlanLongDoubleOoura fft_ref(true);
+        FFTPlanLongDoubleFFTW3 fft_ref(true);
     #else
         #ifdef FFTSCARF_PRECISION_DOUBLE
-            FFTPlanDoubleOoura fft_ref(true);
+            FFTPlanDoubleFFTW3 fft_ref(true);
         #else
-            FFTPlanSingleOoura fft_ref(true);
+            FFTPlanSingleFFTW3 fft_ref(true);
         #endif
     #endif
     FFTPlanType fft(true);
