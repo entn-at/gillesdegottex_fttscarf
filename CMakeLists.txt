@@ -39,7 +39,6 @@ else(FFTSCARF_PRECISION_DEFAULTSINGLE)
     message("-- Default is double precision")
 endif(FFTSCARF_PRECISION_DEFAULTSINGLE)
 
-message("-- FFT Implementation")
 option(FFTSCARF_FFT_IPP "IPP" OFF)
 option(FFTSCARF_FFT_FFTS "FFTS" OFF)
 option(FFTSCARF_FFT_PFFFT "PFFFT" OFF)
@@ -49,14 +48,31 @@ option(FFTSCARF_FFT_FFTREAL "FFTReal" OFF)
 option(FFTSCARF_FFT_DFT "DFT" OFF)
 #option(FFTSCARF_FFT_DJBFFT "DJBFFT" OFF)
 
+if(FFTSCARF_BUILD_TEST)
+    set(FFTSCARF_FFT_FFTREAL ON CACHE BOOL "docstring" FORCE)
+endif(FFTSCARF_BUILD_TEST)
+
+# FFT Implementations --------------------------------------------------------
+
+message("-- FFT Implementation")
+
+function(cat IN_FILE OUT_FILE)
+  file(READ ${IN_FILE} CONTENTS)
+  file(APPEND ${OUT_FILE} "${CONTENTS}")
+endfunction()
+
+configure_file(include/fftscarf.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
+
 if(FFTSCARF_FFT_IPP)
     message("--   Enable Intel Integrated Performance Primitives (Intel IPP) (external lib)")
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_ipp.h ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
     include_directories(/opt/intel/ipp/include)
     target_link_libraries(fftscarf /opt/intel/ipp/lib/intel64/libipps.a /opt/intel/ipp/lib/intel64/libippcore.a  /opt/intel/ipp/lib/intel64/libippvm.a)
 endif(FFTSCARF_FFT_IPP)
 
 if(FFTSCARF_FFT_FFTS)
     message("--   Enable FFTS (shipped with)")
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_ffts.h ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
     message("--       Configuring FFTS library...")
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_ffts.cpp)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ffts ${CMAKE_CURRENT_BINARY_DIR}/ffts_build)
@@ -73,12 +89,14 @@ endif(FFTSCARF_FFT_FFTS)
 
 if(FFTSCARF_FFT_PFFFT)
     message("--   Enable Pretty Fast FFT (PFFFT) (built-in)")
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_pffft.h ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_pffft.cpp)
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/pffft/pffft.c)
 endif(FFTSCARF_FFT_PFFFT)
 
 if(FFTSCARF_FFT_FFTW3)
     message("--   Enable FFTW3 (external lib)")
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_fftw3.h ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
     include_directories(C:/projects/fftscarf/lib/libfft)
     if(FFTSCARF_PRECISION_SINGLE)
         if(WIN32)
@@ -98,6 +116,7 @@ endif(FFTSCARF_FFT_FFTW3)
 
 if(FFTSCARF_FFT_OOURA)
     message("--   Enable Ooura (built-in)")
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_ooura.h ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
     if(FFTSCARF_PRECISION_DEFAULTSINGLE)
         add_definitions(-DOOFLOAT_FLOAT)
     endif(FFTSCARF_PRECISION_DEFAULTSINGLE)
@@ -108,6 +127,7 @@ endif(FFTSCARF_FFT_OOURA)
 
 if(FFTSCARF_FFT_FFTREAL)
     message("--   Enable FFTReal (built-in)")
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_fftreal.h ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
 endif(FFTSCARF_FFT_FFTREAL)
 
 # if(FFTSCARF_FFT_DJBFFT)
@@ -119,11 +139,13 @@ endif(FFTSCARF_FFT_FFTREAL)
 
 if(FFTSCARF_FFT_DFT)
     message("--   Enable Standard DFT (built-in)")
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_dft.h ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
 endif(FFTSCARF_FFT_DFT)
 
-configure_file(include/fftscarf.h.in ${CMAKE_CURRENT_BINARY_DIR}/include/fftscarf.h)
+
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
 include_directories(include)
+include_directories(fftlibs)
 
 
 # Testing ---------------------------------------------------------------------
@@ -135,6 +157,7 @@ if(FFTSCARF_BUILD_TEST)
 endif(FFTSCARF_BUILD_TEST)
 
 message("")
+
 
 # Optimization -----------------------------------------------------------------
 

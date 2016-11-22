@@ -116,30 +116,4 @@ namespace fftscarf {
     };
 }
 
-#ifdef FFTSCARF_FFT_IPP
-    #include "fftscarf_ipp.h"
-#endif
-#ifdef FFTSCARF_FFT_FFTS
-    #include "fftscarf_ffts.h"
-#endif
-#ifdef FFTSCARF_FFT_PFFFT
-    #include "fftscarf_pffft.h"
-#endif
-#ifdef FFTSCARF_FFT_FFTW3
-    #include "fftscarf_fftw3.h"
-#endif
-#ifdef FFTSCARF_FFT_OOURA
-    #include "fftscarf_ooura.h"
-#endif
-#ifdef FFTSCARF_FFT_FFTREAL
-    #include "fftscarf_fftreal.h"
-#endif
-//#ifdef FFTSCARF_FFT_DJBFFT
-//    #include "fftscarf_djbfft.h"
-//#endif
-#ifdef FFTSCARF_FFT_DFT
-    #include "fftscarf_dft.h"
-#endif
-
-
 #endif // __FFTSCARF_H__

@@ -39,8 +39,8 @@ install:
   - ps: cd lib
 
   - ps: echo "Install FFTW3"
-  - ps: if ($env:platform -eq 'x64') {$libfft = "fftw-3.3.4-dll64"}
-  - ps: if ($env:platform -eq 'x86') {$libfft = "fftw-3.3.4-dll32"}
+  - ps: if ($env:platform -eq 'x64') {$libfft = "fftw-3.3.5-dll64"}
+  - ps: if ($env:platform -eq 'x86') {$libfft = "fftw-3.3.5-dll32"}
   - ps: echo $libfft
   - ps: New-Item -ItemType directory -Name $libfft | Out-Null
   - ps: cd $libfft

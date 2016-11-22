@@ -7,7 +7,6 @@ find_package(Boost COMPONENTS unit_test_framework program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
 # Add FFTScarf library
-include_directories(../include)
 link_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_executable(test_version test_version.cpp)
