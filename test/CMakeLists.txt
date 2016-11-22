@@ -37,8 +37,8 @@ endif(WIN32)
 enable_testing()
 add_test(test_version test_version)
 add_test(test_fftlibs test_fftlibs)
-#add_test(NAME test_fftlibs32 CONFIGURATIONS Release COMMAND test_fftlibs --size=32)
-#add_test(NAME test_fftlibs4096 CONFIGURATIONS Release COMMAND test_fftlibs --size=4096)
+#add_test(test_fftlibs32 test_fftlibs --size=32) // Doesn't run on OSX ...
+#add_test(test_fftlibs4096 test_fftlibs --size=4096) // Doesn't run on OSX ...
 
 # Optimization -----------------------------------------------------------------
 
