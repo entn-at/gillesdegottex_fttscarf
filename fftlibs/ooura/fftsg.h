@@ -2,13 +2,10 @@
 #define __OOURA_H__
 
 #if defined(OOFLOAT_SINGLE)
-    #warning "OOFLOAT_SINGLE"
     #define OOFLOAT float
 #elif defined(OOFLOAT_DOUBLE)
-    #warning "OOFLOAT_DOUBLE"
     #define OOFLOAT double
 #elif defined(OOFLOAT_LONGDOUBLE)
-    #warning "OOFLOAT_LONGDOUBLE"
     #define OOFLOAT long double
 #endif
 
