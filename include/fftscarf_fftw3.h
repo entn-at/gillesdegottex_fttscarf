@@ -140,41 +140,41 @@ public:
 
     template<typename TypeOutContainer>
     void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1) {
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         int dftlen = int((in.size()-1)*2);
         if(m_size!=dftlen)
             resize(dftlen);
 
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(winlen==-1)
             winlen = m_size;
         
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(int(out.size())!=winlen)
             out.resize(winlen);
 
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         for(int i=0; i<m_size; i++){
             m_fftw3_spec[i][0] = in[i].real();
             m_fftw3_spec[i][1] = in[i].imag();
         }
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_LOCK
-                std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         fftwg_execute(m_fftw3_plan);
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_UNLOCK
-                std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FloatType oneoverdftlen = FloatType(1.0)/m_size;
         for(int i=0; i<winlen; i++)
             out[i] = m_fftw3_sig[i]*oneoverdftlen;
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     }
 
     ~FFTPlanFFTW3Template() {
