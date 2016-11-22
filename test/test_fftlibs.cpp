@@ -52,7 +52,7 @@ static void test_lib(){
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
     // Prepare the random number generator
     boost::mt19937 rnd_engine((uint32_t)std::time(0));
@@ -60,32 +60,32 @@ static void test_lib(){
     boost::variate_generator<boost::mt19937&, 
         boost::normal_distribution<typename FFTPlanType::FloatType> > generator(rnd_engine, rnd_normal_distrib);
 
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
     std::vector<std::complex<typename FFTPlanType::FloatType> > spec;
     std::vector<std::complex<typename FFTPlanType::FloatType> > spec_ref;
     std::vector<typename FFTPlanType::FloatType> inframe, outframe;
 
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
     // Fill an input frame
     inframe.resize(N);
     for(int n=0; n<N; ++n)
         inframe[n] = generator();
 
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
     // Run the tested implementation
     fft.dft(inframe, spec, N);
 
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
     if(vm.count("verispec")){
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         // Run the "reference" implementation
         fft_ref.dft(inframe, spec_ref, N);
 
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         // Verify: sig->spec == specref
         long double spec_err = 0.0;
         for(size_t i=0; i<spec.size(); ++i)
@@ -97,16 +97,16 @@ static void test_lib(){
             std::cout << "spec=" << spec << endl;
         }
         BOOST_CHECK(spec_err<specaccthresh);
-        std::cout << __LINE__ << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     }
 
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     // Verify: sig->spec->sig' == sig
 
     // First reverse the spec
     ifft.idft(spec, outframe, N);
 
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     // Then measure relative RMS
     long double sqerr = 0.0;
     long double sqin = 0.0;
@@ -114,12 +114,12 @@ static void test_lib(){
         sqerr += (inframe[i]-outframe[i])*(inframe[i]-outframe[i]);
         sqin += inframe[i]*inframe[i];
     }
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     long double sig_rerr = sqrt(sqerr/sqin);
     std::cout << "    sig err=" << sig_rerr << " (threshold=" << accthresh << ")" << std::endl;
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     BOOST_CHECK(sig_rerr<accthresh);
-    std::cout << __LINE__ << std::endl;
+    std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 }
 
 #ifdef FFTSCARF_FFT_OOURA
