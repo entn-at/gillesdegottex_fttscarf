@@ -68,34 +68,26 @@ public:
     void resize(int n) {
         assert(n>0);
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(n==m_size) return;
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_LOCK
         m_size = n;
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(m_fftw3_sig)
             fftwg_free((void*)m_fftw3_sig);
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         m_fftw3_sig = NULL;
         if(m_fftw3_spec)
             fftwg_free((void*)m_fftw3_spec);
         m_fftw3_spec = NULL;
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         m_fftw3_sig = (FloatType*) fftwg_malloc(sizeof(FloatType) * m_size);
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         m_fftw3_spec = (fftwg_complex*) fftwg_malloc(sizeof(fftwg_complex) * m_size);
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         //  | FFTW_PRESERVE_INPUT
     //         unsigned int flags = FFTW_ESTIMATE;
         unsigned int flags = FFTW_ESTIMATE | FFTW_PRESERVE_INPUT;
         // The following is likely to generate non-deterministic runs !
         // See: http://www.fftw.org/faq/section3.html#nondeterministic
         // unsigned int flags = FFTW_MEASURE;
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(m_forward){
             m_fftw3_plan = fftwg_plan_dft_r2c_1d(m_size, m_fftw3_sig, m_fftw3_spec, flags);
     //            m_fftw3_plan = fftw_plan_dft_1d(m_size, m_fftw3_sig, m_fftw3_spec, FFTW_FORWARD, FFTW_MEASURE);
@@ -104,9 +96,7 @@ public:
             m_fftw3_plan = fftwg_plan_dft_c2r_1d(m_size, m_fftw3_spec, m_fftw3_sig, flags);
     //            m_fftw3_plan = fftw_plan_dft_1d(m_size, m_fftw3_sig, m_fftw3_spec, FFTW_BACKWARD, FFTW_MEASURE);
         }
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_UNLOCK
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     }
 
     template<typename TypeInContainer>
@@ -140,41 +130,30 @@ public:
 
     template<typename TypeOutContainer>
     void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1) {
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         int dftlen = int((in.size()-1)*2);
         if(m_size!=dftlen)
             resize(dftlen);
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(winlen==-1)
             winlen = m_size;
         
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if(int(out.size())!=winlen)
             out.resize(winlen);
 
-        std::cout << __FILE__ << ":" << __LINE__ << " m_size=" << m_size << " in.size()=" << in.size() << std::endl;
         for(int i=0; i<m_size/2+1; i++){
             m_fftw3_spec[i][0] = in[i].real();
             m_fftw3_spec[i][1] = in[i].imag();
         }
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_LOCK
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         fftwg_execute(m_fftw3_plan);
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FFTSCARF_PLAN_ACCESS_UNLOCK
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         FloatType oneoverdftlen = FloatType(1.0)/m_size;
         for(int i=0; i<winlen; i++)
             out[i] = m_fftw3_sig[i]*oneoverdftlen;
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
     }
 
     ~FFTPlanFFTW3Template() {
