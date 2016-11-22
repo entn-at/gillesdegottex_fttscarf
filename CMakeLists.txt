@@ -56,7 +56,7 @@ option(FFTSCARF_FFT_DFT "DFT" OFF)
 
 if(FFTSCARF_BUILD_TEST)
     # Force options in order to have a reference FFT
-    set(FFTSCARF_FFT_OOURA ON CACHE BOOL "docstring" FORCE)
+    set(FFTSCARF_FFT_FFTW3 ON CACHE BOOL "docstring" FORCE)
 endif()
 
 # FFT Implementations --------------------------------------------------------
