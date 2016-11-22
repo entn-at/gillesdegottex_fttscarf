@@ -31,14 +31,14 @@ static void test_lib(){
     // Arguments parsing
     po::options_description desc("Options");
     desc.add_options()
-        ("N,N", po::value<uint32_t>(), "The FFT size")
+        ("size", po::value<uint32_t>(), "The FFT size")
         ("verispec", "Verify the spectrum by comparison with a reference")
     ;
     po::variables_map vm;
     po::store(po::parse_command_line(boost::unit_test::framework::master_test_suite().argc, boost::unit_test::framework::master_test_suite().argv, desc), vm);
     po::notify(vm);
-    if (vm.count("N"))
-        N = vm["N"].as<uint32_t>();
+    if (vm.count("size"))
+        N = vm["size"].as<uint32_t>();
 
     std::cout << "Testing " << FFTPlanType::libraryName() << " ..." << std::endl;
 
