@@ -72,7 +72,7 @@ protected:
 private:
 
    // Over this bit depth, we use direct calculation for sin/cos
-   enum {	      TRIGO_BD_LIMIT	= 12  };
+   enum {	      TRIGO_BD_LIMIT	= 30  };
 
 	typedef	OscSinCos <DataType>	OscType;
 
