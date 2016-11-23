@@ -44,7 +44,7 @@ if(FFTSCARF_FFT_IPP)
     include_directories(/opt/intel/ipp/include)
 endif()
 include_directories(${CMAKE_SOURCE_DIR}/../fftlibs)
-include_directories(${CMAKE_BINARY_DIR}/fftscarf/include)
+include_directories(${CMAKE_BINARY_DIR}/fftscarf)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/.. ${CMAKE_CURRENT_BINARY_DIR}/fftscarf)
 
 
