@@ -14,7 +14,7 @@ table td{padding:3px 8px;border:1px solid #666}
 
 <tr><td><a href="https://bitbucket.org/jpommier/pffft">PFFFT</a></td><td>(2^a)*(3^b)*(5^c) [min=32]</td><td>Yes</td><td>No</td><td>No</td><td>Ordered*</td><td>built-in</td><td><a href="https://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22Revised_BSD_License.22.2C_.22New_BSD_License.22.2C_or_.22Modified_BSD_License.22.29">3-clause BSD</a></td></tr>
 
-<tr><td><a href="https://github.com/linkotec/ffts">FFTS</a></td><td>2^a*</td><td>Yes</td><td>No(??)</td><td>No</td><td>Ordered</td><td>shipped with</td><td><a href="https://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22Revised_BSD_License.22.2C_.22New_BSD_License.22.2C_or_.22Modified_BSD_License.22.29">3-clause BSD</a></td><td>Limited on 32b architectures</td></tr>
+<tr><td><a href="https://github.com/linkotec/ffts">FFTS</a></td><td>2^a*</td><td>Yes</td><td>No</td><td>No</td><td>Ordered</td><td>shipped with</td><td><a href="https://en.wikipedia.org/wiki/BSD_licenses#3-clause_license_.28.22Revised_BSD_License.22.2C_.22New_BSD_License.22.2C_or_.22Modified_BSD_License.22.29">3-clause BSD</a></td><td>Limited on 32b architectures</td></tr>
 
 <tr><td><a href="http://www.fftw.org/">FFTW3</a></td><td>Any</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Ordered</td><td>external$</td><td><a href="https://en.wikipedia.org/wiki/GNU_General_Public_License#Version_2">GPL</a> (version >=2)</td></tr>
 
@@ -30,4 +30,5 @@ table td{padding:3px 8px;border:1px solid #666}
 # Selected during FFTScarf compilation.<br/>
 ^ An unordered FFT is always re-ordered by the FFTScarf wrapper.<br/>
 $ When using external libraries, the end software needs to be linked with the appropriate library files (i.e. linking with fftscarf.a is not enough).<br/>
-~ i.e. Public Domain.
+~ i.e. Public Domain.<br/>
+Note that on Windows long double (so-called 128b) might actually be a 64b or might not work at all.

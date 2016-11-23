@@ -49,10 +49,9 @@ option(FFTSCARF_FFT_IPP "IPP" OFF)
 option(FFTSCARF_FFT_FFTS "FFTS" OFF)
 option(FFTSCARF_FFT_PFFFT "PFFFT" OFF)
 option(FFTSCARF_FFT_FFTW3 "FFTW3" OFF)
-option(FFTSCARF_FFT_OOURA "Ooura's FFT" ON)
-option(FFTSCARF_FFT_FFTREAL "FFTReal" OFF)
+option(FFTSCARF_FFT_OOURA "Ooura's FFT" OFF)
+option(FFTSCARF_FFT_FFTREAL "FFTReal" ON)
 option(FFTSCARF_FFT_DFT "DFT" OFF)
-#option(FFTSCARF_FFT_DJBFFT "DJBFFT" OFF)
 
 if(FFTSCARF_BUILD_TEST)
     # Force options in order to have a reference FFT
@@ -142,7 +141,6 @@ if(FFTSCARF_FFT_OOURA)
     endif()
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_ooura.cpp)
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ooura/fftsg.c)
-#    target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ooura/fft4g.cpp)
 endif()
 
 if(FFTSCARF_FFT_FFTREAL)
@@ -150,12 +148,14 @@ if(FFTSCARF_FFT_FFTREAL)
     cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_fftreal.h ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
 endif()
 
-# if(FFTSCARF_FFT_DJBFFT)
-#     message("--   Enable DJBFFT (shipped with)")
-# #    message("--    Configuring DJBFFT library")
-#     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_djbfft.cpp)
-#     target_link_libraries(fftscarf ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/djbfft-0.76/djbfft.a)
-# endif(FFTSCARF_FFT_DJBFFT)
+#if(FFTSCARF_FFT_DJBFFT)
+#    message("--   Enable DJBFFT (shipped with)")
+#    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_djbfft.h ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
+##    message("--    Configuring DJBFFT library")
+## TODO
+#    target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_djbfft.cpp)
+#    target_link_libraries(fftscarf ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/djbfft-0.76/djbfft.a)
+#endif(FFTSCARF_FFT_DJBFFT)
 
 if(FFTSCARF_FFT_DFT)
     message("--   Enable Standard DFT (built-in)")
@@ -164,7 +164,6 @@ endif()
 
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-#include_directories(include)
 include_directories(fftlibs)
 
 

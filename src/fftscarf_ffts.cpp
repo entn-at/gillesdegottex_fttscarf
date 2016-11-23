@@ -1,11 +1,10 @@
 #include <fftscarf.h>
 
-// memalign
-//#include <malloc.h>
-// posix_memalign
+#ifdef HAVE_SSE
+#include <xmmintrin.h>
+#endif
+
 #include <stdlib.h>
-//#include <mm.h>
-//#define HAVE_SSE
 
 #include <cmath>
 #include <string>
@@ -53,15 +52,13 @@ void FFTPlanFFTS::resize(int n)
     m_size = n;
 
     if(m_signal || m_spec){
-    #ifdef HAVE_SSE
-        _mm_free(m_signal);
-        _mm_free(m_spec);
-//        free(m_signal);
-//        free(m_spec);
-    #else
-        free(m_signal);
-        free(m_spec);
-    #endif
+        #ifdef HAVE_SSE
+            _mm_free(m_signal);
+            _mm_free(m_spec);
+        #else
+            free(m_signal);
+            free(m_spec);
+        #endif
         m_signal = NULL;
         m_spec = NULL;
     }
@@ -71,18 +68,13 @@ void FFTPlanFFTS::resize(int n)
         m_spec = (FloatType FFTS_ALIGN(32) *) _aligned_malloc((2*n+1) * sizeof(FloatType), 32);  // TODO (2*n+1) ?????
     #else
         // See http://www.delorie.com/gnu/docs/glibc/libc_31.html
+        // Or ffts/tests/test.c
         #ifdef HAVE_SSE
-            m_signal = _mm_malloc(n * sizeof(FloatType), 32);
-            m_spec = _mm_malloc(2*(m_size/2+1) * sizeof(FloatType), 32);
-    //        posix_memalign((void**)&m_signal, n * sizeof(FloatType), 32); // CRASHES
-    //        posix_memalign((void**)&m_spec, 2*(m_size/2+1) * sizeof(FloatType), 32); // CRASHES
-    //        m_signal = (FloatType FFTS_ALIGN(32) *) posix_memalign(n * sizeof(FloatType), 32);
-    //        m_spec = (FloatType FFTS_ALIGN(32) *) posix_memalign(2*(m_size/2+1) * sizeof(FloatType), 32);
+            m_signal = (FloatType FFTS_ALIGN(32) *) _mm_malloc(n * sizeof(FloatType), 32);
+            m_spec = (FloatType FFTS_ALIGN(32) *) _mm_malloc(2*(m_size/2+1) * sizeof(FloatType), 32);
         #else
             m_signal = (FloatType FFTS_ALIGN(32) *) valloc(n * sizeof(FloatType));
             m_spec = (FloatType FFTS_ALIGN(32) *) valloc((2*n+1) * sizeof(FloatType)); // TODO (2*n+1) ?????
-    //        m_signal = (FloatType*) valloc(m_size * sizeof(FloatType));
-    //        m_spec = (FloatType*) valloc(2*(m_size/2+1) * sizeof(FloatType));
         #endif
     #endif
 
@@ -111,8 +103,6 @@ FFTPlanFFTS::~FFTPlanFFTS() {
             #ifdef HAVE_SSE
                 _mm_free(m_signal);
                 _mm_free(m_spec);
-            //        free(m_signal);
-            //        free(m_spec);
             #else
                 free(m_signal);
                 free(m_spec);

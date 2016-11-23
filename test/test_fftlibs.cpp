@@ -113,6 +113,13 @@ static void test_lib(){
     BOOST_CHECK(sig_rerr<accthresh);
 }
 
+//#ifdef FFTSCARF_FFT_DJBFFT
+//BOOST_AUTO_TEST_CASE( test_fftlibs_djbfft )
+//{
+//    test_lib<fftscarf::FFTPlanDJBFFT>();
+//}
+//#endif
+
 #ifdef FFTSCARF_FFT_OOURA
 BOOST_AUTO_TEST_CASE( test_fftlibs_ooura )
 {
