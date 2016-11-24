@@ -1,6 +1,10 @@
 #ifndef __OOURA_H__
 #define __OOURA_H__
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #if defined(OOFLOAT_SINGLE)
     #define OOFLOAT float
 #elif defined(OOFLOAT_DOUBLE)
@@ -15,5 +19,9 @@ void ddct(int, int, OOFLOAT *, int *, OOFLOAT *);
 void ddst(int, int, OOFLOAT *, int *, OOFLOAT *);
 void dfct(int, OOFLOAT *, OOFLOAT *, int *, OOFLOAT *);
 void dfst(int, OOFLOAT *, OOFLOAT *, int *, OOFLOAT *);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __OOURA_H__
