@@ -8,7 +8,7 @@
 #include <cmath>
 #include <iostream>
 
-#include <pffft/pffft.h>
+//#include <pffft/pffft.h> // Will be included in fftscarf.h
 
 namespace fftscarf {
 

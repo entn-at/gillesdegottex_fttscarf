@@ -6,9 +6,9 @@
 #include <vector>
 #include <string>
 
-extern "C" {
-#include <ooura/fftsg.h>
-}
+//extern "C" {
+//#include <ooura/fftsg.h> // Will be included in fftscarf.h
+//}
 
 namespace fftscarf {
 

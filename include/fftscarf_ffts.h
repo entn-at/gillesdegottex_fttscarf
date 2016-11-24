@@ -8,8 +8,8 @@
 #include <cmath>
 #include <iostream>
 
-#include <ffts/include/ffts.h>
-#include <ffts/src/ffts_attributes.h>
+//#include <ffts/include/ffts.h> // Will be included in fftscarf.h
+//#include <ffts/src/ffts_attributes.h> // Will be included in fftscarf.h
 
 namespace fftscarf {
 
