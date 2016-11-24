@@ -108,11 +108,6 @@ namespace fftscarf {
         #ifdef FFTSCARF_FFTPLAN
         out << "    Default FFTPlan: " << FFTPlan::libraryName() << std::endl;
         #endif
-        #ifdef FFTSCARF_PLAN_PROTECTACCESS
-        out << "    Plan access is protected using a mutex" << std::endl;
-        #else
-        out << "    Plan access is NOT protected" << std::endl;
-        #endif
     }
 
     std::list<std::string> availableLibraries() {
