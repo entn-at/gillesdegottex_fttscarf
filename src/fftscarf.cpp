@@ -74,6 +74,11 @@ namespace fftscarf {
         #ifdef FFTSCARF_LICENSE_GPLENFORCED
         out << "    License: ATTENTION: GPL is enforced on this software" << std::endl;
         #endif
+        #ifdef FFTSCARF_PLAN_PROTECTACCESS
+        out << "    Plan access is protected using a mutex" << std::endl;
+        #else
+        out << "    Plan access is NOT protected" << std::endl;
+        #endif
         std::list<std::string> fftlibs = availableLibraries();
         if(fftlibs.size()==0)
             out << "    No FFT implementation available";
