@@ -70,9 +70,10 @@ static void test_lib(){
     for(size_t b=0; b<100; ++b){
         int bin = binrnd(rnd_engine);
         // Fill an input frame
+        // Test with a simple sinusoid centered on an extact bin
         inframe.resize(N);
         for(int n=0; n<N; ++n)
-            inframe[n] = cosl(bin*2*M_PIl*n/((long double)N));
+            inframe[n] = cosl(bin*2*M_PIl*n/((long double)N)); // TODO Test phase
         
         // Run the tested implementation
         fft.dft(inframe, spec, N);
@@ -80,7 +81,7 @@ static void test_lib(){
         int amp_ref = N/2;
         if(bin==0 || bin==N/2)
             amp_ref *= 2;
-        
+
         BOOST_CHECK(abs(spec[bin].real()-amp_ref)<N*accthresh);
         BOOST_CHECK(abs(spec[bin].imag())<100*N*accthresh); // TODO This one is very badly estimated! Any reason?
 
