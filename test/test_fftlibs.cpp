@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include <ctime>
 #include <iostream>
 #include <iterator>
@@ -22,8 +24,6 @@ using namespace fftscarf;
 
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
-
-#include <math.h>
 
 // #ifndef M_PIl
 // #define M_PIl      = 3.141592653589793238462643383279502884L;
@@ -93,9 +93,8 @@ static void test_lib(){
         long double ampmeas = std::abs(spec[binref]);
         long double phimeas = std::arg(spec[binref]); // TODO Need to compensate for the window?
         BOOST_CHECK(abs(ampref-ampmeas)<N*accthresh);
-//         cout << __LINE__ << ":" << wrap(phiref-phimeas) << endl;
+        cout << __LINE__ << ":" << wrap(phiref-phimeas) << " " << accthresh << endl;
         BOOST_CHECK(abs(wrap(phiref-phimeas))<accthresh);
-//         BOOST_CHECK(abs(wrap(phiref-phimeas))<100*N*accthresh); // TODO This one is very badly estimated! Any reason?
 
         long double spec_err = 0.0;
         for(size_t k=0; k<N/2; ++k)
