@@ -46,8 +46,12 @@ static void test_lib(){
 
     std::cout << "Testing " << FFTPlanType::libraryName() << "  N=" << N << " ..." << std::endl;
 
+    boost::mt19937 rnd_engine((uint32_t)std::time(0));
+    std::vector<std::complex<typename FFTPlanType::FloatType> > spec;
+    std::vector<std::complex<typename FFTPlanType::FloatType> > spec_ref;
+    std::vector<typename FFTPlanType::FloatType> inframe, outframe;
+
     long double accthresh = 100*fftscarf::eps<typename FFTPlanType::FloatType>();
-    long double specaccthresh = accthresh;
 
     #ifdef FFTSCARF_PRECISION_LONGDOUBLE
         FFTPlanLongDoubleFFTReal fft_ref(true);
@@ -61,56 +65,85 @@ static void test_lib(){
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 
+    // Test known transforms ---------------------------------------------------
+    boost::random::uniform_int_distribution<int> binrnd(0,N/2);
+    for(size_t b=0; b<100; ++b){
+        int bin = binrnd(rnd_engine);
+        // Fill an input frame
+        inframe.resize(N);
+        for(int n=0; n<N; ++n)
+            inframe[n] = cosl(bin*2*M_PIl*n/((long double)N));
+        
+        // Run the tested implementation
+        fft.dft(inframe, spec, N);
+
+        int amp_ref = N/2;
+        if(bin==0 || bin==N/2)
+            amp_ref *= 2;
+        
+        BOOST_CHECK(abs(spec[bin].real()-amp_ref)<N*accthresh);
+        BOOST_CHECK(abs(spec[bin].imag())<100*N*accthresh); // TODO This one is very badly estimated! Any reason?
+
+        long double spec_err = 0.0;
+        for(size_t k=0; k<N/2; ++k)
+            if(k!=bin)
+                spec_err += abs(spec[k])*abs(spec[k]);
+        spec_err = sqrt(spec_err/spec.size());
+        BOOST_CHECK(spec_err<N*accthresh);
+    }
+
+    // Test random transforms --------------------------------------------------
+
     // Prepare the random number generator
-    boost::mt19937 rnd_engine((uint32_t)std::time(0));
     boost::normal_distribution<typename FFTPlanType::FloatType> rnd_normal_distrib;
     boost::variate_generator<boost::mt19937&, 
         boost::normal_distribution<typename FFTPlanType::FloatType> > generator(rnd_engine, rnd_normal_distrib);
 
-    std::vector<std::complex<typename FFTPlanType::FloatType> > spec;
-    std::vector<std::complex<typename FFTPlanType::FloatType> > spec_ref;
-    std::vector<typename FFTPlanType::FloatType> inframe, outframe;
+    for(size_t b=0; b<100; ++b){
+        // Fill an input frame
+        inframe.resize(N);
+        for(int n=0; n<N; ++n)
+            inframe[n] = generator();
 
-    // Fill an input frame
-    inframe.resize(N);
-    for(int n=0; n<N; ++n)
-        inframe[n] = generator();
+        // Run the tested implementation
+        fft.dft(inframe, spec, N);
 
-    // Run the tested implementation
-    fft.dft(inframe, spec, N);
+        if(vm.count("specverif")){
+            // Run the "reference" implementation
+            fft_ref.dft(inframe, spec_ref, N);
 
-    if(vm.count("specverif")){
-        // Run the "reference" implementation
-        fft_ref.dft(inframe, spec_ref, N);
-
-        // Verify: sig->spec == specref
-        long double spec_err = 0.0;
-        for(size_t i=0; i<spec.size(); ++i)
-            spec_err += std::abs(spec_ref[i]-spec[i])*std::abs(spec_ref[i]-spec[i]);
-        spec_err = sqrt(spec_err/spec_ref.size());
-        std::cout << "    spec err=" << spec_err << " (threshold=" << specaccthresh << "; ref implementation: " << fft_ref.libraryName() << ")" << std::endl;
-        if(spec_err>specaccthresh && vm.count("specprint")){
-            std::cout << "spec_ref=" << spec_ref << endl;
-            std::cout << "spec=" << spec << endl;
+            // Verify: sig->spec == specref
+            long double spec_err = 0.0;
+            for(size_t i=0; i<spec.size(); ++i)
+                spec_err += std::abs(spec_ref[i]-spec[i])*std::abs(spec_ref[i]-spec[i]);
+            spec_err = sqrt(spec_err/spec_ref.size());
+            if(spec_err>accthresh){
+                std::cout << "    spec err=" << spec_err << " (threshold=" << accthresh << "; ref implementation: " << fft_ref.libraryName() << ")" << std::endl;
+                if(vm.count("specprint")){
+                    std::cout << "spec_ref=" << spec_ref << endl;
+                    std::cout << "spec=" << spec << endl;
+                }
+            }
+            BOOST_CHECK(spec_err<accthresh);
         }
-        BOOST_CHECK(spec_err<specaccthresh);
+
+        // Verify: sig->spec->sig' == sig
+
+        // First reverse the spec
+        ifft.idft(spec, outframe, N);
+
+        // Then measure relative RMS
+        long double sqerr = 0.0;
+        long double sqin = 0.0;
+        for(size_t i=0; i<inframe.size(); ++i){
+            sqerr += (inframe[i]-outframe[i])*(inframe[i]-outframe[i]);
+            sqin += inframe[i]*inframe[i];
+        }
+        long double sig_rerr = sqrt(sqerr/sqin);
+        if(sig_rerr>accthresh)
+            std::cout << "    sig err=" << sig_rerr << " (threshold=" << accthresh << ")" << std::endl;
+        BOOST_CHECK(sig_rerr<accthresh);
     }
-
-    // Verify: sig->spec->sig' == sig
-
-    // First reverse the spec
-    ifft.idft(spec, outframe, N);
-
-    // Then measure relative RMS
-    long double sqerr = 0.0;
-    long double sqin = 0.0;
-    for(size_t i=0; i<inframe.size(); ++i){
-        sqerr += (inframe[i]-outframe[i])*(inframe[i]-outframe[i]);
-        sqin += inframe[i]*inframe[i];
-    }
-    long double sig_rerr = sqrt(sqerr/sqin);
-    std::cout << "    sig err=" << sig_rerr << " (threshold=" << accthresh << ")" << std::endl;
-    BOOST_CHECK(sig_rerr<accthresh);
 }
 
 //#ifdef FFTSCARF_FFT_DJBFFT
