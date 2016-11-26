@@ -3,7 +3,9 @@ project (test)
 
 # Add Boost unit test library.
 set(Boost_USE_STATIC_LIBS on)
-find_package(Boost COMPONENTS random unit_test_framework program_options REQUIRED)
+find_package(Boost COMPONENTS unit_test_framework program_options REQUIRED) # random 
+# find_package(Boost COMPONENTS system unit_test_framework REQUIRED)
+# add_definitions(-DBOOST_TEST_DYN_LINK)
 include_directories(${Boost_INCLUDE_DIR})
 
 # Add FFTScarf library
@@ -21,9 +23,11 @@ if(FFTSCARF_FFT_FFTW3)
         endif()
     endif()
 endif()
+# TODO IPP
 
 add_executable(test_misc test_misc.cpp)
-target_link_libraries(test_misc fftscarf ${Boost_LIBRARIES} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(test_misc fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(test_misc fftscarf ${Boost_LIBRARIES})
 if(FFTSCARF_FFT_FFTW3)
     if(WIN32)
         if(FFTSCARF_PRECISION_SINGLE)
@@ -34,6 +38,7 @@ if(FFTSCARF_FFT_FFTW3)
         endif()
     endif()
 endif()
+# TODO IPP
 
 add_executable(test_fftlibs test_fftlibs.cpp)
 target_link_libraries(test_fftlibs fftscarf ${Boost_LIBRARIES} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
@@ -47,6 +52,7 @@ if(FFTSCARF_FFT_FFTW3)
         endif()
     endif()
 endif()
+# TODO IPP
 
 # Add tests using ctest
 enable_testing()

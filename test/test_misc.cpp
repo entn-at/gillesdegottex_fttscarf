@@ -1,7 +1,10 @@
+#include <ctime>
 #include <iostream>
 #include <limits>
 using namespace std;
 
+#define BOOST_TEST_MAIN
+// #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE TestMisc
 #include <boost/test/unit_test.hpp>
 

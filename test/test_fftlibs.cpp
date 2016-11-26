@@ -7,6 +7,8 @@
 #include <sstream>
 using namespace std;
 
+#define BOOST_TEST_MAIN
+// #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE TestFFTLibs
 #include <boost/test/unit_test.hpp>
 
@@ -106,7 +108,7 @@ static void test_lib(){
             if(k!=binref)
                 spec_err += abs(spec[k])*abs(spec[k]);
         spec_err = sqrt(spec_err/spec.size());
-        if(spec_err<10*N*accthresh)
+        if(spec_err>10*N*accthresh)
             std::cout << "    spec err=" << spec_err << " (threshold=" << 10*N*accthresh << ")" << std::endl;
         BOOST_CHECK(spec_err<10*N*accthresh);
     }
