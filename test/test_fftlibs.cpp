@@ -1,5 +1,4 @@
-#define _USE_MATH_DEFINES
-#include <math.h>
+#include <cmath>
 #include <ctime>
 #include <iostream>
 #include <iterator>
@@ -8,7 +7,6 @@
 #include <sstream>
 using namespace std;
 
-//#define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE TestFFTLibs
 #include <boost/test/unit_test.hpp>
 
@@ -25,9 +23,9 @@ using namespace fftscarf;
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
 
-// #ifndef M_PIl
-// #define M_PIl      = 3.141592653589793238462643383279502884L;
-// #endif
+#ifndef M_PIl
+#define M_PIl      = 3.141592653589793238462643383279502884L;
+#endif
 
 template<typename FFTPlanType>
 static void test_lib(){
@@ -72,9 +70,9 @@ static void test_lib(){
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 
-    // Test known transforms ---------------------------------------------------
-    boost::random::uniform_int_distribution<int> binrnd(0,N/2);
-    boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*M_PIl);
+    // Test transforms of sinusoids --------------------------------------------
+    boost::random::uniform_int_distribution<int> binrnd(0,N/2); // For random frequency
+    boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*M_PIl); // For random phase
     for(size_t b=0; b<10; ++b){
         int binref = binrnd(rnd_engine); // Frequency
         int ampref = N/2;            // Amplitude // TODO Randomize!
@@ -82,7 +80,7 @@ static void test_lib(){
         long double phiref = phirnd(rnd_engine); // Phase
 
         // Fill an input frame
-        // Test with a simple sinusoid centered on an extact bin
+        // Test with a simple sinusoid centered on an exact bin
         inframe.resize(N);
         for(int n=0; n<N; ++n)
             inframe[n] = cosl(binref*2*M_PIl*n/((long double)N) + phiref);
@@ -90,12 +88,19 @@ static void test_lib(){
         // Run the tested implementation
         fft.dft(inframe, spec, N);
 
+        // Check the amplitude
         long double ampmeas = std::abs(spec[binref]);
-        long double phimeas = std::arg(spec[binref]); // TODO Need to compensate for the window?
+        if(abs(ampref-ampmeas)>N*accthresh)
+            cout << __LINE__ << ": " << ampmeas << " " << ampref << endl;
         BOOST_CHECK(abs(ampref-ampmeas)<N*accthresh);
-        cout << __LINE__ << ":" << wrap(phiref-phimeas) << " " << accthresh << endl;
-        BOOST_CHECK(abs(wrap(phiref-phimeas))<accthresh);
 
+        // Check the phase
+        long double phimeas = std::arg(spec[binref]);
+        if(abs(wrap(phiref-phimeas))>N*accthresh)
+            cout << __LINE__ << ": " << phimeas << " " << phiref << endl;
+        BOOST_CHECK(abs(wrap(phiref-phimeas))<N*accthresh);
+
+        // Check the zeros
         long double spec_err = 0.0;
         for(size_t k=0; k<N/2; ++k)
             if(k!=binref)
@@ -104,14 +109,12 @@ static void test_lib(){
         BOOST_CHECK(spec_err<N*accthresh);
     }
 
-    // Test random transforms --------------------------------------------------
-
-    // Prepare the random number generator
+    // Test transforms of Gaussian noise ---------------------------------------
     boost::normal_distribution<typename FFTPlanType::FloatType> rnd_normal_distrib;
     boost::variate_generator<boost::mt19937&, 
         boost::normal_distribution<typename FFTPlanType::FloatType> > generator(rnd_engine, rnd_normal_distrib);
 
-    for(size_t b=0; b<1; ++b){
+    for(size_t b=0; b<100; ++b){
         // Fill an input frame
         inframe.resize(N);
         for(int n=0; n<N; ++n)
