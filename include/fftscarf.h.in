@@ -83,6 +83,12 @@ namespace fftscarf {
     bool isPow2(unsigned int N);
     bool isPow235(unsigned int N);
 
+    //! TODO Speedup
+    template<typename FloatType>
+    inline FloatType wrap(FloatType value){
+        return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
+    }
+
     //! Return a complex value from an array of two values.
     template<typename FloatType>
     inline std::complex<FloatType> make_complex(FloatType value[]){

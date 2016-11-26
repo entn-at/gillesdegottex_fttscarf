@@ -1,4 +1,3 @@
-#include <cmath>
 #include <ctime>
 #include <iostream>
 #include <iterator>
@@ -16,12 +15,15 @@ using namespace fftscarf;
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/normal_distribution.hpp>
+#include <boost/random/uniform_real.hpp>
 #include <boost/random/variate_generator.hpp>
 
 #include "../benchmark/stream.h"
 
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
+
+#include <math.h>
 
 // #ifndef M_PIl
 // #define M_PIl      = 3.141592653589793238462643383279502884L;
@@ -72,27 +74,32 @@ static void test_lib(){
 
     // Test known transforms ---------------------------------------------------
     boost::random::uniform_int_distribution<int> binrnd(0,N/2);
-    for(size_t b=0; b<100; ++b){
-        int bin = binrnd(rnd_engine);
+    boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*M_PIl);
+    for(size_t b=0; b<10; ++b){
+        int binref = binrnd(rnd_engine); // Frequency
+        int ampref = N/2;            // Amplitude // TODO Randomize!
+        if(binref==0 || binref==N/2) ampref *= 2;
+        long double phiref = phirnd(rnd_engine); // Phase
+
         // Fill an input frame
         // Test with a simple sinusoid centered on an extact bin
         inframe.resize(N);
         for(int n=0; n<N; ++n)
-            inframe[n] = cosl(bin*2*M_PIl*n/((long double)N)); // TODO Test phase
+            inframe[n] = cosl(binref*2*M_PIl*n/((long double)N) + phiref);
         
         // Run the tested implementation
         fft.dft(inframe, spec, N);
 
-        int amp_ref = N/2;
-        if(bin==0 || bin==N/2)
-            amp_ref *= 2;
-
-        BOOST_CHECK(abs(spec[bin].real()-amp_ref)<N*accthresh);
-        BOOST_CHECK(abs(spec[bin].imag())<100*N*accthresh); // TODO This one is very badly estimated! Any reason?
+        long double ampmeas = std::abs(spec[binref]);
+        long double phimeas = std::arg(spec[binref]); // TODO Need to compensate for the window?
+        BOOST_CHECK(abs(ampref-ampmeas)<N*accthresh);
+//         cout << __LINE__ << ":" << wrap(phiref-phimeas) << endl;
+        BOOST_CHECK(abs(wrap(phiref-phimeas))<accthresh);
+//         BOOST_CHECK(abs(wrap(phiref-phimeas))<100*N*accthresh); // TODO This one is very badly estimated! Any reason?
 
         long double spec_err = 0.0;
         for(size_t k=0; k<N/2; ++k)
-            if(k!=bin)
+            if(k!=binref)
                 spec_err += abs(spec[k])*abs(spec[k]);
         spec_err = sqrt(spec_err/spec.size());
         BOOST_CHECK(spec_err<N*accthresh);
@@ -105,7 +112,7 @@ static void test_lib(){
     boost::variate_generator<boost::mt19937&, 
         boost::normal_distribution<typename FFTPlanType::FloatType> > generator(rnd_engine, rnd_normal_distrib);
 
-    for(size_t b=0; b<100; ++b){
+    for(size_t b=0; b<1; ++b){
         // Fill an input frame
         inframe.resize(N);
         for(int n=0; n<N; ++n)
