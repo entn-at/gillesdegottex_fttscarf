@@ -80,6 +80,9 @@ namespace fftscarf {
     template<typename FloatType>
     FloatType eps() {return std::numeric_limits<FloatType>::epsilon();}
 
+    //! The pi value with the highest precision
+    static const long double pi = 3.141592653589793238462643383279502884L;
+    
     bool isPow2(unsigned int N);
     bool isPow235(unsigned int N);
 
