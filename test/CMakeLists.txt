@@ -21,6 +21,18 @@ if(WIN32)
     endif()
 endif()
 
+add_executable(test_misc test_misc.cpp)
+target_link_libraries(test_misc fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(test_misc ${Boost_LIBRARIES})
+if(WIN32)
+    if(FFTSCARF_PRECISION_SINGLE)
+        target_link_libraries(test_misc C:/projects/fftscarf/lib/libfft/libfftw3f-3.lib)
+    endif()
+    if(FFTSCARF_PRECISION_DOUBLE)
+        target_link_libraries(test_misc C:/projects/fftscarf/lib/libfft/libfftw3-3.lib)
+    endif()
+endif()
+
 add_executable(test_fftlibs test_fftlibs.cpp)
 target_link_libraries(test_fftlibs fftscarf ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 target_link_libraries(test_fftlibs ${Boost_LIBRARIES})
@@ -36,6 +48,7 @@ endif()
 # Add tests using ctest
 enable_testing()
 add_test(test_version test_version)
+add_test(test_fftlibs test_misc)
 add_test(test_fftlibs test_fftlibs)
 #add_test(test_fftlibs32 test_fftlibs --size=32) // Doesn't run on OSX ...
 #add_test(test_fftlibs4096 test_fftlibs --size=4096) // Doesn't run on OSX ...

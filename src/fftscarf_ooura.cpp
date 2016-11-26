@@ -36,9 +36,10 @@ FFTPlanOoura::FFTPlanOoura(int n, bool forward)
 
 void FFTPlanOoura::resize(int n)
 {
-    assert(n>0);
-
     if(n==m_size) return;
+
+    assert(n>0);
+    assert(isPow2(n));
 
     FFTSCARF_PLAN_ACCESS_LOCK
     m_size = n;

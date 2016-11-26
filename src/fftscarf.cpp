@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include <cmath>
 
 const struct AvailableFFTLibraries : public std::list<std::string> {
     AvailableFFTLibraries(){
@@ -112,6 +113,21 @@ namespace fftscarf {
 
     std::list<std::string> availableLibraries() {
         return s_available_fft_libraries;
+    }
+
+    bool isPow2(unsigned int N){
+        return ((N!=0) && !(N & (N-1)));
+    }
+
+    bool isPow235(unsigned int N){
+        if(isPow2(N))
+            return true;
+
+        while(N%2==0) N /= 2;
+        while(N%3==0) N /= 3;
+        while(N%5==0) N /= 5;
+
+        return N==1;
     }
 
     FFTPlanImplementation::FFTPlanImplementation(bool forward) {

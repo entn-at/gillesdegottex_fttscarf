@@ -80,6 +80,9 @@ namespace fftscarf {
     template<typename FloatType>
     FloatType eps() {return std::numeric_limits<FloatType>::epsilon();}
 
+    bool isPow2(unsigned int N);
+    bool isPow235(unsigned int N);
+
     //! Return a complex value from an array of two values.
     template<typename FloatType>
     inline std::complex<FloatType> make_complex(FloatType value[]){
