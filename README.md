@@ -38,10 +38,11 @@ $ cmake ..
 ```
 
 Then you can use `fftscarf.h` and `libfftscarf.a` in your own project.
-If using FFTReal, its code must be made available during compilation of your project.
-(any other lib is merged into fftscarf.h and libfftscarf.a (except for the external libraries (FFTW3 and IPP)))
 
-(when using external libraries (FFTW3 or IPP), and only in this case, your project has to link with the proper lib files).
+When using external libraries (FFTW3 or IPP), and only in this case, your project has to link with the proper lib files.
+
+If using FFTReal, its code must be made available during compilation of your project.
+The other FFT libraries are merged into fftscarf.h and libfftscarf.a (except for the external libraries).
 
 
 ## Benchmark
