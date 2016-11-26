@@ -47,15 +47,15 @@ static void test_lib(){
     std::cout << "Testing " << FFTPlanType::libraryName() << "  N=" << N << " ..." << std::endl;
 
     long double accthresh = 100*fftscarf::eps<typename FFTPlanType::FloatType>();
-    long double specaccthresh = accthresh; // TODO 10*
+    long double specaccthresh = accthresh;
 
     #ifdef FFTSCARF_PRECISION_LONGDOUBLE
-        FFTPlanLongDoubleFFTW3 fft_ref(true);
+        FFTPlanLongDoubleFFTReal fft_ref(true);
     #else
         #ifdef FFTSCARF_PRECISION_DOUBLE
-            FFTPlanDoubleFFTW3 fft_ref(true);
+            FFTPlanDoubleFFTReal fft_ref(true);
         #else
-            FFTPlanSingleFFTW3 fft_ref(true);
+            FFTPlanSingleFFTReal fft_ref(true);
         #endif
     #endif
     FFTPlanType fft(true);

@@ -71,8 +71,8 @@ public:
         FFTSCARF_PLAN_ACCESS_UNLOCK
     }
 
-    template<typename TypeInContainer, typename TypeInput>
-    void dft(const TypeInContainer& in, std::vector<std::complex<TypeInput> >& out, int dftlen=-1){
+    template<typename TypeInContainer, typename TypeOutContainer>
+    void dft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -86,9 +86,9 @@ public:
             out.resize(neededoutsize);
 
         FFTSCARF_PLAN_ACCESS_LOCK
-        if(in.size()==m_size)
-            m_fftreal_fft->do_fft(m_fftreal_spec, &(in[0]));
-        else{
+//         if(in.size()==m_size)
+//             m_fftreal_fft->do_fft(m_fftreal_spec, &(in[0]));
+//         else{
             int u = 0;
             if(m_signal.size()!=m_size)
                 m_signal.resize(m_size);
@@ -97,7 +97,7 @@ public:
             for(; u<dftlen; ++u)
                 m_signal[u] = 0.0;
             m_fftreal_fft->do_fft(m_fftreal_spec, &(m_signal[0]));
-        }
+//         }
         FFTSCARF_PLAN_ACCESS_UNLOCK
 
         out[0] = m_fftreal_spec[0]; // DC
@@ -107,8 +107,8 @@ public:
         out[m_size/2] = m_fftreal_spec[m_size/2]; // Nyquist
     }
 
-    template<typename TypeOutContainer, typename TypeInput>
-    void idft(const std::vector<std::complex<TypeInput> >& in, TypeOutContainer& out, int winlen=-1){
+    template<typename TypeInContainer, typename TypeOutContainer>
+    void idft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -118,8 +118,6 @@ public:
 
         if(winlen==-1)
             winlen = m_size;
-        
-        // TODO SOMETHING CRASHING IN IDFT
 
         if(int(out.size())!=winlen)
             out.resize(winlen);
@@ -135,9 +133,9 @@ public:
         m_fftreal_spec[m_size/2] = in[m_size/2].real()*oneoverdftlen; // Nyquist
 
         FFTSCARF_PLAN_ACCESS_LOCK
-        if(winlen==m_size)
-            m_fftreal_fft->do_ifft(m_fftreal_spec, &(out[0])); // IDFT
-        else{
+//         if(winlen==m_size)
+//             m_fftreal_fft->do_ifft(m_fftreal_spec, &(out[0])); // IDFT
+//         else{
             if(m_signal.size()!=m_size)
                 m_signal.resize(m_size);
 
@@ -145,7 +143,7 @@ public:
 
             for(int i=0; i<winlen; i++)
                 out[i] = m_signal[i];
-        }
+//         }
         FFTSCARF_PLAN_ACCESS_UNLOCK
     }
 

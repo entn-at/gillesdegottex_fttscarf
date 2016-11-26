@@ -8,12 +8,13 @@ message("\n-- FFTScarf configuring lib")
 option(FFTSCARF_PRECISION_SINGLE "Enable single precision" ON)
 option(FFTSCARF_PRECISION_DOUBLE "Enable double precision" ON)
 option(FFTSCARF_PRECISION_LONGDOUBLE "Enable long double precision" OFF)
-option(FFTSCARF_PRECISION_DEFAULT "Set default precision (32, 64, 128)" 32)
-option(FFTSCARF_PLAN_PROTECTACCESS "Protect access of the plan resize and execution using a mutex (need boost library)." OFF)
+set(FFTSCARF_PRECISION_DEFAULT 32 CACHE STRING "docstring")
+option(FFTSCARF_PRECISION_DEFAULT "Set default precision (32, 64, 128)")
+option(FFTSCARF_PLAN_PROTECTACCESS "Protect access of the plan resize and execution (need boost library)." OFF)
 option(FFTSCARF_BUILD_TEST "Compile the tests" OFF)
 
 if(FFTSCARF_PLAN_PROTECTACCESS)
-    message("-- Protect plan access (resize and execution) using a mutex (using Boost library)")
+    message("-- Protect plan access (resize and execution) (need Boost library)")
     set(Boost_USE_STATIC_LIBS on)
     find_package(Boost COMPONENTS thread REQUIRED)
     add_definitions(-DBOOST_DATE_TIME_POSIX_TIME_STD_CONFIG)
@@ -50,13 +51,13 @@ option(FFTSCARF_FFT_IPP "IPP" OFF)
 option(FFTSCARF_FFT_FFTS "FFTS" OFF)
 option(FFTSCARF_FFT_PFFFT "PFFFT" OFF)
 option(FFTSCARF_FFT_FFTW3 "FFTW3" OFF)
-option(FFTSCARF_FFT_OOURA "Ooura's FFT" OFF)
+option(FFTSCARF_FFT_OOURA "OouraFFT" ON)
 option(FFTSCARF_FFT_FFTREAL "FFTReal" ON)
 option(FFTSCARF_FFT_DFT "DFT" OFF)
 
 if(FFTSCARF_BUILD_TEST)
     # Force options in order to have a reference FFT
-    set(FFTSCARF_FFT_FFTW3 ON CACHE BOOL "docstring" FORCE)
+    set(FFTSCARF_FFT_FFTREAL ON CACHE BOOL "docstring" FORCE)
 endif()
 
 # FFT Implementations --------------------------------------------------------
@@ -133,8 +134,6 @@ endif()
 
 if(FFTSCARF_FFT_OOURA)
     message("--   Enable Ooura (built-in)")
-    cat(${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ooura/fftsg.h ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
-    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_ooura.h ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
     if(FFTSCARF_PRECISION_DEFAULT EQUAL 32)
         add_definitions(-DOOFLOAT_SINGLE)
     endif()
@@ -144,6 +143,8 @@ if(FFTSCARF_FFT_OOURA)
     if(FFTSCARF_PRECISION_DEFAULT EQUAL 128)
         add_definitions(-DOOFLOAT_LONGDOUBLE)
     endif()
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ooura/fftsg.h ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
+    cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_ooura.h ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/fftscarf_ooura.cpp)
     target_sources(fftscarf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/fftlibs/ooura/fftsg.c)
 endif()
@@ -172,12 +173,14 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(fftlibs)
 
 
+
+
 # Testing ---------------------------------------------------------------------
 
 option(FFTSCARF_BUILD_TEST "Build tests" OFF)
 if(FFTSCARF_BUILD_TEST)
     message("\n-- FFTScarf configuring tests")
-    message("-- Forcing FFTW3 for comparison purpose")
+    message("-- Forcing FFTReal for testing purpose")
     add_subdirectory(test)
 endif()
 

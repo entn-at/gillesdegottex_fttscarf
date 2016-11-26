@@ -75,7 +75,7 @@ namespace fftscarf {
         out << "    License: ATTENTION: GPL is enforced on this software" << std::endl;
         #endif
         #ifdef FFTSCARF_PLAN_PROTECTACCESS
-        out << "    Plan access is protected using a mutex" << std::endl;
+        out << "    Plan access is protected" << std::endl;
         #else
         out << "    Plan access is NOT protected" << std::endl;
         #endif

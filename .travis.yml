@@ -48,11 +48,19 @@ install:
     - cmake --version
 
 script:
-    - mkdir build
-    - cd build
+    - mkdir build_simple
+    - cd build_simple
+    - cmake ..
+    - make
+    - ls -l
+    - cd ..
+
+    - mkdir build_full
+    - cd build_full
     - cmake -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_PLAN_PROTECTACCESS:BOOL=ON -DFFTSCARF_PRECISION_SINGLE:BOOL=ON -DFFTSCARF_PRECISION_DOUBLE:BOOL=ON -DFFTSCARF_PRECISION_LONGDOUBLE:BOOL=ON -DFFTSCARF_PRECISION_DEFAULT=32 -DFFTSCARF_FFT_OOURA:BOOL=ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_PFFFT:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON -DFFTSCARF_FFT_FFTS:BOOL=ON ..
     - make
     - ls -l
-
     - cd test
     - ctest -V
+    - cd ..
+    - cd ..

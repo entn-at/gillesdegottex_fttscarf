@@ -24,6 +24,16 @@ FFTPlan (will use the default precision given by FFTScarf (selected at FFTSarf c
 #cmakedefine FFTSCARF_FFT_PFFFT
 #cmakedefine FFTSCARF_FFT_FFTW3
 #cmakedefine FFTSCARF_FFT_OOURA
+#if FFTSCARF_PRECISION_DEFAULT == 32
+    #undef OOFLOAT_SINGLE
+    #define OOFLOAT_SINGLE
+#elif FFTSCARF_PRECISION_DEFAULT == 64
+    #undef OOFLOAT_DOUBLE
+    #define OOFLOAT_DOUBLE
+#elif FFTSCARF_PRECISION_DEFAULT == 128
+    #undef OOFLOAT_LONGDOUBLE
+    #define OOFLOAT_LONGDOUBLE
+#endif
 #cmakedefine FFTSCARF_FFT_FFTREAL
 //#cmakedefine FFTSCARF_FFT_DJBFFT
 #cmakedefine FFTSCARF_FFT_DFT

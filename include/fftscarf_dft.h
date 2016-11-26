@@ -62,8 +62,8 @@ public:
         FFTSCARF_PLAN_ACCESS_UNLOCK
     }
 
-    template<typename TypeInContainer, typename TypeInput>
-    void dft(const TypeInContainer& in, std::vector<std::complex<TypeInput> >& out, int dftlen=-1) {
+    template<typename TypeInContainer, typename TypeOutContainer>
+    void dft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1) {
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -86,8 +86,8 @@ public:
         FFTSCARF_PLAN_ACCESS_UNLOCK
     }
 
-    template<typename TypeOutContainer, typename TypeInput>
-    void idft(const std::vector<std::complex<TypeInput> >& in, TypeOutContainer& out, int winlen=-1) {
+    template<typename TypeInContainer, typename TypeOutContainer>
+    void idft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1) {
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
