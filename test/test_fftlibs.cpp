@@ -24,7 +24,7 @@ using namespace fftscarf;
 namespace po = boost::program_options;
 
 #ifndef M_PIl
-#define M_PIl      3.141592653589793238462643383279502884L;
+#define M_PIl      3.141592653589793238462643383279502884L
 #endif
 
 template<typename FFTPlanType>
@@ -91,13 +91,13 @@ static void test_lib(){
         // Check the amplitude
         long double ampmeas = std::abs(spec[binref]);
         if(abs(ampref-ampmeas)>N*accthresh)
-            cout << __LINE__ << ": " << ampmeas << " " << ampref << endl;
+            std::cout << "    spec err=" << abs(ampref-ampmeas) << " (threshold=" << N*accthresh << ")" << std::endl;
         BOOST_CHECK(abs(ampref-ampmeas)<N*accthresh);
 
         // Check the phase
         long double phimeas = std::arg(spec[binref]);
         if(abs(wrap(phiref-phimeas))>N*accthresh)
-            cout << __LINE__ << ": " << phimeas << " " << phiref << endl;
+            std::cout << "    spec err=" << abs(wrap(phiref-phimeas)) << " (threshold=" << N*accthresh << ")" << std::endl;
         BOOST_CHECK(abs(wrap(phiref-phimeas))<N*accthresh);
 
         // Check the zeros
