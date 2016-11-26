@@ -22,6 +22,10 @@ using namespace fftscarf;
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
 
+#ifndef M_PIl
+#define M_PIl      = 3.141592653589793238462643383279502884L;
+#endif
+
 template<typename FFTPlanType>
 static void test_lib(){
 
