@@ -72,46 +72,46 @@ static void test_lib(){
     FFTPlanType fft(true);
     FFTPlanType ifft(false);
 
-    // Test transforms of sinusoids --------------------------------------------
-    boost::random::uniform_int_distribution<int> binrnd(0,N/2); // For random frequency
-    boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*M_PIl); // For random phase
-    for(size_t b=0; b<10; ++b){
-        int binref = binrnd(rnd_engine); // Frequency
-        int ampref = N/2;            // Amplitude // TODO Randomize!
-        if(binref==0 || binref==N/2) ampref *= 2;
-        long double phiref = phirnd(rnd_engine); // Phase
-
-        // Fill an input frame
-        // Test with a simple sinusoid centered on an exact bin
-        inframe.resize(N);
-        for(int n=0; n<N; ++n)
-            inframe[n] = cosl(binref*2*M_PIl*n/((long double)N) + phiref);
-        
-        // Run the tested implementation
-        fft.dft(inframe, spec, N);
-
-        // Check the amplitude
-        long double ampmeas = std::abs(spec[binref]);
-        if(abs(ampref-ampmeas)>10*N*accthresh)
-            std::cout << "    spec err=" << abs(ampref-ampmeas) << " (threshold=" << 10*N*accthresh << ")" << std::endl;
-        BOOST_CHECK(abs(ampref-ampmeas)<10*N*accthresh);
-
-        // Check the phase
-        long double phimeas = std::arg(spec[binref]);
-        if(abs(wrap(phiref-phimeas))>10*N*accthresh)
-            std::cout << "    spec err=" << abs(wrap(phiref-phimeas)) << " (threshold=" << 10*N*accthresh << ")" << std::endl;
-        BOOST_CHECK(abs(wrap(phiref-phimeas))<10*N*accthresh);
-
-        // Check the zeros
-        long double spec_err = 0.0;
-        for(size_t k=0; k<N/2; ++k)
-            if(k!=binref)
-                spec_err += abs(spec[k])*abs(spec[k]);
-        spec_err = sqrt(spec_err/spec.size());
-        if(spec_err>10*N*accthresh)
-            std::cout << "    spec err=" << spec_err << " (threshold=" << 10*N*accthresh << ")" << std::endl;
-        BOOST_CHECK(spec_err<10*N*accthresh);
-    }
+//     // Test transforms of sinusoids --------------------------------------------
+//     boost::random::uniform_int_distribution<int> binrnd(0,N/2); // For random frequency
+//     boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*M_PIl); // For random phase
+//     for(size_t b=0; b<10; ++b){
+//         int binref = binrnd(rnd_engine); // Frequency
+//         int ampref = N/2;            // Amplitude // TODO Randomize!
+//         if(binref==0 || binref==N/2) ampref *= 2;
+//         long double phiref = phirnd(rnd_engine); // Phase
+// 
+//         // Fill an input frame
+//         // Test with a simple sinusoid centered on an exact bin
+//         inframe.resize(N);
+//         for(int n=0; n<N; ++n)
+//             inframe[n] = cosl(binref*2*M_PIl*n/((long double)N) + phiref);
+//         
+//         // Run the tested implementation
+//         fft.dft(inframe, spec, N);
+// 
+//         // Check the amplitude
+//         long double ampmeas = std::abs(spec[binref]);
+//         if(abs(ampref-ampmeas)>10*N*accthresh)
+//             std::cout << "    spec err=" << abs(ampref-ampmeas) << " (threshold=" << 10*N*accthresh << ")" << std::endl;
+//         BOOST_CHECK(abs(ampref-ampmeas)<10*N*accthresh);
+// 
+//         // Check the phase
+//         long double phimeas = std::arg(spec[binref]);
+//         if(abs(wrap(phiref-phimeas))>10*N*accthresh)
+//             std::cout << "    spec err=" << abs(wrap(phiref-phimeas)) << " (threshold=" << 10*N*accthresh << ")" << std::endl;
+//         BOOST_CHECK(abs(wrap(phiref-phimeas))<10*N*accthresh);
+// 
+//         // Check the zeros
+//         long double spec_err = 0.0;
+//         for(size_t k=0; k<N/2; ++k)
+//             if(k!=binref)
+//                 spec_err += abs(spec[k])*abs(spec[k]);
+//         spec_err = sqrt(spec_err/spec.size());
+//         if(spec_err>10*N*accthresh)
+//             std::cout << "    spec err=" << spec_err << " (threshold=" << 10*N*accthresh << ")" << std::endl;
+//         BOOST_CHECK(spec_err<10*N*accthresh);
+//     }
 
     // Test transforms of Gaussian noise ---------------------------------------
     boost::normal_distribution<typename FFTPlanType::FloatType> rnd_normal_distrib;
