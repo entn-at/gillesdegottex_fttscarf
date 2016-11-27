@@ -27,7 +27,7 @@ Name         | Size          | single | double | long dbl | Availability | Licen
 [IPP][1]     | 2^a %         | Yes    | Yes    | No       | external$    | "Community License"  | .
 [FFTS][2]    | 2^a %         | Yes    | No     | No       | built-in     | 3-clause BSD  | Limited efficiency on 32b architectures
 [PFFFT][3]   | (2^a)*(3^b)*(5^c) [min=32] | Yes | No | No | built-in     | 3-clause BSD  | Initially unordered
-[FFTW3][4]   | Any           | Yes    | Yes    | Yes      | external$    | GPL (version >=2)  | MIT License can be obtained for a charge
+[FFTW3][4]   | Any           | Yes    | Yes    | Yes      | external$    | GPL (version >=2)  | Non-free licenses may also be purchased
 [Ooura][5]   | 2^a           | Yes&   | Yes&   | Yes&     | built-in     | None~   | .
 [FFTReal][6] | 2^a           | Yes    | Yes    | Yes      | shipped with | WTFPL~  | Sources need to be made available
 [DFT][7]     | Any           | Yes    | Yes    | Yes      | built-in     | The Unlicense~  | This is the O(N^2) DFT impl. (for comparison)
