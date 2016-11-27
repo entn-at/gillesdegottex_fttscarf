@@ -8,10 +8,6 @@
 using namespace std;
 
 #include <boost/random.hpp>
-// #include <boost/random/mersenne_twister.hpp>
-// #include <boost/random/normal_distribution.hpp>
-// #include <boost/random/uniform_real.hpp>
-// #include <boost/random/variate_generator.hpp>
 
 #define BOOST_TEST_MAIN
 // #define BOOST_TEST_DYN_LINK
@@ -25,10 +21,6 @@ using namespace fftscarf;
 
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
-
-#ifndef M_PIl
-#define M_PIl      3.141592653589793238462643383279502884L
-#endif
 
 template<typename FFTPlanType>
 static void test_lib(){
@@ -75,7 +67,7 @@ static void test_lib(){
 
     // Test transforms of sinusoids --------------------------------------------
     boost::random::uniform_int_distribution<> binrnd(0,N/2); // For random frequency
-    boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*M_PIl); // For random phase
+    boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*fftscarf::pi); // For random phase
     for(size_t b=0; b<10; ++b){
         int binref = binrnd(rnd_engine); // Frequency
         int ampref = N/2;            // Amplitude // TODO Randomize!
@@ -86,7 +78,7 @@ static void test_lib(){
         // Test with a simple sinusoid centered on an exact bin
         inframe.resize(N);
         for(int n=0; n<N; ++n)
-            inframe[n] = cosl(binref*2*M_PIl*n/((long double)N) + phiref);
+            inframe[n] = cosl(binref*2*fftscarf::pi*n/((long double)N) + phiref);
         
         // Run the tested implementation
         fft.dft(inframe, spec, N);

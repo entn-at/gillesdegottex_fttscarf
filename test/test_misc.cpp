@@ -17,7 +17,7 @@ int g_nb_tests = 1e5;
 
 BOOST_AUTO_TEST_CASE( test_ispow2 )
 {
-    // Test power of 2
+    // Test power of 2 up to 2^30
     int p=2;
     for(size_t l=1; l<30; ++l, p*=2)
         BOOST_CHECK(fftscarf::isPow2(p));
@@ -27,9 +27,9 @@ BOOST_AUTO_TEST_CASE( test_ispow2 )
     boost::random::uniform_int_distribution<int> intrnd(1,std::numeric_limits<int>::max());
     for(size_t n=0; n<g_nb_tests; ++n){
         p = intrnd(rng);
-        while(p%2) p /= 2;
+        while(p%2) p /= 2; // Remove potential powers of 2
         if(p>1)
-            BOOST_CHECK(!fftscarf::isPow2(p));
+            BOOST_CHECK(!fftscarf::isPow2(p)); // The reminder should be non-power of 2^a
     }
 }
 
@@ -48,10 +48,10 @@ BOOST_AUTO_TEST_CASE( test_ispow235 )
     boost::random::uniform_int_distribution<int> intrnd(1,std::numeric_limits<int>::max());
     for(size_t n=0; n<g_nb_tests; ++n){
         p = intrnd(rng);
-        while(p%2==0) p /= 2;
-        while(p%3==0) p /= 3;
-        while(p%5==0) p /= 5;
+        while(p%2==0) p /= 2; // Remove potential powers of 2
+        while(p%3==0) p /= 3; // Remove potential powers of 3
+        while(p%5==0) p /= 5; // Remove potential powers of 5
         if(p>1)
-            BOOST_CHECK(!fftscarf::isPow235(p));
+            BOOST_CHECK(!fftscarf::isPow235(p)); // The reminder should be non-power of 2^a * 3^b * 5^c
     }
 }
