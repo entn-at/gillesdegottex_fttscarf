@@ -19,6 +19,38 @@ considered as a collection of FFT recipes.
 * Multi dimensional FFTs are currently omitted since audio processing is the
 main target.
 
+## Available implementations
+
+Name         | Size          | single | double | long dbl | Availability | License | Notes
+------------ | ------------- | ------ | ------ | -------- | ------------ | ------- | -----
+[IPP][1]     | 2^a %         | Yes    | Yes    | No       | external$    | "Community License"  | .
+[FFTS][2]    | 2^a %         | Yes    | No     | No       | built-in     | 3-clause BSD  | Limited efficiency on 32b architectures
+[PFFFT][3]   | (2^a)*(3^b)*(5^c) [min=32] | Yes | No | No | built-in     | 3-clause BSD  | Initially unordered
+[FFTW3][4]   | Any           | Yes    | Yes    | Yes      | external$    | GPL (version >=2)  | MIT License can be obtained for a charge
+[Ooura][5]   | 2^a           | Yes&   | Yes&   | Yes&     | built-in     | None~   | .
+[FFTReal][6] | 2^a           | Yes    | Yes    | Yes      | shipped with | WTFPL~  | Sources need to be made available
+[DFT][7]     | Any           | Yes    | Yes    | Yes      | built-in     | The Unlicense~  | This is the O(N^2) DFT impl. (for comparison)
+
+% Currently limited by FFTScarf.
+
+& Selected during FFTScarf compilation.
+
+^ An unordered FFT is always re-ordered by the FFTScarf wrapper.
+
+$ When using external libraries, the end software needs to be linked with the appropriate library files (i.e. linking with fftscarf.a is not enough).
+
+~ i.e. Public Domain.
+
+Note that on Windows, long double (so-called 128b) might actually be a 64b or might not work at all.
+
+[1]: https://software.intel.com/en-us/articles/how-to-use-intel-ipp-s-1d-fourier-transform-functions
+[2]: https://github.com/linkotec/ffts
+[3]: https://bitbucket.org/jpommier/pffft
+[4]: http://www.fftw.org/
+[5]: http://www.kurims.kyoto-u.ac.jp/~ooura/fft.html
+[6]: http://ldesoras.free.fr/prod.html
+[7]: https://en.wikipedia.org/wiki/Fourier_transform
+
 
 ## Legal
 Each FFT implementation has obviously its own license. If you intend to use

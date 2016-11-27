@@ -64,7 +64,7 @@ FFTPlan (will use the default precision given by FFTScarf (selected at FFTSarf c
 #endif
 
 
-/*! \brief General namespace of the library
+/*! \brief General namespace of the wrapper library
  */
 namespace fftscarf {
     //! Return the version of the library as a string.
