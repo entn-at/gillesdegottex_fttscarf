@@ -7,6 +7,12 @@
 #include <sstream>
 using namespace std;
 
+#include <boost/random.hpp>
+// #include <boost/random/mersenne_twister.hpp>
+// #include <boost/random/normal_distribution.hpp>
+// #include <boost/random/uniform_real.hpp>
+// #include <boost/random/variate_generator.hpp>
+
 #define BOOST_TEST_MAIN
 // #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MODULE TestFFTLibs
@@ -14,11 +20,6 @@ using namespace std;
 
 #include <fftscarf.h>
 using namespace fftscarf;
-
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/normal_distribution.hpp>
-#include <boost/random/uniform_real.hpp>
-#include <boost/random/variate_generator.hpp>
 
 #include "../benchmark/stream.h"
 
@@ -73,7 +74,7 @@ static void test_lib(){
     FFTPlanType ifft(false);
 
     // Test transforms of sinusoids --------------------------------------------
-    boost::random::uniform_int_distribution<int> binrnd(0,N/2); // For random frequency
+    boost::random::uniform_int_distribution<> binrnd(0,N/2); // For random frequency
     boost::random::uniform_real_distribution<typename FFTPlanType::FloatType> phirnd(0.0, 2*M_PIl); // For random phase
     for(size_t b=0; b<10; ++b){
         int binref = binrnd(rnd_engine); // Frequency
