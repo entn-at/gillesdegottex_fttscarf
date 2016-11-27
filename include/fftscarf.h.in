@@ -70,10 +70,10 @@ namespace fftscarf {
     //! Return the version of the library as a string.
     std::string version();
 
-    //! Write some comile-time information to the given stream.
+    //! Write some compile-time information to the given stream.
     void write_compile_info(std::ostream& out);
 
-    //! Return the list of FFT libraries available in FFTScarf.
+    //! Return the list of FFT libraries available.
     std::list<std::string> availableLibraries();
 
     //! Return the machine epsilon, that is, the difference between 1.0 and the next value representable by the floating-point type FloatType.
@@ -83,10 +83,13 @@ namespace fftscarf {
     //! The pi value with the highest precision
     static const long double pi = 3.141592653589793238462643383279502884L;
     
+    //! Return true if N is a power of 2
     bool isPow2(unsigned int N);
+
+    //! Return true if N is of the form 2^a * 3^b * 5^c
     bool isPow235(unsigned int N);
 
-    //! TODO Speedup
+    //! Wrap the phase value in [-pi, +pi] (TODO Speedup)
     template<typename FloatType>
     inline FloatType wrap(FloatType value){
         return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
@@ -105,12 +108,12 @@ namespace fftscarf {
     }
 
     /*! \brief Interface to be implemented by any FFT implementation
-     * The basic idea is to implement a "plan", which follows the same
-     * definition as in FFTW3. Namely, it is an object that:
-     * - A plan is either forward or backward.
+     * The basic idea isthe  to implement a "plan", which follows the same
+     * definition as in FFTW3. Namely:
+     * - A plan is either forward or backward (FFT or inverse FFT, respectively)
      * - It holds the trigonometric tables for computing an FFT of a given size.
      * - The size of the plan is not fixed and can be resized at run-time.
-     * - The plan can be "executed" to tranform some data.
+     * - The plan can be "executed" to tranform some given data by calling the member functions fft(.) or ifft(.)
      */
     class FFTPlanImplementation
     {
@@ -119,23 +122,31 @@ namespace fftscarf {
         int m_size;
 
     public:
+        //! Simple constructor. By default, the plan compute the forward FFT (i.e. not the inverse FFT)
         FFTPlanImplementation(bool forward=true);
+        //! A constructor for directly initializing the size of the FFT.
         FFTPlanImplementation(int n, bool forward=true);
 
+        //! Resize the FFT plan to the given size (size restrictions may apply depending on the implementation)
         virtual void resize(int n)=0;
+        //! Return the current size of the FFT plan
         int size(){return m_size;}
 
         // Interface to follow for implementations:
-        // (static polymorphism doesn't exist)
-        // static std::string version();
-        // static std::string libraryName();
+        // (these are "ghost" functions, because static polymorphism doesn't exist)
+        //! Return the version of the FFT implementation
+        static std::string version(){}
+        //! Return the name of the FFT implementation
+        static std::string libraryName(){}
 
         // To execute the DFT computation:
-        // (template polymorphism doesn't exist)
-        // template<typename TypeInContainer>
-        // void dft(const TypeInContainer& in, std::vector<std::complex<FloatType> >& out, int dftlen=-1);
-        // template<typename TypeOutContainer>
-        // void idft(const std::vector<std::complex<FloatType> >& in, TypeOutContainer& out, int winlen=-1);
+        // (these are "ghost" functions, because template polymorphism doesn't exist)
+        //! Compute the forward FFT
+        template<typename TypeInContainer, typename TypeOutContainer>
+        void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1);
+        //! Compute the inverse FFT
+        template<typename TypeInContainer, typename TypeOutContainer>
+        void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1);
     };
 }
 

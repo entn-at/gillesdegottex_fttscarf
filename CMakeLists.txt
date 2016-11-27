@@ -173,10 +173,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(fftlibs)
 
 
-
-
 # Testing ---------------------------------------------------------------------
-
 option(FFTSCARF_BUILD_TEST "Build tests" OFF)
 if(FFTSCARF_BUILD_TEST)
     message("\n-- FFTScarf configuring tests")
@@ -186,6 +183,26 @@ endif()
 
 message("")
 
+# Documentation ---------------------------------------------------------------
+option(FFTSCARF_BUILD_DOC "Generate documentation" OFF)
+if(FFTSCARF_BUILD_DOC)
+    message("\n-- FFTScarf generating documentation")
+    find_package(Doxygen)
+    if(DOXYGEN_FOUND)
+        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doc/header.html DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doc/footer.html DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+        file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/doc/implementations.html DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+        add_custom_target(doc
+            ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doc/Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+            COMMENT "Generating API documentation with Doxygen" VERBATIM
+        )
+    else()
+        message("\n--   Doxygen cannot be found. Documentation will not be generated")
+    endif()
+endif()
+
+message("")
 
 # Optimization -----------------------------------------------------------------
 

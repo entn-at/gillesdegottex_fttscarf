@@ -13,7 +13,9 @@
 
 namespace fftscarf {
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 extern bool FFTPlanIPP__s_ipp_initialized;
+#endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 template<typename _FloatType, typename IppsFFTSpec_R_NNf, typename IppNNf, IppNNf* (*ippsMalloc_NNf)(int len), IppStatus (*ippsFFTGetSize_R_NNf)(int, int, IppHintAlgorithm, int*, int*, int*), IppStatus (*ippsFFTInit_R_NNf)(IppsFFTSpec_R_NNf**, int, int, IppHintAlgorithm, Ipp8u*, Ipp8u*),  IppStatus (*ippsFFTFwd_RToPerm_NNf)(const IppNNf*, IppNNf*, const IppsFFTSpec_R_NNf*, Ipp8u*), IppStatus (*ippsFFTInv_PermToR_NNf)(const IppNNf*, IppNNf*, const IppsFFTSpec_R_NNf*, Ipp8u*) >
 class FFTPlanIPPTemplate : public FFTPlanImplementation
@@ -104,7 +106,7 @@ public:
     }
 
     template<typename TypeInContainer, typename TypeOutContainer>
-    void dft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+    void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -136,7 +138,7 @@ public:
     }
 
     template<typename TypeInContainer, typename TypeOutContainer>
-    void idft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+    void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
