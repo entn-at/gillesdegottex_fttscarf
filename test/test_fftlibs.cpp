@@ -88,9 +88,9 @@ static void test_lib(){
         for(int n=0; n<N; ++n)
             inframe[n] = cosl(binref*2*M_PIl*n/((long double)N) + phiref);
         
-//         // Run the tested implementation
-//         fft.dft(inframe, spec, N);
-// 
+        // Run the tested implementation
+        fft.dft(inframe, spec, N);
+
 //         // Check the amplitude
 //         long double ampmeas = std::abs(spec[binref]);
 //         if(abs(ampref-ampmeas)>10*N*accthresh)
