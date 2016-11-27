@@ -81,7 +81,7 @@ static void test_lib(){
             inframe[n] = cosl(binref*2*fftscarf::pi*n/((long double)N) + phiref);
         
         // Run the tested implementation
-        fft.fft(inframe, spec, N);
+//         fft.fft(inframe, spec, N);
 
         // Check the amplitude
 //         long double ampmeas = std::abs(spec[binref]);
