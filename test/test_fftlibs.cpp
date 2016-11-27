@@ -95,11 +95,11 @@ static void test_lib(){
             std::cout << "    spec err=" << abs(wrap(phiref-phimeas)) << " (threshold=" << 10*N*accthresh << ")" << std::endl;
         BOOST_CHECK(abs(wrap(phiref-phimeas))<10*N*accthresh);
 
-//         // Check the zeros
-//         long double spec_err = 0.0;
-//         for(size_t k=0; k<N/2; ++k)
-//             if(k!=binref)
-//                 spec_err += abs(spec[k])*abs(spec[k]);
+        // Check the zeros
+        long double spec_err = 0.0;
+        for(size_t k=0; k<N/2; ++k)
+            if(k!=binref)
+                spec_err += abs(spec[k])*abs(spec[k]);
 //         spec_err = sqrt(spec_err/spec.size());
 //         if(spec_err>10*N*accthresh)
 //             std::cout << "    spec err=" << spec_err << " (threshold=" << 10*N*accthresh << ")" << std::endl;
