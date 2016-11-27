@@ -1,3 +1,5 @@
+dist: trusty
+
 language: cpp
 
 compiler:
@@ -18,15 +20,15 @@ matrix:
         - compiler: clang
           os: linux
 
-addons:
-  apt:
-    sources:
-      - george-edison55-precise-backports # for cmake 3.2.3 / doxygen 1.8.3
-    packages:
-      - cmake
-      - cmake-data
+#addons:
+  #apt:
+    #sources:
+      #- george-edison55-precise-backports # for cmake 3.2.3 / doxygen 1.8.3
+    #packages:
+      #- cmake
+      #- cmake-data
       #- libboost-all-dev
-      - libboost1.60-all-dev
+      #- libboost1.60-all-dev
 
 before_install:
     - git submodule update --init --recursive
