@@ -25,7 +25,8 @@ addons:
     packages:
       - cmake
       - cmake-data
-      - libboost-all-dev
+      #- libboost-all-dev
+      - libboost1.55-all-dev
 
 before_install:
     - git submodule update --init --recursive
