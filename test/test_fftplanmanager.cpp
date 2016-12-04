@@ -20,11 +20,11 @@ BOOST_AUTO_TEST_CASE( test_fftplanmanager )
         FFTPlanManager<FFTPlanSingle> pm_single;
         pm_single.write_status(std::cout);
         std::cout << __LINE__ << std::endl;
-        pm_single.prepare_osf(5, 12);
+        pm_single.prepare_osf(5, 11);
         std::cout << __LINE__ << std::endl;
-//        pm_single.prepare(16384);
-//        std::cout << __LINE__ << std::endl;
-//        pm_single.prepare(8192);
+        pm_single.prepare(8192);
+        std::cout << __LINE__ << std::endl;
+        pm_single.prepare(4096);
         std::cout << __LINE__ << std::endl;
         pm_single.write_status(std::cout);
         std::cout << __LINE__ << std::endl;
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_CASE( test_fftplanmanager )
     #endif
 
     int p_min = 5;
-    int p_max = 20;
+    int p_max = 13;
     std::cout << __LINE__ << std::endl;
     FFTPlanManager<FFTPlan> pm_default_fwd(true);
     std::cout << __LINE__ << std::endl;
