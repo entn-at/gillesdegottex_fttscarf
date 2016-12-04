@@ -39,6 +39,7 @@ void FFTPlanPFFFT::resize(int n)
     if(n==m_size) return;
 
     assert(n>0);
+    assert(n>=32);
     assert(isPow235(n));
 
     FFTSCARF_PLAN_ACCESS_LOCK
