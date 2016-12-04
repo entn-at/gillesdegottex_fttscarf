@@ -65,17 +65,17 @@ void FFTPlanFFTS::resize(int n)
     }
 
     #if (defined(_WIN32) || defined(WIN32))
-        m_signal = (FloatType FFTS_ALIGN(32) *) _aligned_malloc(n * sizeof(FloatType), 32);
-        m_spec = (FloatType FFTS_ALIGN(32) *) _aligned_malloc((2*n+1) * sizeof(FloatType), 32);  // TODO (2*n+1) ?????
+        m_signal = (FloatType FFTS_ALIGN(32) *) _aligned_malloc(2 * m_size * sizeof(FloatType), 32);
+        m_spec = (FloatType FFTS_ALIGN(32) *) _aligned_malloc(2 * m_size * sizeof(FloatType), 32);
     #else
         // See http://www.delorie.com/gnu/docs/glibc/libc_31.html
         // Or ffts/tests/test.c
         #ifdef HAVE_SSE
-            m_signal = (FloatType FFTS_ALIGN(32) *) _mm_malloc(n * sizeof(FloatType), 32);
-            m_spec = (FloatType FFTS_ALIGN(32) *) _mm_malloc(2*(m_size/2+1) * sizeof(FloatType), 32);
+            m_signal = (FloatType FFTS_ALIGN(32) *) _mm_malloc(2 * m_size * sizeof(FloatType), 32);
+            m_spec = (FloatType FFTS_ALIGN(32) *) _mm_malloc(2 * m_size * sizeof(FloatType), 32);
         #else
-            m_signal = (FloatType FFTS_ALIGN(32) *) valloc(n * sizeof(FloatType));
-            m_spec = (FloatType FFTS_ALIGN(32) *) valloc((2*n+1) * sizeof(FloatType)); // TODO (2*n+1) ?????
+            m_signal = (FloatType FFTS_ALIGN(32) *) valloc(2 * m_size * sizeof(FloatType));
+            m_spec = (FloatType FFTS_ALIGN(32) *) valloc(2 * m_size * sizeof(FloatType));
         #endif
     #endif
 

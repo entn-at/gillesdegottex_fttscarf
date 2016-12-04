@@ -16,7 +16,7 @@ using namespace fftscarf;
 BOOST_AUTO_TEST_CASE( test_fftplanmanager )
 {
     int p_min = 5;
-    int p_max = 13; // TODO Going above 13 crashes with FFTS on Travis (!?!?!)
+    int p_max = 20; // TODO Going above 13 crashes with FFTS on Travis (!?!?!)
 
     #ifdef FFTSCARF_PRECISION_SINGLE
         FFTPlanManager<FFTPlanSingle> pm_single;
