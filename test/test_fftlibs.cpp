@@ -95,7 +95,7 @@ static void test_lib(){
             std::cout << "    spec err=" << abs(wrap(phiref-phimeas)) << " (threshold=" << 10*N*accthresh << ")" << std::endl;
         BOOST_CHECK(abs(wrap(phiref-phimeas))<10*N*accthresh);
 
-//         // Check the zeros // Make FFTS crash on Windows x64 (!?!?!)
+//         // Check the zeros // TODO Make FFTS crash on Windows x64 (!?!?!)
 //         long double spec_err = 0.0;
 //         for(size_t k=0; k<=N/2; ++k)
 //             if(k!=binref)
