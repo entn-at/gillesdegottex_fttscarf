@@ -164,7 +164,7 @@ namespace fftscarf {
         bool m_forward;
         std::map<int,FFTPlanType*> m_plans;
 
-        bool has(int dftlen){
+        inline bool has(int dftlen){
             return m_plans.find(dftlen)!=m_plans.end();
         }
 
