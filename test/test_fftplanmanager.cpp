@@ -18,12 +18,13 @@ BOOST_AUTO_TEST_CASE( test_fftplanmanager )
     std::cout << __LINE__ << std::endl;
     #ifdef FFTSCARF_PRECISION_SINGLE
         FFTPlanManager<FFTPlanSingle> pm_single;
+        pm_single.write_status(std::cout);
         std::cout << __LINE__ << std::endl;
         pm_single.prepare_osf(5, 12);
         std::cout << __LINE__ << std::endl;
-        pm_single.prepare(16384);
-        std::cout << __LINE__ << std::endl;
-        pm_single.prepare(8192);
+//        pm_single.prepare(16384);
+//        std::cout << __LINE__ << std::endl;
+//        pm_single.prepare(8192);
         std::cout << __LINE__ << std::endl;
         pm_single.write_status(std::cout);
         std::cout << __LINE__ << std::endl;
@@ -31,6 +32,7 @@ BOOST_AUTO_TEST_CASE( test_fftplanmanager )
     #ifdef FFTSCARF_PRECISION_DOUBLE
         std::cout << __LINE__ << std::endl;
         FFTPlanManager<FFTPlanDouble> pm_double;
+        pm_double.write_status(std::cout);
         std::cout << __LINE__ << std::endl;
         pm_double.prepare_osf(5, 8);
         std::cout << __LINE__ << std::endl;
