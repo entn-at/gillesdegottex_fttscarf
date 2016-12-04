@@ -53,11 +53,26 @@ if(FFTSCARF_FFT_FFTW3)
 endif()
 # TODO IPP
 
+add_executable(test_fftplanmanager test_fftplanmanager.cpp)
+target_link_libraries(test_fftplanmanager fftscarf ${Boost_LIBRARIES} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+if(FFTSCARF_FFT_FFTW3)
+    if(WIN32)
+        if(FFTSCARF_PRECISION_SINGLE)
+            target_link_libraries(test_fftlibs C:/projects/fftscarf/lib/libfft/libfftw3f-3.lib)
+        endif()
+        if(FFTSCARF_PRECISION_DOUBLE)
+            target_link_libraries(test_fftlibs C:/projects/fftscarf/lib/libfft/libfftw3-3.lib)
+        endif()
+    endif()
+endif()
+# TODO IPP
+
 # Add tests using ctest
 enable_testing()
 add_test(test_version test_version)
 add_test(test_fftlibs test_misc)
 add_test(test_fftlibs test_fftlibs)
+add_test(test_fftlibs test_fftplanmanager)
 #add_test(test_fftlibs32 test_fftlibs --size=32) // Doesn't run on OSX ...
 #add_test(test_fftlibs4096 test_fftlibs --size=4096) // Doesn't run on OSX ...
 

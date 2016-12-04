@@ -56,18 +56,21 @@ FFTPlan (will use the default precision given by FFTScarf (selected at FFTSarf c
 
 
 #include <string>
+#include <map>
+//#include <vector>
 #include <list>
 #include <limits>
 #include <complex>
+#include <algorithm>
 #ifdef FFTSCARF_PLAN_PROTECTACCESS
 #include <boost/thread/mutex.hpp>
 #endif
-
+#include <iostream>
 
 /*! \brief General namespace of the wrapper library
  */
 namespace fftscarf {
-    //! Return the version of the library as a string.
+    //! Return the version of FFTScarf as a string.
     std::string version();
 
     //! Write some compile-time information to the given stream.
@@ -80,7 +83,7 @@ namespace fftscarf {
     template<typename FloatType>
     FloatType eps() {return std::numeric_limits<FloatType>::epsilon();}
 
-    //! The pi value with the highest precision
+    //! The pi value with the highest precision for a standard C++ float type.
     static const long double pi = 3.141592653589793238462643383279502884L;
     
     //! Return true if N is a power of 2
@@ -89,7 +92,7 @@ namespace fftscarf {
     //! Return true if N is of the form 2^a * 3^b * 5^c
     bool isPow235(unsigned int N);
 
-    //! Wrap the phase value in [-pi, +pi] (TODO Speedup)
+    //! Wrap the phase value in [-pi, +pi]. (TODO SPEEDUP)
     template<typename FloatType>
     inline FloatType wrap(FloatType value){
         return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
@@ -148,6 +151,88 @@ namespace fftscarf {
         template<typename TypeInContainer, typename TypeOutContainer>
         void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1);
     };
+
+    /*! \brief Manage a collection of DFT plans with different sizes.
+     * It basically avoids re-initializing FFT plans.
+     */
+    template<typename _FFTPlanType>
+    class FFTPlanManager
+    {
+    public:
+        typedef _FFTPlanType FFTPlanType;
+    private:
+        bool m_forward;
+        std::map<int,FFTPlanType*> m_plans;
+
+        bool has(int dftlen){
+            return m_plans.find(dftlen)!=m_plans.end();
+        }
+
+        FFTPlanType* get(int dftlen){
+            typename std::map<int,FFTPlanType*>::iterator dlit = m_plans.find(dftlen);
+            if(dlit!=m_plans.end())
+                return dlit->second;
+            else
+                return prepare(dftlen);
+        }
+
+    public:
+        //! Build a plan manager for forward FFT or backward IFFT
+        FFTPlanManager(bool forward=true){
+            m_forward = forward;
+        }
+        ~FFTPlanManager(){
+            for(size_t u=0; u<m_plans.size(); ++u)
+                delete m_plans[u];
+        }
+
+        //! Prepare a plan with a specific size
+        FFTPlanType* prepare(int dftlen){
+
+            if(has(dftlen))
+                return get(dftlen);
+
+            FFTPlanType* plan = new FFTPlanType(dftlen, m_forward);
+            m_plans[dftlen] = plan;
+
+            return plan;
+        }
+        //! Prepare plans of sizes between 2^p_min to 2^p_max
+        void prepare_osf(int p_min, int p_max){
+            for(int p=p_min; p<=p_max; ++p)
+                prepare(std::pow(2, p));
+        }
+
+        //! Write some information about the plan manager
+        void write_status(std::ostream& out){
+            if(m_forward)
+                out << "Forward FFT ";
+            else
+                out << "Backward IFFT ";
+            out << "FFTPlanManager using " << FFTPlanType::libraryName();
+            if(m_plans.empty())
+                out << " without prepared sizes" << std::endl;
+            else{
+                out << " with sizes: ";
+                for(typename std::map<int,FFTPlanType*>::iterator it=m_plans.begin(); it!=m_plans.end(); ++it)
+                    out << it->first << " ";
+                out << std::endl;
+            }
+        }
+
+        //! Compute the forward FFT
+        template<typename TypeInContainer, typename TypeOutContainer>
+        void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+            get(dftlen)->fft(in, out);
+        }
+
+        //! Compute the inverse FFT (Currently limited to even sizes)
+        template<typename TypeInContainer, typename TypeOutContainer>
+        void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+            get((in.size()-1)*2)->ifft(in, out); // TODO Works only for even sizes!
+        }
+    };
+
 }
 
 #endif // __FFTSCARF_H__

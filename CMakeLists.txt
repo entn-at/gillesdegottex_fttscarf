@@ -174,7 +174,6 @@ include_directories(fftlibs)
 
 
 # Testing ---------------------------------------------------------------------
-option(FFTSCARF_BUILD_TEST "Build tests" OFF)
 if(FFTSCARF_BUILD_TEST)
     message("\n-- FFTScarf configuring tests")
     message("-- Forcing FFTReal for testing purpose")
