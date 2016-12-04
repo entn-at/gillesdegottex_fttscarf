@@ -47,7 +47,7 @@ void FFTPlanFFTS::resize(int n)
     if(n==m_size) return;
 
     assert(n>0);
-    assert(n<=65536);
+//    assert(n<=65536);
     assert(isPow2(n));
 
     FFTSCARF_PLAN_ACCESS_LOCK
