@@ -70,9 +70,9 @@ endif()
 # Add tests using ctest
 enable_testing()
 add_test(test_version test_version)
-add_test(test_fftlibs test_misc)
+add_test(test_misc test_misc)
 add_test(test_fftlibs test_fftlibs)
-add_test(test_fftlibs test_fftplanmanager)
+add_test(test_fftplanmanager test_fftplanmanager)
 #add_test(test_fftlibs32 test_fftlibs --size=32) // Doesn't run on OSX ...
 #add_test(test_fftlibs4096 test_fftlibs --size=4096) // Doesn't run on OSX ...
 
