@@ -32,6 +32,12 @@ BOOST_AUTO_TEST_CASE( test_fftplanmanager )
         pm_double.prepare_osf(p_min, p_max);
         pm_double.write_status(std::cout);
     #endif
+    #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+        FFTPlanManager<FFTPlanLongDouble> pm_long_double;
+        pm_long_double.write_status(std::cout);
+        pm_long_double.prepare_osf(p_min, p_max);
+        pm_long_double.write_status(std::cout);
+    #endif
 
     FFTPlanManager<FFTPlan> pm_default_fwd(true);
     FFTPlanManager<FFTPlan> pm_default_bck(false);
@@ -59,6 +65,10 @@ BOOST_AUTO_TEST_CASE( test_fftplanmanager )
         std::vector<std::complex<typename FFTPlan::FloatType> > spec;
         pm_default_fwd.fft(inframe, spec, dftlen);
         pm_default_bck.ifft(spec, inframe);
+
+        // Test the global Plan Manager
+        fftscarf::fft(inframe, spec, dftlen);
+        fftscarf::ifft(spec, inframe);
     }
     std::cout << std::endl;
     pm_default_fwd.write_status(std::cout);

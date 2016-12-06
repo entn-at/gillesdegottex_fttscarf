@@ -168,6 +168,7 @@ if(FFTSCARF_FFT_DFT)
     cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf_dft.h ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
 endif()
 
+cat(${CMAKE_CURRENT_SOURCE_DIR}/include/fftscarf.h.in_footer ${CMAKE_CURRENT_BINARY_DIR}/fftscarf.h)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(fftlibs)

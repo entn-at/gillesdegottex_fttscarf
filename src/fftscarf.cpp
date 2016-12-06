@@ -140,6 +140,21 @@ namespace fftscarf {
         // resize(n); // Don't call it here the vtable might not be ready. Let the child class deal with it.
     }
 
+    #ifdef FFTSCARF_PRECISION_SINGLE
+        FFTPlanManager<FFTPlanSingle> s_pm_plan_fwd_single(true);
+        FFTPlanManager<FFTPlanSingle> s_pm_plan_bck_single(false);
+    #endif
+    #ifdef FFTSCARF_PRECISION_DOUBLE
+        FFTPlanManager<FFTPlanDouble> s_pm_plan_fwd_double(true);
+        FFTPlanManager<FFTPlanDouble> s_pm_plan_bck_double(false);
+    #endif
+    #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+        FFTPlanManager<FFTPlanLongDouble> s_pm_plan_fwd_long_double(true);
+        FFTPlanManager<FFTPlanLongDouble> s_pm_plan_bck_long_double(false);
+    #endif
+    FFTPlanManager<FFTPlan> s_pm_plan_fwd(true); // TODO Avoid duplication
+    FFTPlanManager<FFTPlan> s_pm_plan_bck(false); // TODO Avoid duplication
+
     #ifdef FFTSCARF_FFT_IPP
     bool FFTPlanIPP__s_ipp_initialized = false;
     #endif

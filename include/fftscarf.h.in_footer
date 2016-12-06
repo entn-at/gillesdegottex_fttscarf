@@ -1,0 +1,75 @@
+#ifndef __FFTSCARF_H_FOOTER__
+#define __FFTSCARF_H_FOOTER__
+
+namespace fftscarf {
+
+    #ifdef FFTSCARF_PRECISION_SINGLE
+        #ifndef DOXYGEN_SHOULD_SKIP_THIS
+        extern FFTPlanManager<FFTPlanSingle> s_pm_plan_fwd_single;
+        extern FFTPlanManager<FFTPlanSingle> s_pm_plan_bck_single;
+        #endif
+        //! Compute the forward FFT using single precision
+        template<typename TypeInContainer, typename TypeOutContainer>
+        inline void ffts(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+            s_pm_plan_fwd_single.fft(in, out, dftlen);
+        }
+
+        //! Compute the inverse FFT using single precision (Currently limited to even sizes)
+        template<typename TypeInContainer, typename TypeOutContainer>
+        inline void iffts(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+            s_pm_plan_bck_single.ifft(in, out, winlen);
+        }
+    #endif
+    #ifdef FFTSCARF_PRECISION_DOUBLE
+        #ifndef DOXYGEN_SHOULD_SKIP_THIS
+        extern FFTPlanManager<FFTPlanDouble> s_pm_plan_fwd_double;
+        extern FFTPlanManager<FFTPlanDouble> s_pm_plan_bck_double;
+        #endif
+        //! Compute the forward FFT using double precision
+        template<typename TypeInContainer, typename TypeOutContainer>
+        inline void fftd(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+            s_pm_plan_fwd_double.fft(in, out, dftlen);
+        }
+
+        //! Compute the inverse FFT using double precision (Currently limited to even sizes)
+        template<typename TypeInContainer, typename TypeOutContainer>
+        inline void ifftd(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+            s_pm_plan_bck_double.ifft(in, out, winlen);
+        }
+    #endif
+    #ifdef FFTSCARF_PRECISION_LONGDOUBLE
+        #ifndef DOXYGEN_SHOULD_SKIP_THIS
+        extern FFTPlanManager<FFTPlanLongDouble> s_pm_plan_fwd_long_double;
+        extern FFTPlanManager<FFTPlanLongDouble> s_pm_plan_bck_long_double;
+        #endif
+        //! Compute the forward FFT using long double precision
+        template<typename TypeInContainer, typename TypeOutContainer>
+        inline void fftl(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+            s_pm_plan_fwd_long_double.fft(in, out, dftlen);
+        }
+
+        //! Compute the inverse FFT using long double precision (Currently limited to even sizes)
+        template<typename TypeInContainer, typename TypeOutContainer>
+        inline void ifftl(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+            s_pm_plan_bck_long_double.ifft(in, out, winlen);
+        }
+    #endif
+    #ifndef DOXYGEN_SHOULD_SKIP_THIS
+    extern FFTPlanManager<FFTPlan> s_pm_plan_fwd; // TODO Avoid duplication of the default precision
+    extern FFTPlanManager<FFTPlan> s_pm_plan_bck; // TODO Avoid duplication of the default precision
+    #endif
+
+    //! Compute the forward FFT using default precision
+    template<typename TypeInContainer, typename TypeOutContainer>
+    inline void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+        s_pm_plan_fwd.fft(in, out, dftlen);
+    }
+
+    //! Compute the inverse FFT using default precision (Currently limited to even sizes)
+    template<typename TypeInContainer, typename TypeOutContainer>
+    inline void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+        s_pm_plan_bck.ifft(in, out, winlen);
+    }
+}
+
+#endif // __FFTSCARF_H_FOOTER__

@@ -83,7 +83,7 @@ namespace fftscarf {
     template<typename FloatType>
     FloatType eps() {return std::numeric_limits<FloatType>::epsilon();}
 
-    //! The pi value with the highest precision for a standard C++ float type.
+    //! The pi value with the highest precision for a standard C++ float type, i.e. long double.
     static const long double pi = 3.141592653589793238462643383279502884L;
     
     //! Return true if N is a power of 2
@@ -168,7 +168,7 @@ namespace fftscarf {
             return m_plans.find(dftlen)!=m_plans.end();
         }
 
-        FFTPlanType* get(int dftlen){
+        inline FFTPlanType* get(int dftlen){
             typename std::map<int,FFTPlanType*>::iterator dlit = m_plans.find(dftlen);
             if(dlit!=m_plans.end())
                 return dlit->second;
@@ -187,7 +187,7 @@ namespace fftscarf {
         }
 
         //! Prepare a plan with a specific size
-        FFTPlanType* prepare(int dftlen){
+        inline FFTPlanType* prepare(int dftlen){
 
             if(has(dftlen))
                 return get(dftlen);
@@ -198,7 +198,7 @@ namespace fftscarf {
             return plan;
         }
         //! Prepare plans of sizes between 2^p_min to 2^p_max
-        void prepare_osf(int p_min, int p_max){
+        inline void prepare_osf(int p_min, int p_max){
             for(int p=p_min; p<=p_max; ++p)
                 prepare(std::pow(2, p));
         }
@@ -222,17 +222,16 @@ namespace fftscarf {
 
         //! Compute the forward FFT
         template<typename TypeInContainer, typename TypeOutContainer>
-        void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
-            get(dftlen)->fft(in, out);
+        inline void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+            get(dftlen)->fft(in, out, dftlen);
         }
 
         //! Compute the inverse FFT (Currently limited to even sizes)
         template<typename TypeInContainer, typename TypeOutContainer>
-        void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
-            get((in.size()-1)*2)->ifft(in, out); // TODO Works only for even sizes!
+        inline void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+            get((in.size()-1)*2)->ifft(in, out, winlen); // TODO Works only for even sizes!
         }
     };
-
 }
 
 #endif // __FFTSCARF_H__
