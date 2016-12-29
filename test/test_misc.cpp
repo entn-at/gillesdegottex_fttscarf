@@ -13,19 +13,19 @@ using namespace std;
 
 #include <fftscarf.h>
 
-int g_nb_tests = 1e5;
+int g_nb_tests = 100000;
 
 BOOST_AUTO_TEST_CASE( test_ispow2 )
 {
     // Test power of 2 up to 2^30
     int p=2;
-    for(size_t l=1; l<30; ++l, p*=2)
+    for(int l=1; l<30; ++l, p*=2)
         BOOST_CHECK(fftscarf::isPow2(p));
 
     // Test non-power of 2
-    boost::random::mt19937 rng(std::time(0));
+    boost::random::mt19937 rng((const uint32_t)std::time(0));
     boost::random::uniform_int_distribution<int> intrnd(1,std::numeric_limits<int>::max());
-    for(size_t n=0; n<g_nb_tests; ++n){
+    for(int n=0; n<g_nb_tests; ++n){
         p = intrnd(rng);
         while(p%2) p /= 2; // Remove potential powers of 2
         if(p>1)
@@ -36,17 +36,17 @@ BOOST_AUTO_TEST_CASE( test_ispow2 )
 BOOST_AUTO_TEST_CASE( test_ispow235 )
 {
     // Test power of 2^a * 3^b * 5^c
-    boost::random::mt19937 rng(std::time(0));
+    boost::random::mt19937 rng((const uint32_t)std::time(0));
     boost::random::uniform_int_distribution<int> powsrnd(1,30);
     int p;
-    for(size_t n=0; n<g_nb_tests; ++n){
+    for(int n=0; n<g_nb_tests; ++n){
         p = std::pow(2, powsrnd(rng)) * std::pow(3, powsrnd(rng)) * std::pow(5, powsrnd(rng));
         BOOST_CHECK(fftscarf::isPow235(p));
     }
 
     // Test non-power of 2^a * 3^b * 5^c
     boost::random::uniform_int_distribution<int> intrnd(1,std::numeric_limits<int>::max());
-    for(size_t n=0; n<g_nb_tests; ++n){
+    for(int n=0; n<g_nb_tests; ++n){
         p = intrnd(rng);
         while(p%2==0) p /= 2; // Remove potential powers of 2
         while(p%3==0) p /= 3; // Remove potential powers of 3
@@ -84,6 +84,6 @@ BOOST_AUTO_TEST_CASE( test_wrap )
     check_wrap<ValueType>(-fftscarf::pi/2);
     check_wrap<ValueType>(-fftscarf::pi);
     check_wrap<ValueType>(2*fftscarf::pi);
-    for(int N=-256; N<=256; ++N)
+    for(int N=-256; N<=4; ++N)
         check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
 }
