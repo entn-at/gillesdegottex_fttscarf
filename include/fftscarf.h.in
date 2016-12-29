@@ -93,6 +93,12 @@ namespace fftscarf {
     //! Return true if N is of the form 2^a * 3^b * 5^c
     bool isPow235(unsigned int N);
 
+    //! Return true if N is odd
+    static inline bool isOdd(unsigned int N){return N&1;}
+
+    //! Return true if N is even
+    static inline bool isEven(unsigned int N){return !isOdd(N);}
+
     //! Wrap the phase value in [-pi, +pi]
     template<typename FloatType>
     inline FloatType wrap(FloatType value){
@@ -242,6 +248,7 @@ namespace fftscarf {
         //! Compute the inverse FFT (Currently limited to even sizes)
         template<typename TypeInContainer, typename TypeOutContainer>
         inline void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+            assert(isOdd(in.size()));                    // TODO Works only for even sizes!
             get((in.size()-1)*2)->ifft(in, out, winlen); // TODO Works only for even sizes!
         }
     };
