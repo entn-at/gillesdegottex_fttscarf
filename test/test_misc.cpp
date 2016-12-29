@@ -1,6 +1,7 @@
 #include <ctime>
 #include <iostream>
 #include <limits>
+#include <iomanip>
 using namespace std;
 
 #define BOOST_TEST_MAIN
@@ -8,8 +9,7 @@ using namespace std;
 #define BOOST_TEST_MODULE TestMisc
 #include <boost/test/unit_test.hpp>
 
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/uniform_int_distribution.hpp>
+#include <boost/random.hpp>
 
 #include <fftscarf.h>
 
@@ -54,4 +54,36 @@ BOOST_AUTO_TEST_CASE( test_ispow235 )
         if(p>1)
             BOOST_CHECK(!fftscarf::isPow235(p)); // The reminder should be non-power of 2^a * 3^b * 5^c
     }
+}
+
+template<typename FloatType>
+inline FloatType refwrap(FloatType value){
+    return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
+}
+
+template<typename ValueType>
+void check_wrap(ValueType value){
+    long double err = refwrap(value) - fftscarf::wrapq(value);
+    if(!(std::abs(err)<5*fftscarf::eps<ValueType>())){
+        std::cout << std::setprecision(std::numeric_limits<ValueType>::digits10+2);
+        std::cout << "value=" << value << " refwrap=" << refwrap(value) << " wrap=" << fftscarf::wrapq(value) << " err=" << err << " eps=" << fftscarf::eps<ValueType>() << std::endl;
+    }
+    BOOST_CHECK(std::abs(err)<5*fftscarf::eps<ValueType>());
+}
+
+BOOST_AUTO_TEST_CASE( test_wrap )
+{
+    typedef double ValueType;
+
+    boost::mt19937 rnd_engine((uint32_t)std::time(0));
+    boost::random::uniform_real_distribution<ValueType> phirnd(0.0, 2*fftscarf::pi); // For random phase
+
+    check_wrap<ValueType>(0.0);
+    check_wrap<ValueType>(fftscarf::pi/2);
+    check_wrap<ValueType>(fftscarf::pi);
+    check_wrap<ValueType>(-fftscarf::pi/2);
+    check_wrap<ValueType>(-fftscarf::pi);
+    check_wrap<ValueType>(2*fftscarf::pi);
+    for(int N=-256; N<=256; ++N)
+        check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
 }

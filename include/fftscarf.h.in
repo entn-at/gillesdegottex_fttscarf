@@ -85,17 +85,30 @@ namespace fftscarf {
 
     //! The pi value with the highest precision for a standard C++ float type, i.e. long double.
     static const long double pi = 3.141592653589793238462643383279502884L;
-    
+    static const long double pi2 = 2*3.141592653589793238462643383279502884L;
+
     //! Return true if N is a power of 2
     bool isPow2(unsigned int N);
 
     //! Return true if N is of the form 2^a * 3^b * 5^c
     bool isPow235(unsigned int N);
 
-    //! Wrap the phase value in [-pi, +pi]. (TODO SPEEDUP)
+    //! Wrap the phase value in [-pi, +pi]
     template<typename FloatType>
     inline FloatType wrap(FloatType value){
         return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
+    }
+    //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
+    template<typename FloatType>
+    inline FloatType wrapq(FloatType value){
+        value = value - int(value/fftscarf::pi2)*fftscarf::pi2;
+
+        if(value>=fftscarf::pi)
+            value -= fftscarf::pi2;
+        else if(value<=-fftscarf::pi)
+            value += fftscarf::pi2;
+
+        return value;
     }
 
     //! Return a complex value from an array of two values.
