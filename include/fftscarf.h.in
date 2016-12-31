@@ -116,11 +116,11 @@ namespace fftscarf {
 
         std::cout << __FILE__ << ":" << __LINE__ << ": " << value << " diff2pi=" << value-pi << " diff2mpi=" << value+pi << std::endl;
 
-        if(value>=pi){
+        if(value>pi){
             value -= pi2;
             std::cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
         }
-        else if(value<=-pi){
+        else if(value<-pi){
             value += pi2;
             std::cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
         }
