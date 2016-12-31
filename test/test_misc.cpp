@@ -74,6 +74,8 @@ void check_wrap(ValueType value){
 template<typename ValueType>
 void check_multi_wrap(){
 
+    std::cout << "test " << sizeof(ValueType) << std::endl;
+
     boost::mt19937 rnd_engine((uint32_t)std::time(0));
     boost::random::uniform_real_distribution<ValueType> phirnd(0.0, 2*fftscarf::pi); // For random phase
 
@@ -83,7 +85,7 @@ void check_multi_wrap(){
     check_wrap<ValueType>(-fftscarf::pi/2);
     check_wrap<ValueType>(-fftscarf::pi);
     check_wrap<ValueType>(2*fftscarf::pi);
-    for(int N=-256; N<=256; ++N)
+    for(int N=-4; N<=4; ++N)
         check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
 }
 
