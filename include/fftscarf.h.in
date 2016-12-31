@@ -104,20 +104,7 @@ namespace fftscarf {
     inline FloatType wrap(FloatType value){
         return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
     }
-//    inline double wrapq(double value){
-//        double pi = fftscarf::pi;
-//        double pi2 = fftscarf::pi2;
-
-//        value = value - int(value/pi2)*pi2;
-
-//        if(value>pi)
-//            value -= pi2;
-//        else if(value<-pi)
-//            value += pi2;
-
-//        return value;
-//    }
-    //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
+    #ifndef DOXYGEN_SHOULD_SKIP_THIS
     inline float wrapq(float value){
         double pi = fftscarf::pi;
         double pi2 = fftscarf::pi2;
@@ -131,9 +118,11 @@ namespace fftscarf {
 
         return value;
     }
+    #endif
+    //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
     template<typename FloatType>
     inline FloatType wrapq(FloatType value){
-        long double pi = fftscarf::pi;
+        double pi = fftscarf::pi;
         long double pi2 = fftscarf::pi2;
 
         value = value - int(value/pi2)*pi2;
