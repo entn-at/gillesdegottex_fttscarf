@@ -111,7 +111,7 @@ namespace fftscarf {
 
         value = value - int(value/fftscarf::pi2)*fftscarf::pi2;
 
-        std::cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
+        std::cout << __FILE__ << ":" << __LINE__ << ": " << value << " diff2pi=" << value-fftscarf::pi << " diff2mpi=" << value+fftscarf::pi << std::endl;
 
         if(value>=fftscarf::pi){
             value -= fftscarf::pi2;
