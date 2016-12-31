@@ -104,20 +104,6 @@ namespace fftscarf {
     inline FloatType wrap(FloatType value){
         return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
     }
-    template<typename FloatType>
-    inline FloatType wrapq(FloatType value){
-        FloatType pi = fftscarf::pi;
-        FloatType pi2 = fftscarf::pi2;
-
-        value = value - int(value/pi2)*pi2;
-
-        if(value>pi)
-            value -= pi2;
-        else if(value<-pi)
-            value += pi2;
-
-        return value;
-    }
 //    inline double wrapq(double value){
 //        double pi = fftscarf::pi;
 //        double pi2 = fftscarf::pi2;
@@ -135,6 +121,20 @@ namespace fftscarf {
     inline float wrapq(float value){
         double pi = fftscarf::pi;
         double pi2 = fftscarf::pi2;
+
+        value = value - int(value/pi2)*pi2;
+
+        if(value>pi)
+            value -= pi2;
+        else if(value<-pi)
+            value += pi2;
+
+        return value;
+    }
+    template<typename FloatType>
+    inline FloatType wrapq(FloatType value){
+        FloatType pi = fftscarf::pi;
+        FloatType pi2 = fftscarf::pi2;
 
         value = value - int(value/pi2)*pi2;
 
