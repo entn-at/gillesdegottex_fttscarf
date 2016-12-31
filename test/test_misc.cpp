@@ -73,21 +73,17 @@ void check_wrap(ValueType value){
 
 BOOST_AUTO_TEST_CASE( test_wrap )
 {
-    // TODO Print values of atan and atan2 and compare result on Linux, OSX and Win
-    std::cout << "(1,0)=" << std::atan2(1.0,0.0) << " (0,1)=" << std::atan2(0.0,1.0) << " (-1,0)=" << std::atan2(-1.0,0.0) << " (0,-1)=" << std::atan2(0.0,-1.0) << std::endl;
-    std::cout << "(1,1)=" << std::atan2(1.0,1.0) << " (-1,1)=" << std::atan2(-1.0,1.0) << " (-1,-1)=" << std::atan2(-1.0,-1.0) << " (1,-1)=" << std::atan2(1.0,-1.0) << std::endl;
-
     typedef double ValueType;
 
     boost::mt19937 rnd_engine((uint32_t)std::time(0));
     boost::random::uniform_real_distribution<ValueType> phirnd(0.0, 2*fftscarf::pi); // For random phase
 
     check_wrap<ValueType>(0.0);
-//    check_wrap<ValueType>(fftscarf::pi/2);
+    check_wrap<ValueType>(fftscarf::pi/2);
     check_wrap<ValueType>(fftscarf::pi);
-//    check_wrap<ValueType>(-fftscarf::pi/2);
+    check_wrap<ValueType>(-fftscarf::pi/2);
     check_wrap<ValueType>(-fftscarf::pi);
-//    check_wrap<ValueType>(2*fftscarf::pi);
-//    for(int N=-256; N<=4; ++N)
-//        check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
+    check_wrap<ValueType>(2*fftscarf::pi);
+    for(int N=-256; N<=256; ++N)
+        check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
 }
