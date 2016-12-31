@@ -71,9 +71,8 @@ void check_wrap(ValueType value){
     BOOST_CHECK(std::abs(err)<5*fftscarf::eps<ValueType>());
 }
 
-BOOST_AUTO_TEST_CASE( test_wrap )
-{
-    typedef double ValueType;
+template<typename ValueType>
+void check_multi_wrap(){
 
     boost::mt19937 rnd_engine((uint32_t)std::time(0));
     boost::random::uniform_real_distribution<ValueType> phirnd(0.0, 2*fftscarf::pi); // For random phase
@@ -86,4 +85,11 @@ BOOST_AUTO_TEST_CASE( test_wrap )
     check_wrap<ValueType>(2*fftscarf::pi);
     for(int N=-256; N<=256; ++N)
         check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
+}
+
+BOOST_AUTO_TEST_CASE( test_wrap )
+{
+    check_multi_wrap<float>();
+    check_multi_wrap<double>();
+    check_multi_wrap<long double>();
 }
