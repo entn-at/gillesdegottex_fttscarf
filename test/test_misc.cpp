@@ -73,6 +73,10 @@ void check_wrap(ValueType value){
 
 BOOST_AUTO_TEST_CASE( test_wrap )
 {
+    // TODO Print values of atan and atan2 and compare result on Linux, OSX and Win
+    std::cout << "(1,0)=" << std::atan2(1.0,0.0) << " (0,1)=" << std::atan2(0.0,1.0) << " (-1,0)=" << std::atan2(-1.0,0.0) << " (0,-1)=" << std::atan2(0.0,-1.0) << std::endl;
+    std::cout << "(1,1)=" << std::atan2(1.0,1.0) << " (-1,1)=" << std::atan2(-1.0,1.0) << " (-1,-1)=" << std::atan2(-1.0,-1.0) << " (1,-1)=" << std::atan2(1.0,-1.0) << std::endl;
+
     typedef double ValueType;
 
     boost::mt19937 rnd_engine((uint32_t)std::time(0));
