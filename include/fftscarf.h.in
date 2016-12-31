@@ -117,7 +117,6 @@ namespace fftscarf {
 
         return value;
     }
-    template<typename float>
     inline double wrapq(double value){
         double pi = fftscarf::pi;
         double pi2 = fftscarf::pi2;
@@ -132,7 +131,6 @@ namespace fftscarf {
         return value;
     }
     //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
-    template<typename float>
     inline float wrapq(float value){
         double pi = fftscarf::pi;
         double pi2 = fftscarf::pi2;
