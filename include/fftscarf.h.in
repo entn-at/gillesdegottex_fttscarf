@@ -107,12 +107,18 @@ namespace fftscarf {
     //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
     template<typename FloatType>
     inline FloatType wrapq(FloatType value){
+        cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
+
         value = value - int(value/fftscarf::pi2)*fftscarf::pi2;
+
+        cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
 
         if(value>=fftscarf::pi)
             value -= fftscarf::pi2;
         else if(value<=-fftscarf::pi)
             value += fftscarf::pi2;
+
+        cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
 
         return value;
     }
