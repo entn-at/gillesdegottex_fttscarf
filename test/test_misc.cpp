@@ -64,11 +64,11 @@ inline FloatType refwrap(FloatType value){
 template<typename ValueType>
 void check_wrap(ValueType value){
     long double err = refwrap(value) - fftscarf::wrapq(value);
-    if(!(std::abs(err)<5*fftscarf::eps<ValueType>())){
+    if(!(std::abs(err)<10*fftscarf::eps<ValueType>())){
         std::cout << std::setprecision(std::numeric_limits<ValueType>::digits10+2);
         std::cout << "value=" << value << " refwrap=" << refwrap(value) << " wrap=" << fftscarf::wrapq(value) << " err=" << err << " eps=" << fftscarf::eps<ValueType>() << std::endl;
     }
-    BOOST_CHECK(std::abs(err)<5*fftscarf::eps<ValueType>());
+    BOOST_CHECK(std::abs(err)<10*fftscarf::eps<ValueType>());
 }
 
 template<typename ValueType>
@@ -85,7 +85,7 @@ void check_multi_wrap(){
     check_wrap<ValueType>(-fftscarf::pi/2);
     check_wrap<ValueType>(-fftscarf::pi);
     check_wrap<ValueType>(2*fftscarf::pi);
-    for(int N=-4; N<=4; ++N)
+    for(int N=-16; N<=16; ++N)
         check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
 }
 
