@@ -108,14 +108,16 @@ namespace fftscarf {
     template<typename FloatType>
     inline FloatType wrapq(FloatType value){
 
-        FloatType pi = fftscarf::pi;
-        FloatType pi2 = fftscarf::pi2;
+//        FloatType pi = fftscarf::pi;
+//        FloatType pi2 = fftscarf::pi2;
+        double pi = fftscarf::pi;
+        double pi2 = fftscarf::pi2;
 
         value = value - int(value/pi2)*pi2;
 
-        if(value>=pi)
+        if(value>pi)
             value -= pi2;
-        else if(value<=-pi)
+        else if(value<-pi)
             value += pi2;
 
         return value;
