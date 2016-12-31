@@ -104,16 +104,38 @@ namespace fftscarf {
     inline FloatType wrap(FloatType value){
         return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
     }
-    //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
-    template<typename FloatType>
-    inline FloatType wrapq(FloatType value){
+    inline long double wrapq(long double value){
+         long double pi = fftscarf::pi;
+         long double pi2 = fftscarf::pi2;
 
-        // As surprising as it can be, double type is necessary for all types
-        // in order to obey the same convention used in std::arg
-         FloatType pi = fftscarf::pi;
-         FloatType pi2 = fftscarf::pi2;
-//        double pi = fftscarf::pi;
-//        double pi2 = fftscarf::pi2;
+        value = value - int(value/pi2)*pi2;
+
+        if(value>pi)
+            value -= pi2;
+        else if(value<-pi)
+            value += pi2;
+
+        return value;
+    }
+    template<typename float>
+    inline double wrapq(double value){
+        double pi = fftscarf::pi;
+        double pi2 = fftscarf::pi2;
+
+        value = value - int(value/pi2)*pi2;
+
+        if(value>pi)
+            value -= pi2;
+        else if(value<-pi)
+            value += pi2;
+
+        return value;
+    }
+    //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
+    template<typename float>
+    inline float wrapq(float value){
+        double pi = fftscarf::pi;
+        double pi2 = fftscarf::pi2;
 
         value = value - int(value/pi2)*pi2;
 
