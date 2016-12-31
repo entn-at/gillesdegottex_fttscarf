@@ -109,16 +109,19 @@ namespace fftscarf {
     inline FloatType wrapq(FloatType value){
         std::cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
 
-        value = value - int(value/fftscarf::pi2)*fftscarf::pi2;
+        FloatType pi = fftscarf::pi;
+        FloatType pi2 = fftscarf::pi2;
 
-        std::cout << __FILE__ << ":" << __LINE__ << ": " << value << " diff2pi=" << value-fftscarf::pi << " diff2mpi=" << value+fftscarf::pi << std::endl;
+        value = value - int(value/pi2)*pi2;
 
-        if(value>=fftscarf::pi){
-            value -= fftscarf::pi2;
+        std::cout << __FILE__ << ":" << __LINE__ << ": " << value << " diff2pi=" << value-pi << " diff2mpi=" << value+pi << std::endl;
+
+        if(value>=pi){
+            value -= pi2;
             std::cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
         }
-        else if(value<=-fftscarf::pi){
-            value += fftscarf::pi2;
+        else if(value<=-pi){
+            value += pi2;
             std::cout << __FILE__ << ":" << __LINE__ << ": " << value << std::endl;
         }
 
