@@ -108,10 +108,12 @@ namespace fftscarf {
     template<typename FloatType>
     inline FloatType wrapq(FloatType value){
 
-//        FloatType pi = fftscarf::pi;
-//        FloatType pi2 = fftscarf::pi2;
-        double pi = fftscarf::pi;
-        double pi2 = fftscarf::pi2;
+        // As surprising as it can be, double type is necessary for all types
+        // in order to obey the same convention used in std::arg
+         FloatType pi = fftscarf::pi;
+         FloatType pi2 = fftscarf::pi2;
+//        double pi = fftscarf::pi;
+//        double pi2 = fftscarf::pi2;
 
         value = value - int(value/pi2)*pi2;
 
