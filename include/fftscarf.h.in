@@ -122,8 +122,10 @@ namespace fftscarf {
     //! Wrap the phase value in [-pi, +pi] (quick version, a few eps different from wrap)
     template<typename FloatType>
     inline FloatType wrapq(FloatType value){
-        double pi = fftscarf::pi;
-        long double pi2 = fftscarf::pi2;
+//        double pi = fftscarf::pi;
+//        long double pi2 = fftscarf::pi2;
+        FloatType pi = fftscarf::pi;
+        FloatType pi2 = fftscarf::pi2;
 
         value = value - int(value/pi2)*pi2;
 

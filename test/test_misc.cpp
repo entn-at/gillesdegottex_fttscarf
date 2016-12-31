@@ -56,6 +56,8 @@ BOOST_AUTO_TEST_CASE( test_ispow235 )
     }
 }
 
+// Test wrapq -----------------------------------------------------------------
+
 template<typename FloatType>
 inline FloatType refwrap(FloatType value){
     return std::arg(std::complex<FloatType>(std::cos(value),std::sin(value)));
