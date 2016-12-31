@@ -113,9 +113,9 @@ namespace fftscarf {
 
         value = value - int(value/pi2)*pi2;
 
-        if(value>pi)
+        if(value>=pi)
             value -= pi2;
-        else if(value<-pi)
+        else if(value<=-pi)
             value += pi2;
 
         return value;
