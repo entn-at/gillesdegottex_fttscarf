@@ -77,7 +77,7 @@ void check_wrap(ValueType value){
 template<typename ValueType>
 void check_multi_wrap(){
 
-    std::cout << "test " << sizeof(ValueType) << std::endl;
+//    std::cout << "test " << sizeof(ValueType) << std::endl;
 
     boost::mt19937 rnd_engine((uint32_t)std::time(0));
     boost::random::uniform_real_distribution<ValueType> phirnd(0.0, 2*fftscarf::pi); // For random phase
@@ -109,7 +109,9 @@ void check_multi_wrap(){
     tend = boost::chrono::system_clock::now();
     boost::chrono::nanoseconds wrapq_nanosec = tend-tstart;
 
-    std::cout << (double(wrap_nanosec.count())/wrapq_nanosec.count()) << std::endl;
+    long double acc = double(wrap_nanosec.count())/wrapq_nanosec.count();
+//    std::cout << acc << std::endl;
+    BOOST_CHECK(acc>20.0); // Should be at least 20 times faster
 }
 
 BOOST_AUTO_TEST_CASE( test_wrap )
