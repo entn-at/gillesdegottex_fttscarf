@@ -95,30 +95,28 @@ void check_multi_wrap(){
 
     // Check speed
     int Nmax = 1000000;
-    ValueType res = 0.0;
+    volatile ValueType res = 0.0; // volatile to avoid simplification because res is not used
     boost::posix_time::ptime tstart;
     boost::posix_time::ptime tend;
     boost::posix_time::time_duration dur;
 
     tstart = boost::posix_time::microsec_clock::local_time();
     for(int N=-Nmax; N<=Nmax; ++N)
-        res += fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
+        res = fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend  = boost::posix_time::microsec_clock::local_time();
     long double dur_wrap = (tend-tstart).total_milliseconds();
-    std::cout << res << std::endl;
-    std::cout << (tstart) << " " << (tend) << " " << dur_wrap << std::endl;
+    std::cout << "wrap time:" << dur_wrap << "ms" << std::endl;
 
     tstart = boost::posix_time::microsec_clock::local_time();
     for(int N=-Nmax; N<=Nmax; ++N)
-        res += fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
+        res = fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend  = boost::posix_time::microsec_clock::local_time();
     long double dur_wrapq = (tend-tstart).total_milliseconds();
-    std::cout << res << std::endl;
-    std::cout << (tstart) << " " << (tend) << " " << dur_wrapq << std::endl;
+    std::cout << "wrapq time:" << dur_wrapq << "ms" << std::endl;
 
     long double acc = dur_wrap/dur_wrapq;
-    std::cout << acc << std::endl;
-    BOOST_CHECK(acc>10.0); // Should be at least 10 times faster
+    std::cout << "speed up ratio:" << acc << std::endl;
+    BOOST_CHECK(acc>5.0); // Should be at least 5 times faster
 }
 
 BOOST_AUTO_TEST_CASE( test_wrap )

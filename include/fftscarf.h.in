@@ -108,7 +108,7 @@ namespace fftscarf {
     template<typename FloatType>
     inline FloatType wrapq(FloatType value){
         double pi = fftscarf::pi;        // It seems double is used somewhere for all precision
-        long double pi2 = fftscarf::pi2; // Should use the highest available precision
+        long double pi2 = fftscarf::pi2; // Should always use the highest available precision
 
         value = value - int(value/pi2)*pi2;
 
