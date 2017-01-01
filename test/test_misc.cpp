@@ -110,7 +110,7 @@ void check_multi_wrap(){
     boost::chrono::nanoseconds wrapq_nanosec = tend-tstart;
 
     long double acc = double(wrap_nanosec.count())/wrapq_nanosec.count();
-//    std::cout << acc << std::endl;
+    std::cout << acc << std::endl;
     BOOST_CHECK(acc>20.0); // Should be at least 20 times faster
 }
 
