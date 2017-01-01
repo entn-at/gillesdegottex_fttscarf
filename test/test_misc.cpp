@@ -78,7 +78,7 @@ void check_wrap(ValueType value){
 template<typename ValueType>
 void check_multi_wrap(){
 
-//    std::cout << "test " << sizeof(ValueType) << std::endl;
+    std::cout << "Test fftscarf::wrapq for type size: " << sizeof(ValueType) << std::endl;
 
     boost::mt19937 rnd_engine((uint32_t)std::time(0));
     boost::random::uniform_real_distribution<ValueType> phirnd(0.0, 2*fftscarf::pi); // For random phase
@@ -119,9 +119,15 @@ void check_multi_wrap(){
     BOOST_CHECK(acc>2.0); // Should be at least twice faster
 }
 
-BOOST_AUTO_TEST_CASE( test_wrap )
+BOOST_AUTO_TEST_CASE( test_wrap_single )
 {
     check_multi_wrap<float>();
+}
+BOOST_AUTO_TEST_CASE( test_wrap_double )
+{
     check_multi_wrap<double>();
+}
+BOOST_AUTO_TEST_CASE( test_wrap_long_double )
+{
     check_multi_wrap<long double>();
 }
