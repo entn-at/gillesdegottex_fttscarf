@@ -101,17 +101,17 @@ void check_multi_wrap(){
     for(int N=-Nmax; N<=Nmax; ++N)
         fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend = boost::chrono::system_clock::now();
-    boost::chrono::nanoseconds wrap_nanosec = tend-tstart;
+    long double dur_wrap = (tend-tstart).count();
 
     tstart = boost::chrono::system_clock::now();
     for(int N=-Nmax; N<=Nmax; ++N)
         fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend = boost::chrono::system_clock::now();
-    boost::chrono::nanoseconds wrapq_nanosec = tend-tstart;
+    long double dur_wrapq = (tend-tstart).count();
 
-    long double acc = double(wrap_nanosec.count())/wrapq_nanosec.count();
+    long double acc = dur_wrap/dur_wrapq;
     std::cout << acc << std::endl;
-    BOOST_CHECK(acc>20.0); // Should be at least 20 times faster
+    BOOST_CHECK(acc>10.0); // Should be at least 10 times faster
 }
 
 BOOST_AUTO_TEST_CASE( test_wrap )
