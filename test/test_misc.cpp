@@ -116,7 +116,7 @@ void check_multi_wrap(){
 
     long double acc = dur_wrap/dur_wrapq;
     std::cout << "speed up ratio:" << acc << std::endl;
-    BOOST_CHECK(acc>5.0); // Should be at least 5 times faster
+    BOOST_CHECK(acc>2.0); // Should be at least twice faster
 }
 
 BOOST_AUTO_TEST_CASE( test_wrap )
