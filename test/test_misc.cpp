@@ -95,20 +95,21 @@ void check_multi_wrap(){
 
     // Check speed
     int Nmax = 1000000;
+    ValueType res;
     boost::posix_time::ptime tstart;
     boost::posix_time::ptime tend;
     boost::posix_time::time_duration dur;
 
     tstart = boost::posix_time::microsec_clock::local_time();
     for(int N=-Nmax; N<=Nmax; ++N)
-        fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
+        res = fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend  = boost::posix_time::microsec_clock::local_time();
     long double dur_wrap = (tend-tstart).total_milliseconds();
     std::cout << (tstart) << " " << (tend) << " " << dur_wrap << std::endl;
 
     tstart = boost::posix_time::microsec_clock::local_time();
     for(int N=-Nmax; N<=Nmax; ++N)
-        fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
+        res = fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend  = boost::posix_time::microsec_clock::local_time();
     long double dur_wrapq = (tend-tstart).total_milliseconds();
     std::cout << (tstart) << " " << (tend) << " " << dur_wrapq << std::endl;
