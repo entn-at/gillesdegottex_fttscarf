@@ -9,7 +9,8 @@ using namespace std;
 #define BOOST_TEST_MODULE TestMisc
 #include <boost/test/unit_test.hpp>
 
-#include <boost/chrono/system_clocks.hpp>
+//#include <boost/chrono/system_clocks.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/random.hpp>
 
 #include <fftscarf.h>
@@ -94,22 +95,24 @@ void check_multi_wrap(){
 
     // Check speed
     int Nmax = 500000;
-    boost::chrono::system_clock::time_point tstart;
-    boost::chrono::system_clock::time_point tend;
+    boost::posix_time::ptime tstart;
+    boost::posix_time::ptime tend;
+    boost::posix_time::time_duration dur;
 
-    tstart = boost::chrono::system_clock::now();
+    tstart = boost::posix_time::microsec_clock::local_time();
     for(int N=-Nmax; N<=Nmax; ++N)
         fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
-    tend = boost::chrono::system_clock::now();
-    std::cout << boost::chrono::system_clock::to_time_t(tstart) << " " << boost::chrono::system_clock::to_time_t(tend) << " " << (tend-tstart).count() << std::endl;
-    long double dur_wrap = (tend-tstart).count();
+    tend  = boost::posix_time::microsec_clock::local_time();
+    dur = tend-tstart;
+    std::cout << (tstart) << " " << (tend) << " " << dur.total_milliseconds() << std::endl;
+    long double dur_wrap = (tend-tstart).total_milliseconds();
 
-    tstart = boost::chrono::system_clock::now();
+    tstart = boost::posix_time::microsec_clock::local_time();
     for(int N=-Nmax; N<=Nmax; ++N)
         fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
-    tend = boost::chrono::system_clock::now();
-    std::cout << boost::chrono::system_clock::to_time_t(tstart) << " " << boost::chrono::system_clock::to_time_t(tend) << " " << (tend-tstart).count() << std::endl;
-    long double dur_wrapq = (tend-tstart).count();
+    tend  = boost::posix_time::microsec_clock::local_time();
+    std::cout << (tstart) << " " << (tend) << " " << dur.total_milliseconds() << std::endl;
+    long double dur_wrapq = (tend-tstart).total_milliseconds();
 
     long double acc = dur_wrap/dur_wrapq;
     std::cout << acc << std::endl;
