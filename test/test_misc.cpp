@@ -9,6 +9,7 @@ using namespace std;
 #define BOOST_TEST_MODULE TestMisc
 #include <boost/test/unit_test.hpp>
 
+#include <boost/chrono/system_clocks.hpp>
 #include <boost/random.hpp>
 
 #include <fftscarf.h>
@@ -89,6 +90,26 @@ void check_multi_wrap(){
     check_wrap<ValueType>(2*fftscarf::pi);
     for(int N=-16; N<=16; ++N)
         check_wrap<ValueType>(phirnd(rnd_engine) + N*2*fftscarf::pi);
+
+
+    // Check speed
+    int Nmax = 500000;
+    boost::chrono::system_clock::time_point tstart;
+    boost::chrono::system_clock::time_point tend;
+
+    tstart = boost::chrono::system_clock::now();
+    for(int N=-Nmax; N<=Nmax; ++N)
+        fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
+    tend = boost::chrono::system_clock::now();
+    boost::chrono::nanoseconds wrap_nanosec = tend-tstart;
+
+    tstart = boost::chrono::system_clock::now();
+    for(int N=-Nmax; N<=Nmax; ++N)
+        fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
+    tend = boost::chrono::system_clock::now();
+    boost::chrono::nanoseconds wrapq_nanosec = tend-tstart;
+
+    std::cout << (double(wrap_nanosec.count())/wrapq_nanosec.count()) << std::endl;
 }
 
 BOOST_AUTO_TEST_CASE( test_wrap )

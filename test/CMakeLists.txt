@@ -3,7 +3,7 @@ project (test)
 
 # Add Boost unit test library.
 set(Boost_USE_STATIC_LIBS on)
-find_package(Boost COMPONENTS system random unit_test_framework program_options REQUIRED)
+find_package(Boost COMPONENTS system random chrono unit_test_framework program_options REQUIRED)
 # add_definitions(-DBOOST_TEST_DYN_LINK)
 include_directories(${Boost_INCLUDE_DIR})
 
