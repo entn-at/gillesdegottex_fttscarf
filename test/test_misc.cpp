@@ -105,6 +105,7 @@ void check_multi_wrap(){
         res += fftscarf::wrap(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend  = boost::posix_time::microsec_clock::local_time();
     long double dur_wrap = (tend-tstart).total_milliseconds();
+    std::cout << res << std::endl;
     std::cout << (tstart) << " " << (tend) << " " << dur_wrap << std::endl;
 
     tstart = boost::posix_time::microsec_clock::local_time();
@@ -112,6 +113,7 @@ void check_multi_wrap(){
         res += fftscarf::wrapq(phirnd(rnd_engine) + N*2*fftscarf::pi);
     tend  = boost::posix_time::microsec_clock::local_time();
     long double dur_wrapq = (tend-tstart).total_milliseconds();
+    std::cout << res << std::endl;
     std::cout << (tstart) << " " << (tend) << " " << dur_wrapq << std::endl;
 
     long double acc = dur_wrap/dur_wrapq;
