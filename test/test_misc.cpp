@@ -94,7 +94,7 @@ void check_multi_wrap(){
 
 
     // Check speed
-    int Nmax = 500000;
+    int Nmax = 1000000;
     boost::posix_time::ptime tstart;
     boost::posix_time::ptime tend;
     boost::posix_time::time_duration dur;
