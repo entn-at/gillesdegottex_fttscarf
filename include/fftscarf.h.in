@@ -213,7 +213,7 @@ namespace fftscarf {
         inline FFTPlanType* prepare(int dftlen){
 
             if(has(dftlen))
-                return get(dftlen);
+                return plan(dftlen);
 
             FFTPlanType* plan = new FFTPlanType(dftlen, m_forward);
             m_plans[dftlen] = plan;
