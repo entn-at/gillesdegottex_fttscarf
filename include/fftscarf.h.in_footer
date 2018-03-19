@@ -18,6 +18,14 @@ namespace fftscarf {
         template<typename TypeInContainer, typename TypeOutContainer>
         inline void iffts(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
             s_pm_plan_bck_single.ifft(in, out, winlen);
+
+        //! Return a single precision FFT plan of the given size
+        inline FFTPlanSingle* plans(int dftlen){
+            return s_pm_plan_fwd_single.plan(dftlen);
+        }
+        //! Return a single precision iFFT plan of the given size
+        inline FFTPlanSingle* iplans(int dftlen){
+            return s_pm_plan_bck_single.plan(dftlen);
         }
     #endif
     #ifdef FFTSCARF_PRECISION_DOUBLE
@@ -35,6 +43,14 @@ namespace fftscarf {
         template<typename TypeInContainer, typename TypeOutContainer>
         inline void ifftd(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
             s_pm_plan_bck_double.ifft(in, out, winlen);
+
+        //! Return a double precision FFT plan of the given size
+        inline FFTPlanDouble* pland(int dftlen){
+            return s_pm_plan_fwd_double.plan(dftlen);
+        }
+        //! Return a double precision iFFT plan of the given size
+        inline FFTPlanDouble* ipland(int dftlen){
+            return s_pm_plan_bck_double.plan(dftlen);
         }
     #endif
     #ifdef FFTSCARF_PRECISION_LONGDOUBLE
@@ -52,6 +68,14 @@ namespace fftscarf {
         template<typename TypeInContainer, typename TypeOutContainer>
         inline void ifftl(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
             s_pm_plan_bck_long_double.ifft(in, out, winlen);
+
+        //! Return a long double precision FFT plan of the given size
+        inline FFTPlanLongDouble* planl(int dftlen){
+            return s_pm_plan_fwd_long_double.plan(dftlen);
+        }
+        //! Return a long double precision iFFT plan of the given size
+        inline FFTPlanLongDouble* iplanl(int dftlen){
+            return s_pm_plan_bck_long_double.plan(dftlen);
         }
     #endif
     #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -69,6 +93,14 @@ namespace fftscarf {
     template<typename TypeInContainer, typename TypeOutContainer>
     inline void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
         s_pm_plan_bck.ifft(in, out, winlen);
+
+    //! Return a default precision FFT plan of the given size
+    inline FFTPlan* plan(int dftlen){
+        return s_pm_plan_fwd.plan(dftlen);
+    }
+    //! Return a default precision iFFT plan of the given size
+    inline FFTPlan* iplan(int dftlen){
+        return s_pm_plan_bck.plan(dftlen);
     }
 }
 
