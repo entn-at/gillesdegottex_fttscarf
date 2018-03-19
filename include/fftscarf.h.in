@@ -168,10 +168,10 @@ namespace fftscarf {
         // (these are "ghost" functions, because template polymorphism doesn't exist)
         //! Compute the forward FFT
         template<typename TypeInContainer, typename TypeOutContainer>
-        void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1);
-        //! Compute the inverse FFT
+        void rfft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1);
+        //! Compute the inverse (backward) FFT
         template<typename TypeInContainer, typename TypeOutContainer>
-        void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1);
+        void irfft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1);
     };
 
     /*! \brief Manage a collection of DFT plans with different sizes.
@@ -245,15 +245,15 @@ namespace fftscarf {
 
         //! Compute the forward FFT
         template<typename TypeInContainer, typename TypeOutContainer>
-        inline void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
-            get(dftlen)->fft(in, out, dftlen);
+        inline void rfft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+            plan(dftlen)->rfft(in, out, dftlen);
         }
 
         //! Compute the inverse FFT (Currently limited to even sizes)
         template<typename TypeInContainer, typename TypeOutContainer>
-        inline void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+        inline void irfft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
             assert(isOdd(in.size()));                    // TODO Works only for even sizes!
-            get((in.size()-1)*2)->ifft(in, out, winlen); // TODO Works only for even sizes!
+            plan((in.size()-1)*2)->irfft(in, out, winlen); // TODO Works only for even sizes!
         }
     };
 }

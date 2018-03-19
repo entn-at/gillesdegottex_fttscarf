@@ -34,7 +34,7 @@ public:
     virtual void resize(int n);
 
     template<typename TypeInContainer, typename TypeOutContainer>
-    void fft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
+    void rfft(const TypeInContainer& in, TypeOutContainer& out, int dftlen=-1){
         if (!m_forward)
             throw std::string("A backward IDFT FFTPlan cannot compute the forward DFT");
 
@@ -64,7 +64,7 @@ public:
     }
 
     template<typename TypeInContainer, typename TypeOutContainer>
-    void ifft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
+    void irfft(const TypeInContainer& in, TypeOutContainer& out, int winlen=-1){
         if(m_forward)
             throw std::string("A forward DFT FFTPlan cannot compute the backward IDFT");
 
@@ -74,7 +74,7 @@ public:
 
         if(winlen==-1)
             winlen = m_size;
-        
+
         if(int(out.size())!=winlen)
             out.resize(winlen);
 

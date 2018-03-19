@@ -81,7 +81,7 @@ static void test_lib(){
             inframe[n] = cosl(binref*2*fftscarf::pi*n/((long double)N) + phiref);
         
         // Run the tested implementation
-        fft.fft(inframe, spec, N);
+        fft.rfft(inframe, spec, N);
 
         // Check the amplitude
         long double ampmeas = std::abs(spec[binref]);
@@ -118,11 +118,11 @@ static void test_lib(){
             inframe[n] = generator();
 
         // Run the tested implementation
-        fft.fft(inframe, spec, N);
+        fft.rfft(inframe, spec, N);
 
         if(vm.count("specverif")){
             // Run the "reference" implementation
-            fft_ref.fft(inframe, spec_ref, N);
+            fft_ref.rfft(inframe, spec_ref, N);
 
             // Verify: sig->spec == specref
             long double spec_err = 0.0;
@@ -142,7 +142,7 @@ static void test_lib(){
         // Verify: sig->spec->sig' == sig
 
         // First reverse the spec
-        ifft.ifft(spec, outframe, N);
+        ifft.irfft(spec, outframe, N);
 
         // Then measure relative RMS
         long double sqerr = 0.0;

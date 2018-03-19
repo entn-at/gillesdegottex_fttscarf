@@ -63,12 +63,12 @@ BOOST_AUTO_TEST_CASE( test_fftplanmanager )
 
         // Run the tested implementation
         std::vector<std::complex<typename FFTPlan::FloatType> > spec;
-        pm_default_fwd.fft(inframe, spec, dftlen);
-        pm_default_bck.ifft(spec, inframe);
+        pm_default_fwd.rfft(inframe, spec, dftlen);
+        pm_default_bck.irfft(spec, inframe);
 
         // Test the global Plan Manager
-        fftscarf::fft(inframe, spec, dftlen);
-        fftscarf::ifft(spec, inframe);
+        fftscarf::rfft(inframe, spec, dftlen);
+        fftscarf::irfft(spec, inframe);
     }
     std::cout << std::endl;
     pm_default_fwd.write_status(std::cout);
