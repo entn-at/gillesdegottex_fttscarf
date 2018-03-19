@@ -98,7 +98,6 @@ void check_multi_wrap(){
     volatile ValueType res = 0.0; // volatile to avoid simplification because res is not used
     boost::posix_time::ptime tstart;
     boost::posix_time::ptime tend;
-    boost::posix_time::time_duration dur;
 
     tstart = boost::posix_time::microsec_clock::local_time();
     for(int N=-Nmax; N<=Nmax; ++N)
