@@ -190,14 +190,6 @@ namespace fftscarf {
             return m_plans.find(dftlen)!=m_plans.end();
         }
 
-        inline FFTPlanType* get(int dftlen){
-            typename std::map<int,FFTPlanType*>::iterator dlit = m_plans.find(dftlen);
-            if(dlit!=m_plans.end())
-                return dlit->second;
-            else
-                return prepare(dftlen);
-        }
-
     public:
         //! Build a plan manager for forward FFT or backward IFFT
         FFTPlanManager(bool forward=true){
@@ -206,6 +198,15 @@ namespace fftscarf {
         ~FFTPlanManager(){
             for(size_t u=0; u<m_plans.size(); ++u)
                 delete m_plans[u];
+        }
+
+        //! Return a plan of the given size
+        inline FFTPlanType* plan(int dftlen){
+            typename std::map<int,FFTPlanType*>::iterator dlit = m_plans.find(dftlen);
+            if(dlit!=m_plans.end())
+                return dlit->second;
+            else
+                return prepare(dftlen);
         }
 
         //! Prepare a plan with a specific size
