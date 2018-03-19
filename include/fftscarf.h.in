@@ -160,9 +160,9 @@ namespace fftscarf {
         // Interface to follow for implementations:
         // (these are "ghost" functions, because static polymorphism doesn't exist)
         //! Return the version of the FFT implementation
-        static std::string version(){}
+        static std::string version(){return "unknown FFT library version";}
         //! Return the name of the FFT implementation
-        static std::string libraryName(){}
+        static std::string libraryName(){return "unknown FFT library";}
 
         // To execute the DFT computation:
         // (these are "ghost" functions, because template polymorphism doesn't exist)
