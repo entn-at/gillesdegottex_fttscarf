@@ -41,6 +41,10 @@ before_install:
 install:
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install libfftw3-dev; fi
     - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install cmake; fi
+    - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew cask uninstall oclint; fi
+    # - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sudo chown -R $(whoami) /usr/local; fi
+    # - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sudo chown -R $(whoami) /usr/local/share; fi
+    # - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sudo chown -R $(whoami) /Library/Caches/Homebrew; fi
     - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install fftw; fi
     #- if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install cmake; fi
     - cmake --version
