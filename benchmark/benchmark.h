@@ -32,7 +32,7 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
 
     boost::mt19937 rnd_engine(std::time(0));
     boost::normal_distribution<FFFLOAT> rnd_normal_distrib;
-    boost::variate_generator<boost::mt19937&, 
+    boost::variate_generator<boost::mt19937&,
                 boost::normal_distribution<FFFLOAT> > generator(rnd_engine, rnd_normal_distrib);
 
     boost::chrono::system_clock::time_point tstart;
@@ -61,7 +61,7 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
 
         durations.clear();
         accuracies.clear();
-        
+
         for(size_t runi=0; runi<10000; ++runi) {
             // Window the frame
             inframe.resize(N);   // The input frame
@@ -73,8 +73,8 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
 
             tstart = boost::chrono::system_clock::now();
 
-            fft.dft(inframe, spec, N);
-            ifft.idft(spec, outframe, N);
+            fft.rfft(inframe, spec, N);
+            ifft.irfft(spec, outframe, N);
 
             tend = boost::chrono::system_clock::now();
 
@@ -105,7 +105,7 @@ static void benchmark(const string& name, int minlN=2, int maxlN=17){
                 sqin += inframe[i]*inframe[i];
             }
             double sig_err = sqrt(sqerr/sqin);
-            
+
             accuracies.push_back(sig_err);
         }
 
