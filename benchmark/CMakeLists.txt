@@ -1,7 +1,9 @@
 cmake_minimum_required (VERSION 3.2)
 project (benchmark)
 
-option(FFTSCARF_PRECISION_DEFAULT "" 32)
+set(FFTSCARF_PRECISION_DEFAULT 32 CACHE STRING "docstring")
+option(FFTSCARF_PRECISION_DEFAULT "Set default precision (32, 64, 128)")
+
 option(FFTSCARF_FFT_IPP "" OFF)
 option(FFTSCARF_FFT_FFTS "" ON)
 option(FFTSCARF_FFT_PFFFT "" ON)
