@@ -133,7 +133,7 @@ if  __name__ == "__main__" :
     axs[1].set_title('(ranges show 5% to 95% percentiles)\n')
     f.canvas.draw()
 
-    labels = [item.get_text() for item in axs[0].get_xticklabels()]
+    labels = [item.get_text() for item in axs[1].get_xticklabels()]
     for li in range(len(labels)):
         labels[li] = str(2**int(float(labels[li])))
     axs[0].set_xticklabels(labels)
@@ -152,4 +152,3 @@ if  __name__ == "__main__" :
     axs[0].set_title(title)
 
     from IPython.core.debugger import  Pdb; Pdb().set_trace()
-
