@@ -174,7 +174,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 include_directories(fftlibs)
 
 
-# Testing ---------------------------------------------------------------------
+# Testing ----------------------------------------------------------------------
 if(FFTSCARF_BUILD_TEST)
     message("\n-- FFTScarf configuring tests")
     message("-- Forcing FFTReal for testing purpose")
@@ -183,7 +183,7 @@ endif()
 
 message("")
 
-# Documentation ---------------------------------------------------------------
+# Documentation ----------------------------------------------------------------
 option(FFTSCARF_BUILD_DOC "Generate documentation" OFF)
 if(FFTSCARF_BUILD_DOC)
     message("\n-- FFTScarf generating documentation")
@@ -211,12 +211,12 @@ if(WIN32) # TODO Should be test on GCC because the followin might work on mingw
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox -D_USE_MATH_DEFINES /arch:SSE") # Needed by PFFFT
 else() # TODO Should be test on GCC because the followin might work on mingw
     # Speed up compilation
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pipe -fPIC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pipe -fPIC")
 
     # -O2 -O3 -Ofast
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -fPIC")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -fPIC")
 endif()
 
 # Install ---------------------------------------------------------------------
