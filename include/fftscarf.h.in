@@ -9,9 +9,7 @@ FFTPlan (will use the default precision given by FFTScarf (selected at FFTSarf c
 #ifndef __FFTSCARF_H__
 #define __FFTSCARF_H__
 
-#define FFTSCARF_VERSION_MAJOR 1
-#define FFTSCARF_VERSION_MINOR 1
-#define FFTSCARF_VERSION_REVISION 0
+#define FFTSCARF_VERSION "@FFTSCARF_VERSION@"
 
 #cmakedefine FFTSCARF_PRECISION_SINGLE
 #cmakedefine FFTSCARF_PRECISION_DOUBLE

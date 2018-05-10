@@ -66,7 +66,8 @@ namespace fftscarf {
 
     std::string version(){
         std::stringstream ver;
-        ver << FFTSCARF_VERSION_MAJOR << "." << FFTSCARF_VERSION_MINOR << "." << FFTSCARF_VERSION_REVISION;
+        // ver << FFTSCARF_VERSION_MAJOR << "." << FFTSCARF_VERSION_MINOR << "." << FFTSCARF_VERSION_REVISION;
+        ver << FFTSCARF_VERSION;
         return ver.str();
     }
 
