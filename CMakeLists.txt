@@ -2,6 +2,24 @@ cmake_minimum_required (VERSION 3.2)
 project (fftscarf)
 
 add_library(fftscarf src/fftscarf.cpp)
+set(FFTSCARF_VERSION 1.2.0)
+
+# Overwrite the version using git
+find_program(GIT_BINARY "git")
+if (GIT_BINARY)
+    if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git) # This is necessary to avoid `git describe` catch the parent git repo.
+        #message("--   GIT_BINARY: " ${GIT_BINARY})
+        #message("--   CMAKE_CURRENT_SOURCE_DIR: " ${CMAKE_CURRENT_SOURCE_DIR})
+        execute_process(COMMAND git -C ${CMAKE_CURRENT_SOURCE_DIR} describe --tags --always OUTPUT_VARIABLE FFTSCARF_VERSION ERROR_VARIABLE GIT_ERROR)
+        if (GIT_ERROR)
+            message("--   GIT_ERROR: " ${GIT_ERROR})
+        else()
+            string(STRIP ${FFTSCARF_VERSION} FFTSCARF_VERSION)  # Remove new line field
+            STRING(SUBSTRING ${FFTSCARF_VERSION} 1 -1 FFTSCARF_VERSION) # Remove the prefix 'v'
+        endif()
+    endif()
+endif()
+message("--   Version: " ${FFTSCARF_VERSION})
 
 message("\n-- FFTScarf configuring lib")
 
