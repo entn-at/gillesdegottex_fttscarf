@@ -12,6 +12,7 @@ before_script:
   - apt -qq -y install libfftw3-dev
   - uname -a
   - lsb_release -a
+  - cmake --version
 
 test:
   stage: test
