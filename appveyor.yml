@@ -1,7 +1,7 @@
 os: Visual Studio 2015
 
 environment:
-  BOOST_ROOT: C:\Libraries\boost_1_59_0
+  BOOST_ROOT: C:\Libraries\boost_1_66_0
 
 platform:
   - x86
@@ -26,12 +26,12 @@ install:
   - ps: echo $env:platform
 
   # Set Boost lib dir
-  - ps: if ($env:platform -eq 'x64') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_67_0\lib64-msvc-14.0"}
-  - ps: if ($env:platform -eq 'x86') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_67_0\lib32-msvc-14.0"}
+  - ps: if ($env:platform -eq 'x64') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_66_0\lib64-msvc-14.0"}
+  - ps: if ($env:platform -eq 'x86') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_66_0\lib32-msvc-14.0"}
   - ps: Get-ChildItem "C:\Libraries"
-  - ps: Get-ChildItem "C:\Libraries\boost_1_67_0"
-  - ps: Get-ChildItem $env:BOOST_LIBRARYDIR
-  - cmd: dir %BOOST_LIBRARYDIR%
+  - ps: Get-ChildItem $env:BOOST_ROOT
+  #- ps: Get-ChildItem $env:BOOST_LIBRARYDIR
+  #- cmd: dir %BOOST_ROOT%
 
   # For the lib command
   - ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
@@ -83,7 +83,7 @@ build_script:
 
   - md build_full
   - cd build_full
-  - cmake -G "%GCONFIG%" -DBOOST_ROOT="%BOOST_LIBRARYDIR%" -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_PLAN_PROTECTACCESS:BOOL=ON -DFFTSCARF_PRECISION_SINGLE:BOOL=ON -DFFTSCARF_PRECISION_DOUBLE:BOOL=ON -DFFTSCARF_PRECISION_DEFAULT=32 -DFFTSCARF_FFT_OOURA:BOOL=ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_PFFFT:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON -DFFTSCARF_FFT_FFTS:BOOL=OFF ..
+  - cmake -G "%GCONFIG%" -DFFTSCARF_BUILD_TEST:BOOL=ON -DFFTSCARF_PLAN_PROTECTACCESS:BOOL=ON -DFFTSCARF_PRECISION_SINGLE:BOOL=ON -DFFTSCARF_PRECISION_DOUBLE:BOOL=ON -DFFTSCARF_PRECISION_DEFAULT=32 -DFFTSCARF_FFT_OOURA:BOOL=ON -DFFTSCARF_FFT_FFTREAL:BOOL=ON -DFFTSCARF_FFT_PFFFT:BOOL=ON -DFFTSCARF_FFT_FFTW3:BOOL=ON -DFFTSCARF_FFT_FFTS:BOOL=OFF ..
   - ps: cmake --build . --config Release
   - ps: Get-ChildItem Release
 
