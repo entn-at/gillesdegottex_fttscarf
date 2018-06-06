@@ -26,9 +26,10 @@ install:
   - ps: echo $env:platform
 
   # Set Boost lib dir
-  - ps: if ($env:platform -eq 'x64') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_65_1\lib64-msvc-14.0"}
-  - ps: if ($env:platform -eq 'x86') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_65_1\lib32-msvc-14.0"}
-  - ps: Get-ChildItem "C:\Libraries\boost_1_65_1"
+  - ps: if ($env:platform -eq 'x64') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_67_0\lib64-msvc-14.0"}
+  - ps: if ($env:platform -eq 'x86') {$env:BOOST_LIBRARYDIR = "C:\Libraries\boost_1_67_0\lib32-msvc-14.0"}
+  - ps: Get-ChildItem "C:\Libraries"
+  - ps: Get-ChildItem "C:\Libraries\boost_1_67_0"
   - ps: Get-ChildItem $env:BOOST_LIBRARYDIR
 
   # For the lib command
