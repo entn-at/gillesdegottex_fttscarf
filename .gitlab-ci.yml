@@ -7,13 +7,16 @@ stages:
 
 before_script:
   - apt update -qq
+  - apt -qq -y install lsb
   - apt -qq -y install cmake
   - apt -qq -y install libfftw3-dev
+  - uname -a
+  - lsb_release -a
 
 test:
   stage: test
   script:
-    - lsb_release -a
+
     - mkdir -p build_simple
     - cd build_simple
     - cmake ..
