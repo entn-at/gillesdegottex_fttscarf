@@ -7,11 +7,13 @@ stages:
 
 before_script:
   - apt update -qq
-  - apt -qq -y install lsb
+  # - apt -qq -y install lsb
+  - apt -qq -y install libboost-all-dev
   - apt -qq -y install cmake
   - apt -qq -y install libfftw3-dev
+  
+  # - lsb_release -a
   - uname -a
-  - lsb_release -a
   - cmake --version
   - dpkg -s libboost-all-dev
 
