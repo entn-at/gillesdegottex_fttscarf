@@ -13,6 +13,7 @@ before_script:
   - uname -a
   - lsb_release -a
   - cmake --version
+  - dpkg -s libboost-all-dev
 
 test:
   stage: test
