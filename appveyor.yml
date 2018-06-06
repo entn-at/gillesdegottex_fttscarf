@@ -31,7 +31,7 @@ install:
   - ps: Get-ChildItem "C:\Libraries"
   - ps: Get-ChildItem "C:\Libraries\boost_1_67_0"
   - ps: Get-ChildItem $env:BOOST_LIBRARYDIR
-  - Get-ChildItem %BOOST_LIBRARYDIR%
+  - cmd: dir %BOOST_LIBRARYDIR%
 
   # For the lib command
   - ps: cd "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC"
