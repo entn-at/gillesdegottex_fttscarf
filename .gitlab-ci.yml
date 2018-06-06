@@ -6,8 +6,6 @@ stages:
 
 
 before_script:
-  - git submodule update --init --recursive
-  - git fetch --tags
   - apt update -qq
   # - apt -qq -y install lsb
   - apt -qq -y install libboost-all-dev
@@ -23,6 +21,8 @@ before_script:
 test:
   stage: test
   script:
+    - git submodule update --init --recursive
+    - git fetch --tags
 
     - mkdir -p build_simple
     - cd build_simple
