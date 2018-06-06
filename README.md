@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/gillesdegottex/fftscarf.svg?branch=master)](https://travis-ci.org/gillesdegottex/fftscarf)
-[![Build status](https://ci.appveyor.com/api/projects/status/ehsedi0p9xl5r663/branch/master?svg=true)](https://ci.appveyor.com/project/gillesdegottex/fftscarf/branch/master)
+[![pipeline status](https://gitlab.com/gillesdegottex/fftscarf/badges/master/pipeline.svg)](https://gitlab.com/gillesdegottex/fftscarf/commits/master)
+[![Build status](https://ci.appveyor.com/api/projects/status/7pm6vkmwnfdr97c6/branch/master?svg=true)](https://ci.appveyor.com/project/gillesdegottex/fftscarf/branch/master)
 
 # FFTScarf
 ### A wrapper for FFT implementations dedicated to audio processing
