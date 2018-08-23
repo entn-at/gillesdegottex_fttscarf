@@ -184,10 +184,6 @@ namespace fftscarf {
         bool m_forward;
         std::map<int,FFTPlanType*> m_plans;
 
-        inline bool has(int dftlen){
-            return m_plans.find(dftlen)!=m_plans.end();
-        }
-
     public:
         //! Build a plan manager for forward FFT or backward IFFT
         FFTPlanManager(bool forward=true){
@@ -222,6 +218,18 @@ namespace fftscarf {
         inline void prepare_osf(int p_min, int p_max){
             for(int p=p_min; p<=p_max; ++p)
                 prepare(std::pow(2, p));
+        }
+
+        inline bool has(int dftlen){
+            return m_plans.find(dftlen)!=m_plans.end();
+        }
+
+        inline int shortest(){
+            return m_plans.begin()->first;
+        }
+
+        inline int longest(){
+            return m_plans.rbegin()->first;
         }
 
         //! Write some information about the plan manager
