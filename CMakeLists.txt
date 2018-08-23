@@ -3,7 +3,7 @@ project (fftscarf)
 
 message("\n-- FFTScarf")
 
-set(FFTSCARF_VERSION 1.4.1)
+set(FFTSCARF_VERSION 1.4.2)
 
 # Overwrite the version using git
 find_program(GIT_BINARY "git")
