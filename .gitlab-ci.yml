@@ -1,5 +1,9 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+
 #image: gcc
-image: ubuntu:16.04
+image: ubuntu:18.04
 
 stages:
   - test
@@ -10,6 +14,7 @@ before_script:
   # - apt -qq -y install lsb
   - apt -qq -y install libboost-all-dev
   - apt -qq -y install g++
+  - apt -qq -y install git
   - apt -qq -y install cmake
   - apt -qq -y install libfftw3-dev
   
@@ -21,6 +26,8 @@ before_script:
 test:
   stage: test
   script:
+    - pwd
+    - git status
 
     - mkdir -p build_simple
     - cd build_simple
